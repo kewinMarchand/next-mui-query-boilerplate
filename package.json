@@ -1,0 +1,76 @@
+{
+  "name": "next-mui-query-boilerplate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test tests/e2e",
+    "test:a11y": "playwright test tests/a11y",
+    "lhci": "lhci autorun",
+    "api:types": "openapi-typescript $API_SCHEMA_URL --output src/core/api/schema.d.ts",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.9.1",
+    "@mui/material": "^9.4.0",
+    "@mui/material-nextjs": "^9.4.0",
+    "@tanstack/react-query": "^5.104.0",
+    "lucide-react": "^1.49.0",
+    "next": "16.3.7",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-hook-form": "^7.89.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.63.0",
+    "@tanstack/react-query-devtools": "^5.104.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.7",
+    "husky": "^9.1.7",
+    "jsdom": "^29",
+    "lint-staged": "^17.6.0",
+    "openapi-typescript": "^7.13.0",
+    "prettier": "^3.9.9",
+    "typescript": "~6.0.3",
+    "vite": "^8",
+    "vitest": "^5.0.3"
+  },
+  "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": ">=24.14.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,yml}": [
+      "prettier --write"
+    ]
+  },
+  "license": "MIT",
+  "description": "Boilerplate Next.js App Router, MUI, TanStack Query, react-hook-form et zod, avec lint, tests unitaires, e2e, accessibilit\u00e9 et Lighthouse"
+}
