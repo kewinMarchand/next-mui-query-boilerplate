@@ -2565,6 +2565,31 @@ electron-to-chromium@^1.5.439:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.443.tgz#192b675e73bd809480cb9dc98babf3d370f1ac39"
   integrity sha512-TDJG36L9A3CWWwZ97HKaE+Iz1sW80pNp6sAU0owzCIV3Zc9eVyRqZK8Vz6NKuMIU8WjP0pIkoqCa0VRf/yFD0Q==
 
+embla-carousel-react@^8:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-react/-/embla-carousel-react-8.6.0.tgz#b737042a32761c38d6614593653b3ac619477bd1"
+  integrity sha512-0/PjqU7geVmo6F734pmPqpyHqiM99olvyecY7zdweCw+6tKEXnrE90pBiBbMMU8s5tICemzpQ3hi5EpxzGW+JA==
+  dependencies:
+    embla-carousel "8.6.0"
+    embla-carousel-reactive-utils "8.6.0"
+
+embla-carousel-reactive-utils@8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-reactive-utils/-/embla-carousel-reactive-utils-8.6.0.tgz#607f1d8ab9921c906a555c206251b2c6db687223"
+  integrity sha512-fMVUDUEx0/uIEDM0Mz3dHznDhfX+znCCDCeIophYb1QGVM7YThSWX+wz11zlYwWFOr74b4QLGg0hrGPJeG2s4A==
+
+embla-carousel-wheel-gestures@^8:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-wheel-gestures/-/embla-carousel-wheel-gestures-8.1.0.tgz#dfdb865f634058723c46539bdde45248673a43a5"
+  integrity sha512-J68jkYrxbWDmXOm2n2YHl+uMEXzkGSKjWmjaEgL9xVvPb3HqVmg6rJSKfI3sqIDVvm7mkeTy87wtG/5263XqHQ==
+  dependencies:
+    wheel-gestures "^2.2.5"
+
+embla-carousel@8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel/-/embla-carousel-8.6.0.tgz#abcedff2bff36992ea8ac27cd30080ca5b6a3f58"
+  integrity sha512-SjWyZBHJPbqxHOzckOfo8lHisEaJWmwd23XppYFYVh10bU66/Pn5tkVkbkCMZVdbUE5eTCI2nD8OyIP4Z+uwkA==
+
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
@@ -6107,6 +6132,11 @@ whatwg-url@^5.0.0:
   dependencies:
     tr46 "~0.0.3"
     webidl-conversions "^3.0.0"
+
+wheel-gestures@^2.2.5:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/wheel-gestures/-/wheel-gestures-2.3.0.tgz#ac9009c09620f46d0209adaa0f589534875d92be"
+  integrity sha512-6b+PIXuKIy0ibVnF04GoijGKGIDwjlYSK7bCgicuQwPLivfjoLeCCK0bwbjyOdrStDTNPlyGFixIj0d0kZzwiQ==
 
 which-boxed-primitive@^1.1.0, which-boxed-primitive@^1.1.1:
   version "1.1.1"

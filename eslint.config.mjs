@@ -56,6 +56,10 @@ const config = [
     files: ['src/core/ui/ui-kit/Icon.tsx'],
     rules: { 'no-restricted-imports': 'off' },
   },
+  {
+    files: ['src/core/ui/ui-kit/Picture.tsx'],
+    rules: { '@next/next/no-img-element': 'off' },
+  },
 ]
 
 export default config

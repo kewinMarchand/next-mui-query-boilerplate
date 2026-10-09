@@ -15,6 +15,7 @@
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test tests/e2e",
     "test:a11y": "playwright test tests/a11y",
+    "test:dev": "playwright test -c playwright.dev.config.ts",
     "lhci": "lhci autorun",
     "api:types": "openapi-typescript $API_SCHEMA_URL --output src/core/api/schema.d.ts",
     "prepare": "husky"
@@ -27,6 +28,8 @@
     "@mui/material": "^9.4.0",
     "@mui/material-nextjs": "^9.4.0",
     "@tanstack/react-query": "^5.104.0",
+    "embla-carousel-react": "^8",
+    "embla-carousel-wheel-gestures": "^8",
     "lucide-react": "^1.49.0",
     "next": "16.3.7",
     "react": "^19.3.0",
@@ -72,5 +75,5 @@
     ]
   },
   "license": "MIT",
-  "description": "Boilerplate Next.js App Router, MUI, TanStack Query, react-hook-form et zod, avec lint, tests unitaires, e2e, accessibilit\u00e9 et Lighthouse"
+  "description": "Boilerplate Next.js App Router, MUI, TanStack Query, react-hook-form et zod, avec lint, tests unitaires, e2e, accessibilité et Lighthouse"
 }

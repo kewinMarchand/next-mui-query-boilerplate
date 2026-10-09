@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('Navigation', () => {
-  test('le lien actif porte aria-current', async ({ page }) => {
+  test('le lien actif porte aria-current', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'La navigation principale passe dans le menu latéral sur mobile')
     await page.goto('/contact')
 
     const nav = page.getByRole('navigation', { name: 'Navigation principale' })
@@ -17,5 +18,17 @@ test.describe('Navigation', () => {
     await expect(skipLink).toBeFocused()
     await skipLink.press('Enter')
     await expect(page).toHaveURL(/#main$/)
+  })
+
+  test('le logo porte le nom du site et aria-current sur l’accueil seulement', async ({ page }) => {
+    await page.goto('/')
+    const logo = page.getByTestId('layout-logo')
+
+    await expect(logo).toHaveAccessibleName('Next MUI Query Boilerplate')
+    await expect(logo).toHaveAttribute('href', '/')
+    await expect(logo).toHaveAttribute('aria-current', 'page')
+
+    await page.goto('/contact')
+    await expect(page.getByTestId('layout-logo')).not.toHaveAttribute('aria-current')
   })
 })

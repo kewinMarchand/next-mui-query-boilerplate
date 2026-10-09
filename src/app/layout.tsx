@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 
 import { SITE } from '@/core/config'
 import { Providers } from '@/core/providers'
+import { A11Y_MODE_SCRIPT } from '@/core/theme/a11yMode'
 import { AppShell } from '@/core/ui/layouts'
 
 import type { Metadata, Viewport } from 'next'
@@ -15,17 +16,6 @@ export const metadata: Metadata = {
   title: { default: SITE.name, template: `%s · ${SITE.name}` },
   description: SITE.description,
   applicationName: SITE.name,
-  alternates: { canonical: '/' },
-  openGraph: {
-    type: 'website',
-    siteName: SITE.name,
-    title: SITE.name,
-    description: SITE.description,
-    url: '/',
-    locale: SITE.locale,
-  },
-  twitter: { card: 'summary', title: SITE.name, description: SITE.description },
-  robots: { index: true, follow: true },
   formatDetection: { telephone: false, email: false, address: false },
 }
 
@@ -37,7 +27,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={inter.variable}>
+    <html lang="fr" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: A11Y_MODE_SCRIPT }} />
+      </head>
       <body>
         <AppRouterCacheProvider>
           <Providers>

@@ -6,7 +6,14 @@
       "url": [
         "http://localhost:3200/",
         "http://localhost:3200/taches",
-        "http://localhost:3200/contact"
+        "http://localhost:3200/contact",
+        "http://localhost:3200/catalogue",
+        "http://localhost:3200/catalogue/plantes-interieur",
+        "http://localhost:3200/catalogue/plantes-interieur/feuillages",
+        "http://localhost:3200/mentions-legales",
+        "http://localhost:3200/donnees-personnelles",
+        "http://localhost:3200/accessibilite",
+        "http://localhost:3200/plan-du-site"
       ],
       "numberOfRuns": 1,
       "settings": {

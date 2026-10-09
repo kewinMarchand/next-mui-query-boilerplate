@@ -1,9 +1,11 @@
 import Typography from '@mui/material/Typography'
 
+import { buildBreadcrumb, PageContainer } from '@/core/ui/layouts'
+
 import { TasksPanel } from './TasksPanel'
 
 export const TasksView = () => (
-  <>
+  <PageContainer breadcrumb={buildBreadcrumb('/taches')}>
     <Typography variant="h1" gutterBottom>
       Tâches
     </Typography>
@@ -12,5 +14,5 @@ export const TasksView = () => (
       gérés.
     </Typography>
     <TasksPanel />
-  </>
+  </PageContainer>
 )

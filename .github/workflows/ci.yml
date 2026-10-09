@@ -32,7 +32,7 @@ jobs:
           cache: yarn
       - run: yarn install --frozen-lockfile
       - run: npx playwright install --with-deps chromium
-      - run: make test-e2e test-a11y
+      - run: make test-e2e test-a11y test-dev
       - uses: actions/upload-artifact@v7
         if: failure()
         with:

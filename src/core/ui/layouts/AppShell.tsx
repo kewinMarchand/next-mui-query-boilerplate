@@ -1,4 +1,4 @@
-import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
 
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -11,12 +11,12 @@ interface AppShellProps {
 }
 
 export const AppShell = ({ children }: AppShellProps) => (
-  <>
+  <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <SkipLink />
     <Header />
-    <Container component="main" id="main" tabIndex={-1} maxWidth="lg" sx={{ py: 4 }}>
+    <Box component="main" id="main" tabIndex={-1} sx={{ flexGrow: 1 }}>
       {children}
-    </Container>
+    </Box>
     <Footer />
-  </>
+  </Box>
 )

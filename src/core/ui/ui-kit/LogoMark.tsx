@@ -1,0 +1,24 @@
+interface LogoMarkProps {
+  size?: number
+}
+
+export const LogoMark = ({ size = 32 }: LogoMarkProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 64 64"
+    width={size}
+    height={size}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect width="64" height="64" rx="14" fill="#1d4ed8" />
+    <path d="M14 50C14 28 28 14 50 14c0 22-14 36-36 36z" fill="#fff" />
+    <path
+      d="M14 50 42 22M24 40h10M30 34h9M24 40v-9M30 34v-8"
+      fill="none"
+      stroke="#1d4ed8"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+  </svg>
+)

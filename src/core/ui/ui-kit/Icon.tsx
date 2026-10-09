@@ -1,14 +1,42 @@
-import { CircleAlert, CircleCheck, ListTodo, Mail, RotateCw } from 'lucide-react'
+import {
+  Accessibility,
+  ArrowLeft,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  CircleAlert,
+  CircleCheck,
+  LayoutGrid,
+  List,
+  ListTodo,
+  Mail,
+  Menu,
+  RotateCw,
+  SlidersHorizontal,
+  X,
+} from 'lucide-react'
 
 const ICONS = {
+  accessibility: Accessibility,
+  'arrow-left': ArrowLeft,
+  'chevron-down': ChevronDown,
+  'chevron-left': ChevronLeft,
+  'chevron-right': ChevronRight,
   'circle-alert': CircleAlert,
   'circle-check': CircleCheck,
+  'layout-grid': LayoutGrid,
+  list: List,
   'list-todo': ListTodo,
   mail: Mail,
+  menu: Menu,
   'rotate-cw': RotateCw,
+  'sliders-horizontal': SlidersHorizontal,
+  x: X,
 } as const
 
 export type IconName = keyof typeof ICONS
+
+export const ICON_NAMES = Object.keys(ICONS).filter((name): name is IconName => name in ICONS)
 
 interface IconProps {
   name: IconName

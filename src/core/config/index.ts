@@ -1,4 +1,7 @@
-export { MAIN_NAVIGATION } from './navigation'
+export { ACCESSIBILITY_COMPLIANCE } from './accessibility'
+export { CATALOG_PATH, CATEGORY_TREE, categoryHref } from './categories'
+export type { CategoryNode } from './categories'
+export { LEGAL_NAVIGATION, MAIN_NAVIGATION, SITE_MAP, SITEMAP_ENTRIES } from './navigation'
 export type { NavigationItem } from './navigation'
 export { SITE } from './site'
 export type { SiteConfig } from './site'

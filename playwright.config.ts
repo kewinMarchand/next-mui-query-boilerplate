@@ -23,6 +23,7 @@ export default defineConfig({
     command: `yarn build && yarn start --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
+    env: { ENABLE_TEST_ROUTES: '1' },
     timeout: 180_000,
   },
 })
