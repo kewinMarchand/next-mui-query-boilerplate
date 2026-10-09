@@ -1,8 +1,9 @@
 import { categoryHref } from '@/core/config'
 import { buildMetadata } from '@/core/seo'
 
-import { isFilteredOrSorted, parseCatalogQuery } from '../common/models/catalogQuery'
+import { isFilteredOrSorted } from '../common/models/catalogQuery'
 import { resolveCategoryPath } from '../common/models/categories'
+import { parseCatalogQuery } from '../common/models/parseCatalogQuery'
 
 import type { SearchParams } from '../common/models/catalogQuery'
 import type { Metadata } from 'next'

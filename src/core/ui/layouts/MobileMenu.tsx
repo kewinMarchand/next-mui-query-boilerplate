@@ -2,10 +2,10 @@
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
 import MuiLink from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
+import dynamic from 'next/dynamic'
 import { useId } from 'react'
 
 import { CATALOG_PATH, categoryHref } from '@/core/config'
@@ -14,6 +14,9 @@ import { useMobileMenu } from '@/core/ui/hooks/useMobileMenu'
 import { Icon, Link } from '@/core/ui/ui-kit'
 
 import type { CategoryNode, NavigationItem } from '@/core/config'
+
+// Le panneau n'est utile qu'au clic : son code (Modal, piège de focus) quitte le chargement initial.
+const Drawer = dynamic(() => import('@mui/material/Drawer'), { ssr: false })
 
 interface MobileMenuProps {
   navigation: NavigationItem[]
@@ -46,7 +49,7 @@ const findLevel = (tree: CategoryNode[], levels: string[]) => {
 export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
   const isHydrated = useHydrated()
   const drawerId = useId()
-  const { isOpen, levels, titleRef, focusTitle, open, close, descend, back } = useMobileMenu()
+  const { isOpen, levels, titleRef, open, close, descend, back } = useMobileMenu()
 
   if (!isHydrated) {
     return (
@@ -81,8 +84,8 @@ export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
       <Drawer
         open={isOpen}
         onClose={close}
+        disableAutoFocus
         slotProps={{
-          transition: { onEntered: focusTitle },
           paper: {
             id: drawerId,
             'aria-labelledby': `${drawerId}-title`,

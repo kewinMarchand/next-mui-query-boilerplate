@@ -6,8 +6,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useId } from 'react'
 
-import { useHydrated } from '@/core/ui/hooks/useHydrated'
-import { Icon, Picture } from '@/core/ui/ui-kit'
+import { AfterHydration, Icon, Picture } from '@/core/ui/ui-kit'
 
 import { useCarousel } from './hooks/useCarousel'
 
@@ -29,7 +28,6 @@ interface CarouselProps {
 const GAP = 3
 
 export const Carousel = ({ title, slides, 'data-testid': testId }: CarouselProps) => {
-  const isHydrated = useHydrated()
   const titleId = useId()
   const trackId = useId()
   const {
@@ -133,14 +131,13 @@ export const Carousel = ({ title, slides, 'data-testid': testId }: CarouselProps
                   scrollSnapAlign: 'start',
                 }}
               >
-                {position === 0 || isHydrated ? (
-                  slideImage
-                ) : (
-                  // Hors de la première diapositive, l'image attend l'hydratation pour laisser la bande passante à l'image LCP.
-                  <Box sx={{ aspectRatio: '16 / 9', bgcolor: 'grey.100', borderRadius: 1 }}>
-                    <noscript>{slideImage}</noscript>
-                  </Box>
-                )}
+                <AfterHydration
+                  placeholder={
+                    <Box sx={{ aspectRatio: '16 / 9', bgcolor: 'grey.100', borderRadius: 1 }} />
+                  }
+                >
+                  {slideImage}
+                </AfterHydration>
                 <Typography variant="h3" sx={{ mt: 2, mb: 1 }}>
                   {slide.title}
                 </Typography>

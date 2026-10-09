@@ -2,10 +2,10 @@ import {
   catalogHref,
   clearFilters,
   DEFAULT_QUERY,
-  parseCatalogQuery,
   serializeCatalogQuery,
   withFilters,
 } from './catalogQuery'
+import { parseCatalogQuery } from './parseCatalogQuery'
 
 describe('parseCatalogQuery', () => {
   it('retourne la requête par défaut sans paramètre', () => {

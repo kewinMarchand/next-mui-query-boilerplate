@@ -1,8 +1,12 @@
 'use client'
 
 import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import NativeSelect from '@mui/material/NativeSelect'
+import OutlinedInput from '@mui/material/OutlinedInput'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
+import { useId } from 'react'
 
 import { useHydrated } from '@/core/ui/hooks/useHydrated'
 
@@ -22,6 +26,7 @@ const isSort = (value: string): value is Catalog.Sort => SORTS.some((sort) => so
 
 export const SortSelect = ({ path, query }: SortSelectProps) => {
   const isHydrated = useHydrated()
+  const selectId = useId()
   const navigation = useCatalogNavigation(path, query)
 
   return (
@@ -33,26 +38,34 @@ export const SortSelect = ({ path, query }: SortSelectProps) => {
       sx={{ gap: 1, alignItems: 'center' }}
     >
       <QueryHiddenFields query={query} omit={['tri', 'page']} />
-      <TextField
-        select
-        label="Trier par"
-        name="tri"
-        size="small"
-        value={navigation.query.sort}
-        onChange={(event) => {
-          if (isSort(event.target.value)) {
-            navigation.apply(withFilters(query, { sort: event.target.value }))
+      <FormControl size="small" sx={{ minWidth: 200 }}>
+        <InputLabel htmlFor={selectId} shrink>
+          Trier par
+        </InputLabel>
+        <NativeSelect
+          id={selectId}
+          name="tri"
+          value={navigation.query.sort}
+          onChange={(event) => {
+            if (isSort(event.target.value)) {
+              navigation.apply(withFilters(query, { sort: event.target.value }))
+            }
+          }}
+          input={
+            <OutlinedInput
+              label="Trier par"
+              notched
+              inputProps={{ 'data-testid': 'catalog-sort' }}
+            />
           }
-        }}
-        slotProps={{ select: { native: true }, htmlInput: { 'data-testid': 'catalog-sort' } }}
-        sx={{ minWidth: 200 }}
-      >
-        {SORTS.map((sort) => (
-          <option key={sort} value={sort}>
-            {SORT_LABELS[sort]}
-          </option>
-        ))}
-      </TextField>
+        >
+          {SORTS.map((sort) => (
+            <option key={sort} value={sort}>
+              {SORT_LABELS[sort]}
+            </option>
+          ))}
+        </NativeSelect>
+      </FormControl>
       {!isHydrated && (
         <Button type="submit" variant="outlined">
           Trier

@@ -2,9 +2,9 @@
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
+import dynamic from 'next/dynamic'
 import { useId, useState } from 'react'
 
 import { useHydrated } from '@/core/ui/hooks/useHydrated'
@@ -15,6 +15,9 @@ import { useCatalogNavigation } from './hooks/useCatalogNavigation'
 import { countActiveFilters } from '../common/models/catalogQuery'
 
 import type { Catalog } from '../common/models/catalog'
+
+// Le panneau n'est utile qu'au clic : son code (Modal, piège de focus) quitte le chargement initial.
+const Drawer = dynamic(() => import('@mui/material/Drawer'), { ssr: false })
 
 interface CatalogFiltersProps {
   path: string

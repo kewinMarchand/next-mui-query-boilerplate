@@ -50,7 +50,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - La règle `react-hooks/refs` refuse `objet.propriété` dès que l'objet retourné par un hook contient une ref : déstructurer le retour du hook.
 - Embla sous jsdom exige `matchMedia`, `ResizeObserver` et `IntersectionObserver` : le test du carrousel les remplace par des bouchons.
 - Une page d'erreur rendue entièrement côté client recrée `<html>` sans l'attribut posé par le script inline : `useA11yMode` le repose au montage.
-- Le `Drawer` MUI place le focus sur le panneau après les effets des composants : le menu mobile focalise son titre dans `onEntered`.
+- Le `Drawer` chargé à la demande se monte déjà ouvert : MUI ne joue pas la transition d'entrée (`onEntered` n'est jamais appelé) et son focus automatique passe après nos effets. Le menu mobile désactive ce focus (`disableAutoFocus`) et focalise son titre par une ref de rappel, au montage.
 - Afficher les filtres en ligne avant l'hydratation puis les replier sur mobile décalait toute la page (clic raté en e2e, CLS). Avant hydratation, le mobile reçoit un `<details>` fermé, remplacé ensuite par le bouton « Filtrer ».
 - Le nom du site dans le header était un `<p>` : la marge « après paragraphe » du mode renforcé ouvrait un espace sous la navigation. Il est devenu le texte du lien logo, et le mode renforcé ne vise plus que `<main>`.
 - Un `next dev` lancé dans le dépôt écrit des types dans `.next/dev/types`. Périmés, ils cassent `tsc` (`Route` non assignable) jusqu'à la prochaine compilation du serveur de développement.
@@ -65,3 +65,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+- Le JavaScript initial pèse sur le LCP simulé de Lighthouse : toute requête lancée avant l'affichage de l'image LCP entre dans son calcul. Le catalogue est passé de 383 à 276 ko gzip en sortant zod du code client (`parseCatalogQuery.ts`, importé côté serveur seulement), en remplaçant `TextField` (qui embarque Select, Menu et Popover) par `OutlinedInput` et `NativeSelect`, et en chargeant les `Drawer` à la demande (`next/dynamic`).
+- Les images hors de l'écran initial (diapositives, produits au-delà des quatre premiers) attendent l'hydratation (`AfterHydration`, avec `<noscript>` pour le rendu sans JavaScript) : en `loading="lazy"`, Chrome les téléchargeait quand même avant l'image LCP.
+- Lighthouse CI fait trois passages par page et compare la médiane au seuil (`aggregationMethod: "median"`) : trois passages successifs ont donné 0,71, 0,92 et 0,94 sur `/catalogue/plantes-interieur`.

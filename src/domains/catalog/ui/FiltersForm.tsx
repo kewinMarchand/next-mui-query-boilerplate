@@ -3,11 +3,14 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import InputLabel from '@mui/material/InputLabel'
 import MuiLink from '@mui/material/Link'
+import OutlinedInput from '@mui/material/OutlinedInput'
 import Switch from '@mui/material/Switch'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useId } from 'react'
 
 import { Link, VISUALLY_HIDDEN } from '@/core/ui/ui-kit'
 
@@ -59,6 +62,33 @@ const FacetGroup = ({ legend, children }: { legend: string; children: ReactNode 
     </Box>
   </Box>
 )
+
+interface PriceFieldProps {
+  label: string
+  name: string
+  defaultValue: number | null
+  onBlur: (event: FocusEvent<HTMLInputElement>) => void
+  testId: string
+}
+
+// FormControl + OutlinedInput plutôt que TextField : TextField embarque Select, Menu et Popover.
+const PriceField = ({ label, name, defaultValue, onBlur, testId }: PriceFieldProps) => {
+  const id = useId()
+  return (
+    <FormControl size="small">
+      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <OutlinedInput
+        id={id}
+        label={label}
+        name={name}
+        type="number"
+        defaultValue={defaultValue ?? ''}
+        onBlur={onBlur}
+        inputProps={{ min: 0, inputMode: 'numeric', 'data-testid': testId }}
+      />
+    </FormControl>
+  )
+}
 
 export const FiltersForm = ({
   path,
@@ -166,35 +196,19 @@ export const FiltersForm = ({
           key={`${query.priceMin}-${query.priceMax}`}
           sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5, py: 1 }}
         >
-          <TextField
+          <PriceField
             label="Minimum"
             name="prix_min"
-            type="number"
-            size="small"
-            defaultValue={query.priceMin ?? ''}
+            defaultValue={query.priceMin}
             onBlur={applyPrice('priceMin')}
-            slotProps={{
-              htmlInput: {
-                min: 0,
-                inputMode: 'numeric',
-                'data-testid': 'catalog-filter-price-min',
-              },
-            }}
+            testId="catalog-filter-price-min"
           />
-          <TextField
+          <PriceField
             label="Maximum"
             name="prix_max"
-            type="number"
-            size="small"
-            defaultValue={query.priceMax ?? ''}
+            defaultValue={query.priceMax}
             onBlur={applyPrice('priceMax')}
-            slotProps={{
-              htmlInput: {
-                min: 0,
-                inputMode: 'numeric',
-                'data-testid': 'catalog-filter-price-max',
-              },
-            }}
+            testId="catalog-filter-price-max"
           />
         </Box>
       </FacetGroup>

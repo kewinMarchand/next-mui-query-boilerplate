@@ -1,14 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const useMobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   // null : premier niveau (navigation principale), [] : racine du catalogue, puis les slugs ouverts.
   const [levels, setLevels] = useState<string[] | null>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
+  const titleNode = useRef<HTMLHeadingElement | null>(null)
   const levelKey = levels?.join('/') ?? 'menu'
 
+  // Le panneau est chargé à la demande : le titre n'existe qu'une fois monté, il prend le focus à ce moment.
+  const titleRef = useCallback((node: HTMLHeadingElement | null) => {
+    titleNode.current = node
+    node?.focus()
+  }, [])
+
   useEffect(() => {
-    if (isOpen) titleRef.current?.focus()
+    if (isOpen) titleNode.current?.focus()
   }, [isOpen, levelKey])
 
   const close = () => {
@@ -17,7 +23,6 @@ export const useMobileMenu = () => {
   }
 
   return {
-    focusTitle: () => titleRef.current?.focus(),
     isOpen,
     levels,
     titleRef,
