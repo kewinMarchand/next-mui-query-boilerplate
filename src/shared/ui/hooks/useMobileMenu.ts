@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const useMobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
-  // null : premier niveau (navigation principale), [] : racine du catalogue, puis les slugs ouverts.
+  // null : premier niveau (navigation principale), [] : racine du catalogue, puis les identifiants des nœuds ouverts.
   const [levels, setLevels] = useState<string[] | null>(null)
   const titleNode = useRef<HTMLHeadingElement | null>(null)
   const levelKey = levels?.join('/') ?? 'menu'
@@ -28,7 +28,7 @@ export const useMobileMenu = () => {
     titleRef,
     open: () => setIsOpen(true),
     close,
-    descend: (slug?: string) => setLevels((current) => (slug ? [...(current ?? []), slug] : [])),
+    descend: (id?: string) => setLevels((current) => (id ? [...(current ?? []), id] : [])),
     back: () => setLevels((current) => (current?.length ? current.slice(0, -1) : null)),
   }
 }

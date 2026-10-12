@@ -30,8 +30,8 @@ export const useCategoryMenu = () => {
 
   const toggle = () => (isOpen ? close() : setIsOpen(true))
 
-  const openBranch = (level: number, slug: string, hasChildren: boolean) =>
-    setOpenPath((current) => [...current.slice(0, level), ...(hasChildren ? [slug] : [])])
+  const openBranch = (level: number, id: string, hasChildren: boolean) =>
+    setOpenPath((current) => [...current.slice(0, level), ...(hasChildren ? [id] : [])])
 
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Escape') {

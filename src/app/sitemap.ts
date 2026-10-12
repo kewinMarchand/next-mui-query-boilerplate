@@ -1,7 +1,10 @@
-import { SITE, SITEMAP_ENTRIES } from '@/shared/config'
+import { listCatalogPaths } from '@/modules/catalog'
+import { SITE, SITE_MAP } from '@/shared/config'
 
 import type { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return SITEMAP_ENTRIES.map(({ href }) => ({ url: `${SITE.url}${href}` }))
+  return [...SITE_MAP.map(({ href }) => href), ...listCatalogPaths()].map((href) => ({
+    url: `${SITE.url}${href}`,
+  }))
 }

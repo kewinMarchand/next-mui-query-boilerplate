@@ -1,13 +1,21 @@
-import { CATALOG_PATH, CATEGORY_ENTRIES } from './categories'
-
 export interface NavigationItem {
   href: string
   label: string
 }
 
+/** Nœud de menu générique : le socle l'affiche sans connaître le module qui le fournit. */
+export interface NavigationNode {
+  id: string
+  label: string
+  href: string
+  children: NavigationNode[]
+}
+
+export const CATALOG_NAVIGATION: NavigationItem = { href: '/catalogue', label: 'Catalogue' }
+
 export const MAIN_NAVIGATION: NavigationItem[] = [
   { href: '/', label: 'Accueil' },
-  { href: CATALOG_PATH, label: 'Catalogue' },
+  CATALOG_NAVIGATION,
   { href: '/taches', label: 'Tâches' },
   { href: '/contact', label: 'Contact' },
 ]
@@ -20,8 +28,3 @@ export const LEGAL_NAVIGATION: NavigationItem[] = [
 ]
 
 export const SITE_MAP: NavigationItem[] = [...MAIN_NAVIGATION, ...LEGAL_NAVIGATION]
-
-export const SITEMAP_ENTRIES: NavigationItem[] = [
-  ...SITE_MAP,
-  ...CATEGORY_ENTRIES.map(({ href, label }) => ({ href, label })),
-]

@@ -3,7 +3,6 @@ import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import { notFound } from 'next/navigation'
 
-import { CATALOG_PATH, categoryHref } from '@/shared/config'
 import { itemListJsonLd, JsonLd } from '@/shared/seo'
 import { Link, PicturePreload } from '@/shared/ui/kit'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
@@ -18,10 +17,16 @@ import { ProductResults } from './ProductResults'
 import { SortSelect } from './SortSelect'
 import { ViewToggle } from './ViewToggle'
 import { catalogHref, clearFilters } from '../domain/catalogQuery'
-import { resolveCategoryPath, trailHrefs } from '../domain/categories'
+import {
+  CATALOG_ROOT_PATH,
+  categoryHref,
+  categoryTrail,
+  resolveCategoryPath,
+  subcategoryLinks,
+} from '../domain/categoryPath'
 import { parseCatalogQuery } from '../domain/parseCatalogQuery'
 import { CatalogLoadError } from '../infrastructure/CatalogLoadError'
-import { findCatalogPage } from '../infrastructure/catalogRepository'
+import { findCatalogPage, findCategoryTree } from '../infrastructure/catalogRepository'
 
 import type { SearchParams } from '../domain/catalogQuery'
 
@@ -33,12 +38,14 @@ interface CatalogViewProps {
 const productCount = (count: number) => `${count} produit${count > 1 ? 's' : ''}`
 
 export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => {
-  const match = resolveCategoryPath(slugs)
-  if (!match) notFound()
+  const tree = findCategoryTree()
+  const categoryPath = resolveCategoryPath(tree, slugs)
+  if (!categoryPath) notFound()
+  const subcategories = subcategoryLinks(tree, slugs)
 
   const query = parseCatalogQuery(searchParams)
   const path = categoryHref(slugs)
-  const title = match.current?.name ?? 'Catalogue'
+  const title = categoryPath.at(-1)?.name ?? 'Catalogue'
   const page = await findCatalogPage(slugs, query).catch((error: unknown) => {
     console.error(error)
     return null
@@ -50,19 +57,19 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
   return (
     <>
       {firstProduct && <PicturePreload {...productImage(firstProduct)} />}
-      <PageContainer breadcrumb={buildBreadcrumb(CATALOG_PATH, trailHrefs(match.trail))}>
+      <PageContainer breadcrumb={buildBreadcrumb(CATALOG_ROOT_PATH, categoryTrail(categoryPath))}>
         <CatalogTitle title={title} focusKey={href} />
-        {match.children.length > 0 && (
+        {subcategories.length > 0 && (
           <Box
             component="ul"
             aria-label="Sous-catégories"
             sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, listStyle: 'none', m: 0, mb: 3, p: 0 }}
           >
-            {match.children.map((child) => (
+            {subcategories.map((child) => (
               <li key={child.slug}>
                 <Chip
                   component={Link}
-                  href={categoryHref([...slugs, child.slug])}
+                  href={child.href}
                   clickable
                   label={child.name}
                   variant="outlined"

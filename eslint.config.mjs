@@ -45,13 +45,6 @@ const policy = (from, to, message, extra = {}) => ({
   message,
 })
 
-// Temporaire, retiré quand l'arbre des catégories rejoint le module catalogue : son domaine et
-// son infrastructure lisent encore CATEGORY_TREE dans shared/config.
-const CATEGORY_TREE_IN_SHARED = {
-  from: { element: { type: ['domain', 'infrastructure'], captured: { module: 'catalog' } } },
-  allow: { to: { element: { type: 'shared', captured: { area: 'config' } } } },
-}
-
 const ARCHITECTURE_POLICIES = [
   policy('routes', 'views', 'Routage : vues, index public des modules et socle seulement.'),
   policy('routes', 'module', 'Routage : vues, index public des modules et socle seulement.'),
@@ -91,7 +84,6 @@ const ARCHITECTURE_POLICIES = [
     'Infrastructure : domaine du module et client HTTP.',
   ),
   policy('infrastructure', 'shared-api', 'Infrastructure : domaine du module et client HTTP.'),
-  CATEGORY_TREE_IN_SHARED,
   policy('ui', sameModule('domain'), 'Interface : domaine, application et interface du module.'),
   policy(
     'ui',

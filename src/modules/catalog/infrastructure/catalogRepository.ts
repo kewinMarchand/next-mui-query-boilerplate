@@ -1,7 +1,7 @@
-import { CATEGORY_TREE, categoryHref } from '@/shared/config'
-
+import { CATEGORY_TREE } from './catalogData'
 import { countFacets, filterProducts, paginate, sortProducts } from '../domain/catalogFilters'
-import { collectSlugs, resolveCategoryPath } from '../domain/categories'
+import { categoryHref } from '../domain/categoryPath'
+import { childCategories, collectSlugs, findCategoryChain } from '../domain/categoryTree'
 
 import type { Catalog } from '../domain/catalog'
 
@@ -78,13 +78,11 @@ export interface CatalogPage extends Catalog.Result {
 export const findCatalogPage = (slugs: string[], query: Catalog.Query): Promise<CatalogPage> =>
   new Promise((resolve, reject) =>
     setTimeout(() => {
-      const match = resolveCategoryPath(slugs, CATEGORY_TREE)
-      if (!match) return reject(new Error(`Catégorie inconnue : ${slugs.join('/')}`))
+      const chain = findCategoryChain(CATEGORY_TREE, slugs)
+      if (!chain) return reject(new Error(`Catégorie inconnue : ${slugs.join('/')}`))
 
-      const branch = productsOfBranch(
-        match.current ? [match.current] : CATEGORY_TREE,
-        !match.current,
-      )
+      const current = chain.at(-1)
+      const branch = productsOfBranch(current ? [current] : CATEGORY_TREE, !current)
       const filtered = sortProducts(filterProducts(branch, query), query.sort)
       const { items, page, pageCount } = paginate(filtered, query.page)
 
@@ -94,7 +92,7 @@ export const findCatalogPage = (slugs: string[], query: Catalog.Query): Promise<
         page,
         pageCount,
         facets: countFacets(branch, query),
-        subcategories: match.children.map((child) => ({
+        subcategories: childCategories(CATEGORY_TREE, chain).map((child) => ({
           href: categoryHref([...slugs, child.slug]),
           name: child.name,
           count: productsOfBranch([child], false).length,
@@ -102,3 +100,5 @@ export const findCatalogPage = (slugs: string[], query: Catalog.Query): Promise<
       })
     }, LATENCY_MS),
   )
+
+export const findCategoryTree = (): Catalog.Category[] => CATEGORY_TREE

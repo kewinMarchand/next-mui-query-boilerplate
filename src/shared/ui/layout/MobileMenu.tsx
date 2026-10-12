@@ -8,19 +8,19 @@ import Typography from '@mui/material/Typography'
 import dynamic from 'next/dynamic'
 import { useId } from 'react'
 
-import { CATALOG_PATH, categoryHref } from '@/shared/config'
+import { CATALOG_NAVIGATION } from '@/shared/config'
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 import { useMobileMenu } from '@/shared/ui/hooks/useMobileMenu'
 import { Icon, Link } from '@/shared/ui/kit'
 
-import type { CategoryNode, NavigationItem } from '@/shared/config'
+import type { NavigationItem, NavigationNode } from '@/shared/config'
 
 // Le panneau n'est utile qu'au clic : son code (Modal, piège de focus) quitte le chargement initial.
 const Drawer = dynamic(() => import('@mui/material/Drawer'), { ssr: false })
 
 interface MobileMenuProps {
   navigation: NavigationItem[]
-  tree: CategoryNode[]
+  categoryMenu: NavigationNode[]
 }
 
 const ROW_SX = {
@@ -34,19 +34,19 @@ const ROW_SX = {
   textAlign: 'left',
 } as const
 
-const findLevel = (tree: CategoryNode[], levels: string[]) => {
+const findLevel = (tree: NavigationNode[], levels: string[]) => {
   let nodes = tree
-  const trail: CategoryNode[] = []
-  for (const slug of levels) {
-    const node = nodes.find((item) => item.slug === slug)
+  const trail: NavigationNode[] = []
+  for (const id of levels) {
+    const node = nodes.find((item) => item.id === id)
     if (!node) break
     trail.push(node)
-    nodes = node.children ?? []
+    nodes = node.children
   }
   return { nodes, trail }
 }
 
-export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
+export const MobileMenu = ({ navigation, categoryMenu }: MobileMenuProps) => {
   const isHydrated = useHydrated()
   const drawerId = useId()
   const { isOpen, levels, titleRef, open, close, descend, back } = useMobileMenu()
@@ -64,10 +64,10 @@ export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
     )
   }
 
-  const { nodes, trail } = findLevel(tree, levels ?? [])
+  const { nodes, trail } = findLevel(categoryMenu, levels ?? [])
   const current = trail.at(-1)
-  const title = levels === null ? 'Menu' : (current?.name ?? 'Catalogue')
-  const parentName = levels?.length ? (trail.at(-2)?.name ?? 'Catalogue') : 'Menu'
+  const title = levels === null ? 'Menu' : (current?.label ?? CATALOG_NAVIGATION.label)
+  const parentName = levels?.length ? (trail.at(-2)?.label ?? CATALOG_NAVIGATION.label) : 'Menu'
 
   return (
     <>
@@ -127,7 +127,7 @@ export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
             {levels === null ? (
               navigation.map((item) => (
                 <li key={item.href}>
-                  {item.href === CATALOG_PATH ? (
+                  {item.href === CATALOG_NAVIGATION.href ? (
                     <Box
                       component="button"
                       type="button"
@@ -156,7 +156,7 @@ export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
                 <li>
                   <MuiLink
                     component={Link}
-                    href={categoryHref(levels)}
+                    href={current?.href ?? CATALOG_NAVIGATION.href}
                     onClick={close}
                     sx={{ ...ROW_SX, fontWeight: 600 }}
                   >
@@ -164,13 +164,13 @@ export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
                   </MuiLink>
                 </li>
                 {nodes.map((node) => (
-                  <li key={node.slug}>
-                    {node.children?.length ? (
+                  <li key={node.id}>
+                    {node.children.length > 0 ? (
                       <Box
                         component="button"
                         type="button"
-                        onClick={() => descend(node.slug)}
-                        data-testid={`layout-mobile-menu-descend-${node.slug}`}
+                        onClick={() => descend(node.id)}
+                        data-testid={`layout-mobile-menu-descend-${node.id}`}
                         sx={{
                           ...ROW_SX,
                           border: 0,
@@ -179,18 +179,18 @@ export const MobileMenu = ({ navigation, tree }: MobileMenuProps) => {
                           cursor: 'pointer',
                         }}
                       >
-                        {node.name}
+                        {node.label}
                         <Icon name="chevron-right" />
                       </Box>
                     ) : (
                       <MuiLink
                         component={Link}
-                        href={categoryHref([...levels, node.slug])}
+                        href={node.href}
                         onClick={close}
                         data-testid="layout-category-link"
                         sx={ROW_SX}
                       >
-                        {node.name}
+                        {node.label}
                       </MuiLink>
                     )}
                   </li>

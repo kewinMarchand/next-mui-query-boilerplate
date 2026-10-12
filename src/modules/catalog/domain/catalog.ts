@@ -1,5 +1,3 @@
-import type { CategoryNode } from '@/shared/config'
-
 export const EXPOSURES = ['soleil', 'mi-ombre', 'ombre'] as const
 export const SIZES = ['S', 'M', 'L'] as const
 export const SORTS = ['pertinence', 'prix-asc', 'prix-desc', 'nom'] as const
@@ -24,7 +22,20 @@ export declare namespace Catalog {
   type Size = (typeof SIZES)[number]
   type Sort = (typeof SORTS)[number]
   type View = (typeof VIEWS)[number]
-  type Category = CategoryNode
+  interface Category {
+    slug: string
+    name: string
+    children?: Category[]
+  }
+
+  interface CategoryPathLink {
+    slug: string
+    name: string
+    href: string
+  }
+
+  /** Chaîne des catégories de la racine à la catégorie courante, validée contre l'arbre. */
+  type CategoryPath = CategoryPathLink[]
 
   interface Product {
     id: string

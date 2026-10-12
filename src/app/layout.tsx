@@ -1,6 +1,7 @@
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import { Inter } from 'next/font/google'
 
+import { getCategoryMenu } from '@/modules/catalog'
 import { SITE } from '@/shared/config'
 import { Providers } from '@/shared/providers'
 import { A11Y_MODE_SCRIPT } from '@/shared/ui/a11y-mode/a11yMode'
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <AppRouterCacheProvider>
           <Providers>
-            <AppShell>{children}</AppShell>
+            <AppShell categoryMenu={getCategoryMenu()}>{children}</AppShell>
           </Providers>
         </AppRouterCacheProvider>
       </body>

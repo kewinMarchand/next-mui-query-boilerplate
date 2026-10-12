@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 
-import { CATALOG_PATH, CATEGORY_TREE, MAIN_NAVIGATION } from '@/shared/config'
+import { CATALOG_NAVIGATION, MAIN_NAVIGATION } from '@/shared/config'
 
 import { CategoryMenu } from './CategoryMenu'
 import { LogoLink } from './LogoLink'
@@ -11,13 +11,19 @@ import { MobileMenu } from './MobileMenu'
 import { NavLink } from './NavLink'
 import { A11yModeToggle } from '../a11y-mode/A11yModeToggle'
 
-export const Header = () => (
+import type { NavigationNode } from '@/shared/config'
+
+interface HeaderProps {
+  categoryMenu: NavigationNode[]
+}
+
+export const Header = ({ categoryMenu }: HeaderProps) => (
   <AppBar position="static" component="header">
     <Container>
       <Toolbar disableGutters sx={{ flexWrap: 'wrap', columnGap: 1, py: 1 }}>
         <LogoLink />
         <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-          <MobileMenu navigation={MAIN_NAVIGATION} tree={CATEGORY_TREE} />
+          <MobileMenu navigation={MAIN_NAVIGATION} categoryMenu={categoryMenu} />
         </Box>
         <Box
           component="nav"
@@ -30,8 +36,8 @@ export const Header = () => (
           >
             {MAIN_NAVIGATION.map((item) => (
               <li key={item.href}>
-                {item.href === CATALOG_PATH ? (
-                  <CategoryMenu label={item.label} tree={CATEGORY_TREE} />
+                {item.href === CATALOG_NAVIGATION.href ? (
+                  <CategoryMenu label={item.label} nodes={categoryMenu} />
                 ) : (
                   <NavLink {...item} />
                 )}

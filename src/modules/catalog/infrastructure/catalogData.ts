@@ -1,12 +1,6 @@
-export interface CategoryNode {
-  slug: string
-  name: string
-  children?: CategoryNode[]
-}
+import type { Catalog } from '../domain/catalog'
 
-export const CATALOG_PATH = '/catalogue'
-
-export const CATEGORY_TREE: CategoryNode[] = [
+export const CATEGORY_TREE: Catalog.Category[] = [
   {
     slug: 'plantes-interieur',
     name: 'Plantes d’intérieur',
@@ -50,23 +44,3 @@ export const CATEGORY_TREE: CategoryNode[] = [
     children: [{ slug: 'nenuphars', name: 'Nénuphars' }],
   },
 ]
-
-export const categoryHref = (slugs: string[]) =>
-  slugs.length ? `${CATALOG_PATH}/${slugs.join('/')}` : CATALOG_PATH
-
-interface CategoryEntry {
-  href: string
-  label: string
-  slugs: string[]
-}
-
-const flatten = (nodes: CategoryNode[], parents: string[] = []): CategoryEntry[] =>
-  nodes.flatMap((node) => {
-    const slugs = [...parents, node.slug]
-    return [
-      { href: categoryHref(slugs), label: node.name, slugs },
-      ...flatten(node.children ?? [], slugs),
-    ]
-  })
-
-export const CATEGORY_ENTRIES: CategoryEntry[] = flatten(CATEGORY_TREE)

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { CATALOG_PATH } from '@/shared/config'
+import { CATALOG_NAVIGATION } from '@/shared/config'
 import { Link } from '@/shared/ui/kit'
 import { Breadcrumb, buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
@@ -26,7 +26,7 @@ export const NotFoundView = () => (
       <Button component={Link} href="/plan-du-site" variant="outlined">
         Plan du site
       </Button>
-      <Button component={Link} href={CATALOG_PATH} variant="outlined">
+      <Button component={Link} href={CATALOG_NAVIGATION.href} variant="outlined">
         Catalogue
       </Button>
     </Stack>

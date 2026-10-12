@@ -8,39 +8,39 @@ import Paper from '@mui/material/Paper'
 import { usePathname } from 'next/navigation'
 import { useId } from 'react'
 
-import { CATALOG_PATH, categoryHref } from '@/shared/config'
+import { CATALOG_NAVIGATION } from '@/shared/config'
 import { useCategoryMenu } from '@/shared/ui/hooks/useCategoryMenu'
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 import { Icon, Link } from '@/shared/ui/kit'
 
 import { NavLink } from './NavLink'
 
-import type { CategoryNode } from '@/shared/config'
+import type { NavigationNode } from '@/shared/config'
 
 interface CategoryMenuProps {
   label: string
-  tree: CategoryNode[]
+  nodes: NavigationNode[]
 }
 
 const COLUMN_WIDTH = 240
 
-const buildColumns = (tree: CategoryNode[], openPath: string[]) => {
-  const columns = [tree]
-  openPath.forEach((slug, level) => {
-    const children = columns[level]?.find((node) => node.slug === slug)?.children
+const buildColumns = (nodes: NavigationNode[], openPath: string[]) => {
+  const columns = [nodes]
+  openPath.forEach((id, level) => {
+    const children = columns[level]?.find((node) => node.id === id)?.children
     if (children) columns.push(children)
   })
   return columns
 }
 
-export const CategoryMenu = ({ label, tree }: CategoryMenuProps) => {
+export const CategoryMenu = ({ label, nodes }: CategoryMenuProps) => {
   const isHydrated = useHydrated()
-  const isActive = usePathname().startsWith(CATALOG_PATH)
+  const isActive = usePathname().startsWith(CATALOG_NAVIGATION.href)
   const panelId = useId()
   const { isOpen, openPath, buttonRef, panelRef, close, toggle, openBranch, onKeyDown } =
     useCategoryMenu()
 
-  if (!isHydrated) return <NavLink href={CATALOG_PATH} label={label} />
+  if (!isHydrated) return <NavLink href={CATALOG_NAVIGATION.href} label={label} />
 
   return (
     <ClickAwayListener onClickAway={close}>
@@ -77,7 +77,7 @@ export const CategoryMenu = ({ label, tree }: CategoryMenuProps) => {
         >
           <MuiLink
             component={Link}
-            href={CATALOG_PATH}
+            href={CATALOG_NAVIGATION.href}
             onClick={close}
             data-testid="layout-category-link"
             sx={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, fontWeight: 600 }}
@@ -85,24 +85,23 @@ export const CategoryMenu = ({ label, tree }: CategoryMenuProps) => {
             Tout le catalogue
           </MuiLink>
           <Box sx={{ display: 'flex', gap: 2 }}>
-            {buildColumns(tree, openPath).map((column, level) => (
+            {buildColumns(nodes, openPath).map((column, level) => (
               <Box
                 component="ul"
                 key={level}
                 sx={{ listStyle: 'none', m: 0, p: 0, width: COLUMN_WIDTH, flexShrink: 0 }}
               >
                 {column.map((node) => {
-                  const hasChildren = Boolean(node.children?.length)
-                  const slugs = [...openPath.slice(0, level), node.slug]
+                  const hasChildren = node.children.length > 0
                   return (
-                    <li key={node.slug}>
+                    <li key={node.id}>
                       <MuiLink
                         component={Link}
-                        href={categoryHref(slugs)}
+                        href={node.href}
                         data-level={level}
-                        aria-expanded={hasChildren ? openPath[level] === node.slug : undefined}
-                        onMouseEnter={() => openBranch(level, node.slug, hasChildren)}
-                        onFocus={() => openBranch(level, node.slug, hasChildren)}
+                        aria-expanded={hasChildren ? openPath[level] === node.id : undefined}
+                        onMouseEnter={() => openBranch(level, node.id, hasChildren)}
+                        onFocus={() => openBranch(level, node.id, hasChildren)}
                         onClick={close}
                         data-testid="layout-category-link"
                         sx={{
@@ -116,7 +115,7 @@ export const CategoryMenu = ({ label, tree }: CategoryMenuProps) => {
                           '&[aria-expanded="true"]': { bgcolor: 'action.selected' },
                         }}
                       >
-                        {node.name}
+                        {node.label}
                         {hasChildren && <Icon name="chevron-right" size={16} />}
                       </MuiLink>
                     </li>

@@ -1,5 +1,6 @@
 export type { Catalog } from './domain/catalog'
 export { buildCatalogMetadata } from './ui/catalogMetadata'
+export { getCategoryMenu, listCatalogPaths } from './ui/categoryNavigation'
 export { CatalogView } from './ui/CatalogView'
 export { CatalogPagination } from './ui/CatalogPagination'
 export { ProductCard } from './ui/ProductCard'

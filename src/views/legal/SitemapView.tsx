@@ -2,27 +2,25 @@ import Box from '@mui/material/Box'
 import MuiLink from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 
-import { CATALOG_PATH, CATEGORY_TREE, categoryHref, SITE_MAP } from '@/shared/config'
+import { getCategoryMenu } from '@/modules/catalog'
+import { CATALOG_NAVIGATION, SITE_MAP } from '@/shared/config'
 import { Link } from '@/shared/ui/kit'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
-import type { CategoryNode } from '@/shared/config'
+import type { NavigationNode } from '@/shared/config'
 
 const LINK_SX = { display: 'inline-flex', alignItems: 'center', minHeight: 44 } as const
 
-const CategoryList = ({ nodes, parents }: { nodes: CategoryNode[]; parents: string[] }) => (
+const CategoryList = ({ nodes }: { nodes: NavigationNode[] }) => (
   <ul>
-    {nodes.map((node) => {
-      const slugs = [...parents, node.slug]
-      return (
-        <li key={node.slug}>
-          <MuiLink component={Link} href={categoryHref(slugs)} sx={LINK_SX}>
-            {node.name}
-          </MuiLink>
-          {node.children && <CategoryList nodes={node.children} parents={slugs} />}
-        </li>
-      )
-    })}
+    {nodes.map((node) => (
+      <li key={node.id}>
+        <MuiLink component={Link} href={node.href} sx={LINK_SX}>
+          {node.label}
+        </MuiLink>
+        {node.children.length > 0 && <CategoryList nodes={node.children} />}
+      </li>
+    ))}
   </ul>
 )
 
@@ -37,7 +35,7 @@ export const SitemapView = () => (
           <MuiLink component={Link} href={href} sx={LINK_SX}>
             {label}
           </MuiLink>
-          {href === CATALOG_PATH && <CategoryList nodes={CATEGORY_TREE} parents={[]} />}
+          {href === CATALOG_NAVIGATION.href && <CategoryList nodes={getCategoryMenu()} />}
         </li>
       ))}
     </Box>

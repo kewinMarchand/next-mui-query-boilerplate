@@ -106,7 +106,7 @@ Règles de dépendance, vérifiées par ESLint (`@boundaries/eslint-plugin`) :
 - le routage importe les vues, l'index public des modules et le socle ;
 - une vue importe l'index public des modules et le socle ;
 - un module n'importe jamais un autre module, la composition se fait dans `views/` (l'accueil assemble le blog) ;
-- le socle n'importe ni module, ni vue, ni routage ;
+- le socle n'importe ni module, ni vue, ni routage : il reçoit les données métier en propriétés (le menu de catégories est fourni par `src/app/layout.tsx`) ;
 - dans un module, `domain/` n'importe que lui-même (et des types du socle), `infrastructure/` le domaine et les types générés de l'API, `ui/` le domaine, l'interface du module et le socle (l'infrastructure seulement si le module n'a pas d'`application/`) ;
 - les types générés de l'API (`shared/api/`) ne sont importés que par `infrastructure/`.
 
@@ -115,7 +115,8 @@ Règles de dépendance, vérifiées par ESLint (`@boundaries/eslint-plugin`) :
 **Sources uniques** :
 
 - `src/shared/config/site.ts` : nom, description, URL, éditeur (valeurs fictives), état d'audit d'accessibilité.
-- `src/shared/config/navigation.ts` et `categories.ts` : navigation principale, liens légaux, arbre des catégories. Le header, le footer, le plan du site, le sitemap XML et le fil d'Ariane en dérivent.
+- `src/shared/config/navigation.ts` : navigation principale et liens légaux. Le header, le footer, le plan du site, le sitemap XML et le fil d'Ariane en dérivent.
+- `src/modules/catalog/infrastructure/catalogData.ts` : arbre des catégories, donnée du module catalogue. Le layout racine en tire le menu (`getCategoryMenu`), le plan du site et le sitemap leurs liens (`listCatalogPaths`).
 - `src/shared/seo/` : `buildMetadata` construit title, description, canonique, robots, Open Graph et Twitter de chaque route. Les JSON-LD (`Organization`, `WebSite`, `BreadcrumbList`, `ItemList`) en partagent les URL absolues.
 
 Les conventions de code viennent du `CLAUDE.md` global de l'auteur. Le `CLAUDE.md` de ce dépôt note les choix propres au projet, les versions épinglées et les pièges rencontrés.
@@ -131,7 +132,7 @@ Les conventions de code viennent du `CLAUDE.md` global de l'auteur. Le `CLAUDE.m
 
 ### Ajouter une catégorie ou une facette au catalogue
 
-- Catégorie : ajouter le nœud dans `CATEGORY_TREE` (`src/shared/config/categories.ts`). Le menu, le plan du site, le sitemap et le fil d'Ariane suivent. Un slug absent de l'arbre répond 404.
+- Catégorie : ajouter le nœud dans `CATEGORY_TREE` (`src/modules/catalog/infrastructure/catalogData.ts`). Le menu, le plan du site, le sitemap et le fil d'Ariane suivent. Un slug absent de l'arbre répond 404.
 - Facette : ajouter le champ au produit et à `Catalog.Query`, le lire et l'écrire dans `catalogQuery.ts` (zod ignore les valeurs invalides), le filtrer et le compter dans `catalogFilters.ts`, l'afficher dans `FiltersForm.tsx`. Chaque étape a son test unitaire à côté.
 - Tout changement de filtre passe par `withFilters`, qui remet la page à 1 et conserve le reste (vue comprise).
 
