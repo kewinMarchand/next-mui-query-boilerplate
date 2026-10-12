@@ -26,6 +26,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - **SEO** : `src/shared/seo/buildMetadata.ts` est le seul constructeur de métadonnées. Pages de catalogue filtrées ou triées en `noindex, follow`, canonique sans filtres.
 - **Erreurs** : `not-found.tsx`, `error.tsx` et `global-error.tsx` délèguent à la vue `views/errors`. `/_erreur-test` (dossier `%5Ferreur-test`) lève une erreur en développement, ou sur un build lancé avec `ENABLE_TEST_ROUTES=1`. `MAINTENANCE=1` fait répondre 503 à toutes les pages via `src/proxy.ts`.
 - **Charte graphique** : `/charte-graphique`, `notFound()` dès que `NODE_ENV === 'production'`. Testée par `playwright.dev.config.ts` sur `next dev` (port 3101).
+- **Suivi des erreurs (GlitchTip)** : `@sentry/nextjs`, section 16 de la spec commune, uniquement via `src/shared/observability/` (règle ESLint). Neutre par défaut : sans `GLITCHTIP_DSN` ni `NEXT_PUBLIC_GLITCHTIP_DSN`, aucun SDK n'est importé et aucune requête ne part. Serveur : SDK importé dans `register` de `src/instrumentation.ts`, `onRequestError` ne remonte que les erreurs inattendues : ni signal de Next (`notFound`, `redirect`), ni en-tête `X-Scenario` (`shouldReportError`, testé). La maintenance 503 est une réponse du proxy, pas une erreur. Navigateur : `src/instrumentation-client.ts` programme le chargement du SDK par import dynamique, à l'inactivité après `load`, sans traçage, sans session ni rejeu. Les frontières d'erreur (`error.tsx`, `global-error.tsx`) remontent les erreurs du navigateur par `useReportError`, sauf celles qui portent un `digest` (rendu serveur, déjà remonté). Options : `sendDefaultPii: false`, `tracesSampleRate: 0`, corps de requête jamais joints côté serveur (`httpIntegration({ maxRequestBodySize: 'none' })`). `withSentryConfig` n'est pas utilisé : il sert à l'envoi des source maps et à l'injection automatique du SDK, deux choses que ce dépôt ne veut pas. Pas de CSP dans ce dépôt : aucune entrée à ajouter.
 - **API** : aucune. Les dépôts des modules (`infrastructure/`) renvoient des données en mémoire. `make api-types` génère `src/shared/api/schema.d.ts` quand `API_SCHEMA_URL` est renseigné. Seule la couche `infrastructure/` des modules a le droit d'importer ces types.
 - **Cibles tactiles** : 44 px minimum (`MuiButton` `minHeight: 44`).
 
@@ -38,6 +39,10 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 | `jsdom`      | `^29`   | jsdom 30 exige Node ≥ 24.15                                    |
 | `vite`       | `^8`    | peer obligatoire de Vitest 5                                   |
 
+## Dépendances ajoutées
+
+- `@sentry/nextjs` 11.6 (dépendance d'exécution) : SDK GlitchTip imposé par la spec (section 16), même version majeure que le dépôt SvelteKit. Côté navigateur, il ne vit que dans un chunk chargé à la demande, après l'affichage et seulement avec un DSN : le JS initial ne gagne que le module de programmation (`errorReporting.client.ts`). Poids du chunk non mesuré à ce jour. Environ 85 Mo installés dans `node_modules/@sentry`.
+
 ## Dépendances de développement ajoutées
 
 - `@boundaries/eslint-plugin` 7.2 (dev, 4,8 Mo installés avec `@boundaries/elements`, aucun effet sur le bundle) : vérifie les règles de dépendance entre couches et modules (D6). Contrairement à `no-restricted-imports`, qui compare la chaîne d'import, il résout le chemin réel : un import relatif `../infrastructure/x` ne le contourne pas. Compatible ESLint 9 (peer `>=6`), vérifié par l'auto-test. Il s'appuie sur `eslint-import-resolver-typescript`, déjà fourni et configuré par `eslint-config-next` : aucun résolveur à ajouter, contrairement au dépôt SvelteKit.
@@ -49,6 +54,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - `no-restricted-imports` :
   - frameworks interdits dans `domain/` et `application/` (`react`, `react-dom`, `next`, `@mui/*`, `@emotion/*`, `@tanstack/*`, `react-hook-form`, `@hookform/*`, `embla-carousel*`) ;
   - `lucide-react` interdit hors du wrapper `Icon.tsx` ;
+  - `@sentry/*` interdit hors de `shared/observability/` ;
   - chemins relatifs à plus d'un niveau interdits.
 - `make arch-selftest` (`tools/archSelftest.mts`, lancé par `make qa`) : écrit une violation volontaire de chaque règle (domaine vers infrastructure par chemin relatif, domaine vers framework, application vers framework, module vers module, interface vers infrastructure dans le catalogue, socle vers module, vue et routage vers l'intérieur d'un module, types générés hors infrastructure), exige l'échec d'ESLint avec le message attendu, puis retire le fichier. Extension `.mts` : le `package.json` n'est pas en `"type": "module"` et Node avertirait sinon.
 - `no-console` désactivé dans `tools/` : ce sont des outils en ligne de commande dont la sortie est le résultat.
@@ -70,6 +76,8 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - Afficher les filtres en ligne avant l'hydratation puis les replier sur mobile décalait toute la page (clic raté en e2e, CLS). Avant hydratation, le mobile reçoit un `<details>` fermé, remplacé ensuite par le bouton « Filtrer ».
 - Le nom du site dans le header était un `<p>` : la marge « après paragraphe » du mode renforcé ouvrait un espace sous la navigation. Il est devenu le texte du lien logo, et le mode renforcé ne vise plus que `<main>`.
 - Un `next dev` lancé dans le dépôt écrit des types dans `.next/dev/types`. Périmés, ils cassent `tsc` (`Route` non assignable) jusqu'à la prochaine compilation du serveur de développement.
+- **DSN GlitchTip** : la clé publique d'un DSN au format Sentry n'accepte que des caractères de mot. Un tiret (`cle-factice`) rend le DSN invalide et le SDK s'éteint.
+- **Tests GlitchTip** : les variables `NEXT_PUBLIC_*` sont figées au build. `tests/e2e/observability.e2e.ts` construit donc sa propre version dans `.next-obs` (`NEXT_DIST_DIR`, lu par `next.config.ts`), la sert sur le port 3102 avec des DSN factices et démarre un faux GlitchTip local (port 3103) qui enregistre les enveloppes. Aucune instance réelle n'est contactée, et la suite principale tourne sans variable.
 - Les dossiers préfixés par `_` sont privés dans l'App Router : une URL qui commence par `_` s'écrit `%5F` dans le nom du dossier.
 - Le JavaScript initial pèse sur le LCP simulé de Lighthouse : toute requête lancée avant l'affichage de l'image LCP entre dans son calcul. Le catalogue est passé de 383 à 276 ko gzip en sortant zod du code client (`parseCatalogQuery.ts`, importé côté serveur seulement), en remplaçant `TextField` (qui embarque Select, Menu et Popover) par `OutlinedInput` et `NativeSelect`, et en chargeant les `Drawer` à la demande (`next/dynamic`).
 - Les images hors de l'écran initial (diapositives, produits au-delà des quatre premiers) attendent l'hydratation (`AfterHydration`, avec `<noscript>` pour le rendu sans JavaScript) : en `loading="lazy"`, Chrome les téléchargeait quand même avant l'image LCP.

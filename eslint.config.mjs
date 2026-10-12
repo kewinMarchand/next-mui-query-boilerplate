@@ -16,6 +16,11 @@ const ICONS_WRAPPER = {
   group: ['lucide-react'],
   message: 'Les icônes passent par le wrapper @/shared/ui/kit/Icon.',
 }
+const OBSERVABILITY_WRAPPER = {
+  group: ['@sentry/*'],
+  message: 'Le SDK GlitchTip passe par le wrapper @/shared/observability.',
+}
+
 const FRAMEWORK_PACKAGES = [
   'react',
   'react/*',
@@ -111,6 +116,7 @@ const config = [
   {
     ignores: [
       '.next/**',
+      '.next-obs/**',
       'node_modules/**',
       'playwright-report/**',
       'test-results/**',
@@ -134,7 +140,10 @@ const config = [
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-      'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER] }],
+      'no-restricted-imports': [
+        'error',
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, OBSERVABILITY_WRAPPER] },
+      ],
     },
   },
   {
@@ -176,7 +185,7 @@ const config = [
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, FRAMEWORKS_IN_DOMAIN] },
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, OBSERVABILITY_WRAPPER, FRAMEWORKS_IN_DOMAIN] },
       ],
     },
   },
@@ -185,9 +194,20 @@ const config = [
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, FRAMEWORKS_IN_APPLICATION] },
+        {
+          patterns: [
+            RELATIVE_DEPTH,
+            ICONS_WRAPPER,
+            OBSERVABILITY_WRAPPER,
+            FRAMEWORKS_IN_APPLICATION,
+          ],
+        },
       ],
     },
+  },
+  {
+    files: ['src/shared/observability/**'],
+    rules: { 'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER] }] },
   },
   {
     files: ['tools/**'],

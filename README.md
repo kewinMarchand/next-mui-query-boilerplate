@@ -49,12 +49,14 @@ make up        # http://localhost:3000
 
 Variables d'environnement :
 
-| Variable               | Rôle                                                                                    |
-| ---------------------- | --------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL` | URL publique, utilisée pour les URL canoniques, Open Graph, JSON-LD et le sitemap       |
-| `API_SCHEMA_URL`       | Schéma OpenAPI de l'API consommée, lu par `make api-types`                              |
-| `MAINTENANCE`          | `1` : toutes les pages répondent 503 avec `Retry-After` (page autonome, `src/proxy.ts`) |
-| `ENABLE_TEST_ROUTES`   | `1` : active `/_erreur-test` sur un build de production. Posée par Playwright seulement |
+| Variable                                     | Rôle                                                                                         |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                       | URL publique, utilisée pour les URL canoniques, Open Graph, JSON-LD et le sitemap            |
+| `API_SCHEMA_URL`                             | Schéma OpenAPI de l'API consommée, lu par `make api-types`                                   |
+| `MAINTENANCE`                                | `1` : toutes les pages répondent 503 avec `Retry-After` (page autonome, `src/proxy.ts`)      |
+| `GLITCHTIP_DSN`, `NEXT_PUBLIC_GLITCHTIP_DSN` | Suivi des erreurs GlitchTip, serveur et navigateur. Vides : aucun SDK chargé, aucune requête |
+| `NEXT_PUBLIC_GLITCHTIP_ENVIRONMENT`          | Environnement des erreurs remontées (défaut : `development` ou `production`)                 |
+| `ENABLE_TEST_ROUTES`                         | `1` : active `/_erreur-test` sur un build de production. Posée par Playwright seulement      |
 
 ## Commandes
 

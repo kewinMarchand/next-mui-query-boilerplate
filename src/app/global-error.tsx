@@ -1,8 +1,11 @@
 'use client'
 
+import { useReportError } from '@/shared/observability'
 import { Link } from '@/shared/ui/kit'
 
-export default function GlobalError() {
+export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
+  useReportError(error)
+
   return (
     <html lang="fr">
       <head>
