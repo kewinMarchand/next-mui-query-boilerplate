@@ -20,7 +20,7 @@ interface HeaderProps {
 export const Header = ({ categoryMenu }: HeaderProps) => (
   <AppBar position="static" component="header">
     <Container>
-      <Toolbar disableGutters sx={{ flexWrap: 'wrap', columnGap: 1, py: 1 }}>
+      <Toolbar disableGutters sx={{ flexWrap: { xs: 'nowrap', md: 'wrap' }, columnGap: 1, py: 1 }}>
         <LogoLink />
         <Box sx={{ display: { xs: 'block', md: 'none' } }}>
           <MobileMenu navigation={MAIN_NAVIGATION} categoryMenu={categoryMenu} />

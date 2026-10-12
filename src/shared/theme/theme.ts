@@ -36,6 +36,11 @@ export const theme = createTheme({
       defaultProps: { disableElevation: true },
       styleOverrides: { root: { minHeight: 44, textTransform: 'none' } },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: { '&.Mui-focusVisible': { outline: '2px solid currentColor', outlineOffset: 2 } },
+      },
+    },
     MuiLink: { defaultProps: { underline: 'hover' } },
   },
 })

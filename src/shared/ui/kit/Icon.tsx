@@ -1,5 +1,4 @@
 import {
-  Accessibility,
   ArrowLeft,
   ChevronDown,
   ChevronLeft,
@@ -11,13 +10,15 @@ import {
   ListTodo,
   Mail,
   Menu,
+  PersonStanding,
   RotateCw,
   SlidersHorizontal,
   X,
 } from 'lucide-react'
 
 const ICONS = {
-  accessibility: Accessibility,
+  // Personnage debout bras ouverts : le mode vise la lecture, pas le handicap moteur.
+  accessibility: PersonStanding,
   'arrow-left': ArrowLeft,
   'chevron-down': ChevronDown,
   'chevron-left': ChevronLeft,

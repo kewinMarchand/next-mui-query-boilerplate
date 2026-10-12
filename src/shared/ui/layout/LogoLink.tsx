@@ -15,7 +15,7 @@ export const LogoLink = () => {
       href="/"
       aria-current={pathname === '/' ? 'page' : undefined}
       data-testid="layout-logo"
-      sx={{
+      sx={(theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         gap: 1.5,
@@ -23,9 +23,11 @@ export const LogoLink = () => {
         color: 'inherit',
         textDecoration: 'none',
         typography: 'h6',
+        fontSize: { xs: theme.typography.body1.fontSize, md: theme.typography.h6.fontSize },
         fontWeight: 700,
+        minWidth: 0,
         mr: 'auto',
-      }}
+      })}
     >
       <LogoMark size={36} />
       {SITE.name}

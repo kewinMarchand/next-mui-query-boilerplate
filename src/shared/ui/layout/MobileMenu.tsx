@@ -23,6 +23,8 @@ interface MobileMenuProps {
   categoryMenu: NavigationNode[]
 }
 
+const MENU_BUTTON_SX = { width: 44, height: 44 } as const
+
 const ROW_SX = {
   display: 'flex',
   alignItems: 'center',
@@ -53,14 +55,15 @@ export const MobileMenu = ({ navigation, categoryMenu }: MobileMenuProps) => {
 
   if (!isHydrated) {
     return (
-      <Button
+      <IconButton
         component={Link}
         href="/plan-du-site"
         color="inherit"
-        startIcon={<Icon name="menu" />}
+        aria-label="Menu"
+        sx={MENU_BUTTON_SX}
       >
-        Menu
-      </Button>
+        <Icon name="menu" />
+      </IconButton>
     )
   }
 
@@ -71,16 +74,17 @@ export const MobileMenu = ({ navigation, categoryMenu }: MobileMenuProps) => {
 
   return (
     <>
-      <Button
+      <IconButton
         color="inherit"
-        startIcon={<Icon name="menu" />}
+        aria-label="Menu"
         aria-expanded={isOpen}
         aria-controls={drawerId}
         onClick={open}
         data-testid="layout-mobile-menu-toggle"
+        sx={MENU_BUTTON_SX}
       >
-        Menu
-      </Button>
+        <Icon name="menu" />
+      </IconButton>
       <Drawer
         open={isOpen}
         onClose={close}
