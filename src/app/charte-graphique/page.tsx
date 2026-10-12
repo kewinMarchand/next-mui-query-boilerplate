@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { StyleguideView } from '@/domains/styleguide'
+import { StyleguideView } from '@/views/styleguide'
 
 import type { Metadata } from 'next'
 

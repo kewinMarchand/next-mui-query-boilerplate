@@ -1,4 +1,4 @@
-import { buildCatalogMetadata, CatalogView } from '@/domains/catalog'
+import { buildCatalogMetadata, CatalogView } from '@/modules/catalog'
 
 import type { Metadata } from 'next'
 

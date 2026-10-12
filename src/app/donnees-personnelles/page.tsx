@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/core/seo'
-import { PersonalDataView } from '@/domains/legal'
+import { buildMetadata } from '@/shared/seo'
+import { PersonalDataView } from '@/views/legal'
 
 import type { Metadata } from 'next'
 

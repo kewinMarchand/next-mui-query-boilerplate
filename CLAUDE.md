@@ -5,22 +5,23 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 ## Choix du projet
 
 - **Type** : application Next.js App Router, rendu serveur par défaut.
-- **Design system** : MUI v9, branché via `@mui/material-nextjs/v16-appRouter` (`AppRouterCacheProvider` dans `src/app/layout.tsx`). Thème dans `src/core/theme/theme.ts` (`cssVariables: true`).
-- **Données serveur côté client** : TanStack Query. Un `QueryClient` par navigateur, créé par `useState(makeQueryClient)` dans `src/core/providers/Providers.tsx`. Devtools en développement uniquement.
-- **Formulaires** : react-hook-form + zod (`@hookform/resolvers/zod`), schéma dans `common/models/` du domaine.
-- **Icônes** : `lucide-react`, uniquement via `src/core/ui/ui-kit/Icon.tsx` (règle ESLint).
+- **Architecture** : quatre racines, `src/app/` (routage, plus `src/proxy.ts`), `src/views/` (pages sans métier ou qui composent des modules : home, legal, errors, styleguide), `src/modules/` (`catalog`, `blog`, `contact`, `task`, en forme réduite `domain/`, `infrastructure/`, `ui/`), `src/shared/` (socle). Suit le document d'architecture commun aux boilerplates (D1 à D12), avec la refonte SvelteKit comme référence. Alias `@/*`, convention de Next.
+- **Design system** : MUI v9, branché via `@mui/material-nextjs/v16-appRouter` (`AppRouterCacheProvider` dans `src/app/layout.tsx`). Thème dans `src/shared/theme/theme.ts` (`cssVariables: true`).
+- **Données serveur côté client** : TanStack Query. Un `QueryClient` par navigateur, créé par `useState(makeQueryClient)` dans `src/shared/providers/Providers.tsx`. Devtools en développement uniquement.
+- **Formulaires** : react-hook-form + zod (`@hookform/resolvers/zod`), schéma dans `domain/` du module.
+- **Icônes** : `lucide-react`, uniquement via `src/shared/ui/kit/Icon.tsx` (règle ESLint).
 - **Unité de police** : `px`. Police Inter via `next/font/google` (servie localement au build).
-- **Images** : composant `Picture` (`src/core/ui/ui-kit/Picture.tsx`), qui sert les variantes AVIF puis WebP générées à l'avance dans `public/images/` (`<nom>-<largeur>.<ext>`). Exception assumée à « toujours `next/image` » : l'optimiseur de Next encode à la première requête, et Lighthouse CI, qui ne passe qu'une fois sur chaque page, mesurait l'accueil entre 0,83 et 0,92 selon que le cache était chaud. Avec les variantes statiques, toutes les pages passent 0,9. La règle `@next/next/no-img-element` est désactivée pour ce seul fichier.
+- **Images** : composant `Picture` (`src/shared/ui/kit/Picture.tsx`), qui sert les variantes AVIF puis WebP générées à l'avance dans `public/images/` (`<nom>-<largeur>.<ext>`). Exception assumée à « toujours `next/image` » : l'optimiseur de Next encode à la première requête, et Lighthouse CI, qui ne passe qu'une fois sur chaque page, mesurait l'accueil entre 0,83 et 0,92 selon que le cache était chaud. Avec les variantes statiques, toutes les pages passent 0,9. La règle `@next/next/no-img-element` est désactivée pour ce seul fichier.
 - **Langue** : français uniquement. URLs en français (`/taches`, `/contact`, `/catalogue`).
 - **Points de rupture** : `md` = 1024 px (bascule ordinateur : menu en cascade, colonne de filtres), `xl` = 1440 px (largeur max du conteneur, jeton unique via `MuiContainer` `maxWidth: 'xl'`). Gouttières 16, 24 puis 32 px.
 - **Mise en page** : `<main>` est pleine largeur. Chaque vue s'enveloppe dans `PageContainer` (conteneur + fil d'Ariane), sauf le hero de l'accueil qui reste bord à bord.
-- **Carrousel** : `embla-carousel-react` 8, importé uniquement dans `src/features/carousel/`. Retenu pour le glisser souris, le swipe et la molette, qu'un carrousel maison en `scroll-snap` ne gère pas proprement au pointeur. Poids mesuré sur les fichiers ESM publiés : 11,2 ko gzip pour le cœur, 0,5 ko pour l'adaptateur React. Embla 8 ne gère pas la molette seul (vérifié par un test e2e en `page.mouse.wheel` horizontal, resté sur la diapositive 1) : `embla-carousel-wheel-gestures` 8 l'ajoute, pour 2,3 ko gzip plus 4,4 ko pour sa dépendance `wheel-gestures` (fichiers ESM publiés). Sans JavaScript, la piste reste en `overflow-x: auto` + `scroll-snap`, Embla prend la main au montage (`data-embla-ready`).
-- **Mode accessibilité renforcée** : script inline dans `<head>` (`src/core/theme/a11yMode.ts`), surcharges CSS sous `html[data-a11y-mode="enhanced"]` injectées par `MuiCssBaseline`, aucun second thème JavaScript. Les espacements WCAG 1.4.12 ne visent que le texte de `<main>`.
+- **Carrousel** : `embla-carousel-react` 8, importé uniquement dans `src/shared/ui/carousel/`. Retenu pour le glisser souris, le swipe et la molette, qu'un carrousel maison en `scroll-snap` ne gère pas proprement au pointeur. Poids mesuré sur les fichiers ESM publiés : 11,2 ko gzip pour le cœur, 0,5 ko pour l'adaptateur React. Embla 8 ne gère pas la molette seul (vérifié par un test e2e en `page.mouse.wheel` horizontal, resté sur la diapositive 1) : `embla-carousel-wheel-gestures` 8 l'ajoute, pour 2,3 ko gzip plus 4,4 ko pour sa dépendance `wheel-gestures` (fichiers ESM publiés). Sans JavaScript, la piste reste en `overflow-x: auto` + `scroll-snap`, Embla prend la main au montage (`data-embla-ready`).
+- **Mode accessibilité renforcée** : script inline dans `<head>` (`src/shared/ui/a11y-mode/a11yMode.ts`), surcharges CSS sous `html[data-a11y-mode="enhanced"]` injectées par `MuiCssBaseline`, aucun second thème JavaScript. Les espacements WCAG 1.4.12 ne visent que le texte de `<main>`.
 - **Catalogue** : état dans l'URL (source unique), lu et écrit par `catalogQuery.ts` (zod). Rendu serveur sans frontière de chargement, formulaire GET qui marche sans JavaScript, navigation client avec `useOptimistic` quand JavaScript est là. Les squelettes s'affichent pendant la transition d'un filtre ou d'un tri (`CatalogTransition.tsx`).
-- **SEO** : `src/core/seo/buildMetadata.ts` est le seul constructeur de métadonnées. Pages de catalogue filtrées ou triées en `noindex, follow`, canonique sans filtres.
-- **Erreurs** : `not-found.tsx`, `error.tsx` et `global-error.tsx` délèguent au domaine `errors`. `/_erreur-test` (dossier `%5Ferreur-test`) lève une erreur en développement, ou sur un build lancé avec `ENABLE_TEST_ROUTES=1`. `MAINTENANCE=1` fait répondre 503 à toutes les pages via `src/proxy.ts`.
+- **SEO** : `src/shared/seo/buildMetadata.ts` est le seul constructeur de métadonnées. Pages de catalogue filtrées ou triées en `noindex, follow`, canonique sans filtres.
+- **Erreurs** : `not-found.tsx`, `error.tsx` et `global-error.tsx` délèguent à la vue `views/errors`. `/_erreur-test` (dossier `%5Ferreur-test`) lève une erreur en développement, ou sur un build lancé avec `ENABLE_TEST_ROUTES=1`. `MAINTENANCE=1` fait répondre 503 à toutes les pages via `src/proxy.ts`.
 - **Charte graphique** : `/charte-graphique`, `notFound()` dès que `NODE_ENV === 'production'`. Testée par `playwright.dev.config.ts` sur `next dev` (port 3101).
-- **API** : aucune. Les dépôts des domaines (`api/`) renvoient des données en mémoire. `make api-types` génère `src/core/api/schema.d.ts` quand `API_SCHEMA_URL` est renseigné.
+- **API** : aucune. Les dépôts des modules (`infrastructure/`) renvoient des données en mémoire. `make api-types` génère `src/shared/api/schema.d.ts` quand `API_SCHEMA_URL` est renseigné. Seule la couche `infrastructure/` des modules a le droit d'importer ces types.
 - **Cibles tactiles** : 44 px minimum (`MuiButton` `minHeight: 44`).
 
 ## Versions épinglées, et pourquoi
@@ -32,10 +33,20 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 | `jsdom`      | `^29`   | jsdom 30 exige Node ≥ 24.15                                    |
 | `vite`       | `^8`    | peer obligatoire de Vitest 5                                   |
 
+## Dépendances de développement ajoutées
+
+- `@boundaries/eslint-plugin` 7.2 (dev, 4,8 Mo installés avec `@boundaries/elements`, aucun effet sur le bundle) : vérifie les règles de dépendance entre couches et modules (D6). Contrairement à `no-restricted-imports`, qui compare la chaîne d'import, il résout le chemin réel : un import relatif `../infrastructure/x` ne le contourne pas. Compatible ESLint 9 (peer `>=6`), vérifié par l'auto-test. Il s'appuie sur `eslint-import-resolver-typescript`, déjà fourni et configuré par `eslint-config-next` : aucun résolveur à ajouter, contrairement au dépôt SvelteKit.
+
 ## Règles ESLint propres au projet
 
-- `@typescript-eslint/no-namespace` avec `allowDeclarations` : les types de domaine sont en `export declare namespace Xxx {}`.
-- `no-restricted-imports` : import profond d'un domaine (`@/domains/x/...`) interdit depuis `app/`, `core/` et `features/`. Autorisé à l'intérieur du domaine lui-même, pour respecter la limite d'un niveau de chemin relatif.
+- `@typescript-eslint/no-namespace` avec `allowDeclarations` : les types de module sont en `export declare namespace Xxx {}`.
+- `boundaries/dependencies` (refus par défaut) : routage (`src/app/` et les fichiers à la racine de `src/`) vers vues, index des modules et socle. Vues vers index des modules et socle. Index d'un module vers ses propres couches. `domain/` vers son module et les types du socle (`import type` seulement). `infrastructure/` vers domaine du module et `shared/api`. `ui/` vers domaine, interface du module et socle, plus infrastructure si le module n'a pas d'`application/` (liste calculée en lisant le disque). Socle vers socle seulement. La valeur capturée `module` interdit tout import d'un module à l'autre. Exception temporaire : le domaine et l'infrastructure du catalogue lisent encore l'arbre des catégories dans `shared/config` (politique `CATEGORY_TREE_IN_SHARED`, à retirer quand l'arbre rejoint le module).
+- `no-restricted-imports` :
+  - frameworks interdits dans `domain/` (`react`, `react-dom`, `next`, `@mui/*`, `@emotion/*`, `@tanstack/*`, `react-hook-form`, `@hookform/*`, `embla-carousel*`) ;
+  - `lucide-react` interdit hors du wrapper `Icon.tsx` ;
+  - chemins relatifs à plus d'un niveau interdits.
+- `make arch-selftest` (`tools/archSelftest.mts`, lancé par `make qa`) : écrit une violation volontaire de chaque règle (domaine vers infrastructure par chemin relatif, domaine vers framework, module vers module, socle vers module, vue et routage vers l'intérieur d'un module, types générés hors infrastructure), exige l'échec d'ESLint avec le message attendu, puis retire le fichier. Extension `.mts` : le `package.json` n'est pas en `"type": "module"` et Node avertirait sinon.
+- `no-console` désactivé dans `tools/` : ce sont des outils en ligne de commande dont la sortie est le résultat.
 - `import/internal-regex: ^@/` : place les imports `@/` en « internes » et laisse les imports de type en dernier.
 
 ## Pièges connus
@@ -55,6 +66,9 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - Le nom du site dans le header était un `<p>` : la marge « après paragraphe » du mode renforcé ouvrait un espace sous la navigation. Il est devenu le texte du lien logo, et le mode renforcé ne vise plus que `<main>`.
 - Un `next dev` lancé dans le dépôt écrit des types dans `.next/dev/types`. Périmés, ils cassent `tsc` (`Route` non assignable) jusqu'à la prochaine compilation du serveur de développement.
 - Les dossiers préfixés par `_` sont privés dans l'App Router : une URL qui commence par `_` s'écrit `%5F` dans le nom du dossier.
+- Le JavaScript initial pèse sur le LCP simulé de Lighthouse : toute requête lancée avant l'affichage de l'image LCP entre dans son calcul. Le catalogue est passé de 383 à 276 ko gzip en sortant zod du code client (`parseCatalogQuery.ts`, importé côté serveur seulement), en remplaçant `TextField` (qui embarque Select, Menu et Popover) par `OutlinedInput` et `NativeSelect`, et en chargeant les `Drawer` à la demande (`next/dynamic`).
+- Les images hors de l'écran initial (diapositives, produits au-delà des quatre premiers) attendent l'hydratation (`AfterHydration`, avec `<noscript>` pour le rendu sans JavaScript) : en `loading="lazy"`, Chrome les téléchargeait quand même avant l'image LCP.
+- Lighthouse CI fait trois passages par page et compare la médiane au seuil (`aggregationMethod: "median"`) : trois passages successifs ont donné 0,71, 0,92 et 0,94 sur `/catalogue/plantes-interieur`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
@@ -65,7 +79,3 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
-
-- Le JavaScript initial pèse sur le LCP simulé de Lighthouse : toute requête lancée avant l'affichage de l'image LCP entre dans son calcul. Le catalogue est passé de 383 à 276 ko gzip en sortant zod du code client (`parseCatalogQuery.ts`, importé côté serveur seulement), en remplaçant `TextField` (qui embarque Select, Menu et Popover) par `OutlinedInput` et `NativeSelect`, et en chargeant les `Drawer` à la demande (`next/dynamic`).
-- Les images hors de l'écran initial (diapositives, produits au-delà des quatre premiers) attendent l'hydratation (`AfterHydration`, avec `<noscript>` pour le rendu sans JavaScript) : en `loading="lazy"`, Chrome les téléchargeait quand même avant l'image LCP.
-- Lighthouse CI fait trois passages par page et compare la médiane au seuil (`aggregationMethod: "median"`) : trois passages successifs ont donné 0,71, 0,92 et 0,94 sur `/catalogue/plantes-interieur`.

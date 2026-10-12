@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/core/seo'
-import { ContactView } from '@/domains/contact'
+import { ContactView } from '@/modules/contact'
+import { buildMetadata } from '@/shared/seo'
 
 import type { Metadata } from 'next'
 

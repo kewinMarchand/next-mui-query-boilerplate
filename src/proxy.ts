@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { MAINTENANCE_RETRY_AFTER_SECONDS, maintenancePage } from '@/domains/errors'
+import { MAINTENANCE_RETRY_AFTER_SECONDS, maintenancePage } from '@/views/errors'
 
 export function proxy() {
   if (process.env.MAINTENANCE !== '1') return NextResponse.next()

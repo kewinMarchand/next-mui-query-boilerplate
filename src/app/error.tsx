@@ -1,6 +1,6 @@
 'use client'
 
-import { ServerErrorView } from '@/domains/errors'
+import { ServerErrorView } from '@/views/errors'
 
 export default function Error() {
   return (

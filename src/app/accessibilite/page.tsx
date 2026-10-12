@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/core/seo'
-import { AccessibilityView } from '@/domains/legal'
+import { buildMetadata } from '@/shared/seo'
+import { AccessibilityView } from '@/views/legal'
 
 import type { Metadata } from 'next'
 

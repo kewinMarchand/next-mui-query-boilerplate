@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from '@/core/ui/ui-kit'
+import { Link } from '@/shared/ui/kit'
 
 export default function GlobalError() {
   return (

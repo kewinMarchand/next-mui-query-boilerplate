@@ -1,4 +1,4 @@
-import { SITE } from '@/core/config'
+import { SITE } from '@/shared/config'
 
 import type { MetadataRoute } from 'next'
 

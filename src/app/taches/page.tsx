@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/core/seo'
-import { TasksView } from '@/domains/tasks'
+import { TasksView } from '@/modules/task'
+import { buildMetadata } from '@/shared/seo'
 
 import type { Metadata } from 'next'
 

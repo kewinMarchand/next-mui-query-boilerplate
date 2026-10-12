@@ -1,6 +1,6 @@
-import { SITE } from '@/core/config'
-import { buildMetadata } from '@/core/seo'
-import { HomeView } from '@/domains/home'
+import { SITE } from '@/shared/config'
+import { buildMetadata } from '@/shared/seo'
+import { HomeView } from '@/views/home'
 
 import type { Metadata } from 'next'
 

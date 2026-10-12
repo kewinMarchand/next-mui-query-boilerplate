@@ -1,4 +1,4 @@
-import { NotFoundView } from '@/domains/errors'
+import { NotFoundView } from '@/views/errors'
 
 import type { Metadata } from 'next'
 

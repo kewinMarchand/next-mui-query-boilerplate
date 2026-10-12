@@ -1,10 +1,10 @@
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import { Inter } from 'next/font/google'
 
-import { SITE } from '@/core/config'
-import { Providers } from '@/core/providers'
-import { A11Y_MODE_SCRIPT } from '@/core/theme/a11yMode'
-import { AppShell } from '@/core/ui/layouts'
+import { SITE } from '@/shared/config'
+import { Providers } from '@/shared/providers'
+import { A11Y_MODE_SCRIPT } from '@/shared/ui/a11y-mode/a11yMode'
+import { AppShell } from '@/shared/ui/layout'
 
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'

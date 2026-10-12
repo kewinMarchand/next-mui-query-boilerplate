@@ -1,4 +1,4 @@
-import { SITE, SITEMAP_ENTRIES } from '@/core/config'
+import { SITE, SITEMAP_ENTRIES } from '@/shared/config'
 
 import type { MetadataRoute } from 'next'
 
