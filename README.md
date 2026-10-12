@@ -85,12 +85,13 @@ src/
   proxy.ts                mode maintenance (503), couche de routage lui aussi
   views/                  pages sans métier ou qui composent des modules : home, legal, errors, styleguide
   modules/
-    catalog/
-      domain/             types (namespace Catalog), état de recherche dans l'URL, règles pures, sans framework
+    catalog/              forme complète
+      domain/             types (namespace Catalog), value objects, règles pures, sans framework
+      application/        cas d'utilisation : chargement de page, menu, chemins du sitemap, sans framework
       infrastructure/     accès aux données (ici en mémoire, avec latence)
       ui/                 vue serveur, filtres et tri client, cartes, pagination, métadonnées SEO
       index.ts            seul export public
-    blog/, contact/, task/   forme réduite : domain/, infrastructure/, ui/
+    blog/, contact/, task/   forme réduite : domain/, infrastructure/, ui/, sans application/
   shared/                 socle sans métier : config, seo, theme, providers,
                           ui/ (kit, layout, carousel, a11y-mode, hooks), api/ (types générés)
 tests/
@@ -107,7 +108,7 @@ Règles de dépendance, vérifiées par ESLint (`@boundaries/eslint-plugin`) :
 - une vue importe l'index public des modules et le socle ;
 - un module n'importe jamais un autre module, la composition se fait dans `views/` (l'accueil assemble le blog) ;
 - le socle n'importe ni module, ni vue, ni routage : il reçoit les données métier en propriétés (le menu de catégories est fourni par `src/app/layout.tsx`) ;
-- dans un module, `domain/` n'importe que lui-même (et des types du socle), `infrastructure/` le domaine et les types générés de l'API, `ui/` le domaine, l'interface du module et le socle (l'infrastructure seulement si le module n'a pas d'`application/`) ;
+- dans un module, `domain/` n'importe que lui-même (et des types du socle), `application/` le domaine et l'infrastructure, `infrastructure/` le domaine et les types générés de l'API, `ui/` le domaine, l'application, l'interface du module et le socle (l'infrastructure seulement si le module n'a pas d'`application/`) ;
 - les types générés de l'API (`shared/api/`) ne sont importés que par `infrastructure/`.
 
 `make arch-selftest`, lancé par `make qa`, écrit une violation volontaire de chaque règle à son emplacement réel, exige l'échec d'ESLint, puis la retire.
@@ -134,7 +135,7 @@ Les conventions de code viennent du `CLAUDE.md` global de l'auteur. Le `CLAUDE.m
 
 - Catégorie : ajouter le nœud dans `CATEGORY_TREE` (`src/modules/catalog/infrastructure/catalogData.ts`). Le menu, le plan du site, le sitemap et le fil d'Ariane suivent. Un slug absent de l'arbre répond 404.
 - Facette : ajouter le champ au produit et à `Catalog.Query`, le lire et l'écrire dans `catalogQuery.ts` (zod ignore les valeurs invalides), le filtrer et le compter dans `catalogFilters.ts`, l'afficher dans `FiltersForm.tsx`. Chaque étape a son test unitaire à côté.
-- Tout changement de filtre passe par `withFilters`, qui remet la page à 1 et conserve le reste (vue comprise).
+- Tout changement de filtre passe par `withFilter`, qui remet la page à 1 et conserve le reste (vue comprise).
 
 ### Charger des données avec TanStack Query
 

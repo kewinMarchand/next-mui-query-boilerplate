@@ -14,8 +14,9 @@ import { useId } from 'react'
 
 import { Link, VISUALLY_HIDDEN } from '@/shared/ui/kit'
 
+import { EXPOSURE_LABELS, sizeLabel } from './labels'
 import { QueryHiddenFields } from './QueryHiddenFields'
-import { withFilters } from '../domain/catalogQuery'
+import { withFilter } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 import type { FocusEvent, FormEvent, ReactNode } from 'react'
@@ -100,7 +101,7 @@ export const FiltersForm = ({
 }: FiltersFormProps) => {
   const applyPrice = (key: 'priceMin' | 'priceMax') => (event: FocusEvent<HTMLInputElement>) => {
     const value = parsePrice(event.target.value)
-    if (value !== query[key]) onApply(withFilters(query, { [key]: value }))
+    if (value !== query[key]) onApply(withFilter(query, { [key]: value }))
   }
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -108,7 +109,7 @@ export const FiltersForm = ({
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     onApply(
-      withFilters(query, {
+      withFilter(query, {
         priceMin: parsePrice(String(data.get('prix_min') ?? '')),
         priceMax: parsePrice(String(data.get('prix_max') ?? '')),
       }),
@@ -144,7 +145,7 @@ export const FiltersForm = ({
             <FormControlLabel
               key={facet.value}
               sx={{ display: 'flex', minHeight: 44 }}
-              label={`${facet.label} (${facet.count})`}
+              label={`${EXPOSURE_LABELS[facet.value]} (${facet.count})`}
               disabled={facet.count === 0 && !checked}
               control={
                 <Checkbox
@@ -152,7 +153,7 @@ export const FiltersForm = ({
                   value={facet.value}
                   checked={checked}
                   onChange={() =>
-                    onApply(withFilters(query, { exposures: toggle(query.exposures, facet.value) }))
+                    onApply(withFilter(query, { exposures: toggle(query.exposures, facet.value) }))
                   }
                   slotProps={{
                     input: { 'data-testid': `catalog-filter-exposure-${facet.value}` } as object,
@@ -171,7 +172,7 @@ export const FiltersForm = ({
             <FormControlLabel
               key={facet.value}
               sx={{ display: 'flex', minHeight: 44 }}
-              label={`${facet.label} (${facet.count})`}
+              label={`${sizeLabel(facet.value)} (${facet.count})`}
               disabled={facet.count === 0 && !checked}
               control={
                 <Checkbox
@@ -179,7 +180,7 @@ export const FiltersForm = ({
                   value={facet.value}
                   checked={checked}
                   onChange={() =>
-                    onApply(withFilters(query, { sizes: toggle(query.sizes, facet.value) }))
+                    onApply(withFilter(query, { sizes: toggle(query.sizes, facet.value) }))
                   }
                   slotProps={{
                     input: { 'data-testid': `catalog-filter-size-${facet.value}` } as object,
@@ -222,7 +223,7 @@ export const FiltersForm = ({
               name="en_stock"
               value="1"
               checked={query.inStock}
-              onChange={() => onApply(withFilters(query, { inStock: !query.inStock }))}
+              onChange={() => onApply(withFilter(query, { inStock: !query.inStock }))}
               slotProps={{
                 input: {
                   role: 'switch',

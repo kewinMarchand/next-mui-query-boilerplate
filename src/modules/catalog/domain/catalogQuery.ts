@@ -32,7 +32,7 @@ export const catalogHref = (path: string, query: Catalog.Query) => {
 }
 
 /** Tout changement de filtre ou de tri revient à la page 1 et conserve le reste. */
-export const withFilters = (
+export const withFilter = (
   query: Catalog.Query,
   changes: Partial<Catalog.Query>,
 ): Catalog.Query => ({
@@ -53,5 +53,5 @@ export const countActiveFilters = (query: Catalog.Query) =>
   (query.priceMax !== null ? 1 : 0) +
   (query.inStock ? 1 : 0)
 
-export const isFilteredOrSorted = (query: Catalog.Query) =>
+export const isFiltered = (query: Catalog.Query) =>
   countActiveFilters(query) > 0 || query.sort !== DEFAULT_QUERY.sort

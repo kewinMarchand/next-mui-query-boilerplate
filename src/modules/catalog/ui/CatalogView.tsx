@@ -16,17 +16,9 @@ import { productImage } from './ProductCard'
 import { ProductResults } from './ProductResults'
 import { SortSelect } from './SortSelect'
 import { ViewToggle } from './ViewToggle'
+import { loadCatalogPage } from '../application/loadCatalogPage'
 import { catalogHref, clearFilters } from '../domain/catalogQuery'
-import {
-  CATALOG_ROOT_PATH,
-  categoryHref,
-  categoryTrail,
-  resolveCategoryPath,
-  subcategoryLinks,
-} from '../domain/categoryPath'
-import { parseCatalogQuery } from '../domain/parseCatalogQuery'
-import { CatalogLoadError } from '../infrastructure/CatalogLoadError'
-import { findCatalogPage, findCategoryTree } from '../infrastructure/catalogRepository'
+import { CATALOG_ROOT_PATH, categoryHref, categoryTrail } from '../domain/categoryPath'
 
 import type { SearchParams } from '../domain/catalogQuery'
 
@@ -38,18 +30,13 @@ interface CatalogViewProps {
 const productCount = (count: number) => `${count} produit${count > 1 ? 's' : ''}`
 
 export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => {
-  const tree = findCategoryTree()
-  const categoryPath = resolveCategoryPath(tree, slugs)
-  if (!categoryPath) notFound()
-  const subcategories = subcategoryLinks(tree, slugs)
+  const load = await loadCatalogPage(slugs, searchParams)
+  if (load.status === 'not-found') notFound()
 
-  const query = parseCatalogQuery(searchParams)
+  const { query, categoryPath, subcategories, result } = load
+  const page = result.status === 'success' ? result.page : null
   const path = categoryHref(slugs)
   const title = categoryPath.at(-1)?.name ?? 'Catalogue'
-  const page = await findCatalogPage(slugs, query).catch((error: unknown) => {
-    console.error(error)
-    return null
-  })
   const href = catalogHref(path, query)
 
   const firstProduct = page?.products[0]
@@ -124,12 +111,12 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
                   <ViewToggle path={path} query={query} />
                 </Box>
               </Box>
-              {page ? (
+              {result.status === 'success' ? (
                 <>
                   <PendingResults view={query.view}>
                     <ProductResults
                       status="success"
-                      products={page.products}
+                      products={result.page.products}
                       view={query.view}
                       clearHref={catalogHref(path, clearFilters(query))}
                     />
@@ -137,13 +124,13 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
                   <CatalogPagination
                     path={path}
                     query={query}
-                    page={page.page}
-                    pageCount={page.pageCount}
+                    page={result.page.page}
+                    pageCount={result.page.pageCount}
                   />
                   <JsonLd
                     data={itemListJsonLd(
                       path,
-                      page.products.map((product) => product.name),
+                      result.page.products.map((product) => product.name),
                     )}
                   />
                 </>
@@ -152,7 +139,7 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
                   status="error"
                   products={undefined}
                   view={query.view}
-                  errorMessage={new CatalogLoadError().message}
+                  errorMessage={result.message}
                   retryHref={href}
                 />
               )}

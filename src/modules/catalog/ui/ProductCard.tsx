@@ -5,7 +5,8 @@ import Typography from '@mui/material/Typography'
 
 import { AfterHydration, Picture } from '@/shared/ui/kit'
 
-import { EXPOSURE_LABELS, formatPrice } from '../domain/catalog'
+import { EXPOSURE_LABELS } from './labels'
+import { formatPrice } from '../domain/catalog'
 
 import type { Catalog } from '../domain/catalog'
 

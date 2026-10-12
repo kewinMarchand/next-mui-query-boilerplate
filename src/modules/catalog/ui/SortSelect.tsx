@@ -11,9 +11,10 @@ import { useId } from 'react'
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 
 import { useCatalogNavigation } from './hooks/useCatalogNavigation'
+import { SORT_LABELS } from './labels'
 import { QueryHiddenFields } from './QueryHiddenFields'
-import { SORT_LABELS, SORTS } from '../domain/catalog'
-import { withFilters } from '../domain/catalogQuery'
+import { SORTS } from '../domain/catalog'
+import { withFilter } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 
@@ -48,7 +49,7 @@ export const SortSelect = ({ path, query }: SortSelectProps) => {
           value={navigation.query.sort}
           onChange={(event) => {
             if (isSort(event.target.value)) {
-              navigation.apply(withFilters(query, { sort: event.target.value }))
+              navigation.apply(withFilter(query, { sort: event.target.value }))
             }
           }}
           input={

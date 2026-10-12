@@ -1,4 +1,4 @@
-import { EXPOSURE_LABELS, EXPOSURES, PAGE_SIZE, SIZES } from './catalog'
+import { EXPOSURES, PAGE_SIZE, SIZES } from './catalog'
 
 import type { Catalog } from './catalog'
 
@@ -22,12 +22,10 @@ export const countFacets = (products: Catalog.Product[], query: Catalog.Query): 
   return {
     exposure: EXPOSURES.map((value) => ({
       value,
-      label: EXPOSURE_LABELS[value],
       count: withoutExposure.filter((product) => product.exposure === value).length,
     })),
     size: SIZES.map((value) => ({
       value,
-      label: `Taille ${value}`,
       count: withoutSize.filter((product) => product.size === value).length,
     })),
   }

@@ -1,7 +1,7 @@
 import { buildMetadata } from '@/shared/seo'
 
-import { findCategoryPath } from './categoryNavigation'
-import { isFilteredOrSorted } from '../domain/catalogQuery'
+import { findCategoryPath } from '../application/catalogNavigation'
+import { isFiltered } from '../domain/catalogQuery'
 import { categoryHref } from '../domain/categoryPath'
 import { parseCatalogQuery } from '../domain/parseCatalogQuery'
 
@@ -26,6 +26,6 @@ export const buildCatalogMetadata = (slugs: string[], searchParams: SearchParams
       ? `${name} : sélection de plantes tropicales de démonstration, à filtrer par exposition, taille, prix et disponibilité, avec tri et pagination.`
       : ROOT_DESCRIPTION,
     path: canonical,
-    noindex: isFilteredOrSorted(query),
+    noindex: isFiltered(query),
   })
 }

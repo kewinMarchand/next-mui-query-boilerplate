@@ -3,9 +3,9 @@ import Chip from '@mui/material/Chip'
 
 import { Icon, Link } from '@/shared/ui/kit'
 
+import { EXPOSURE_LABELS, sizeLabel } from './labels'
 import { TitleFocusLink } from './TitleFocusLink'
-import { EXPOSURE_LABELS } from '../domain/catalog'
-import { catalogHref, clearFilters, isFilteredOrSorted, withFilters } from '../domain/catalogQuery'
+import { catalogHref, clearFilters, isFiltered, withFilter } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 
@@ -17,23 +17,23 @@ interface ActiveFiltersProps {
 const activeFilters = (query: Catalog.Query) => [
   ...query.exposures.map((value) => ({
     label: EXPOSURE_LABELS[value],
-    next: withFilters(query, { exposures: query.exposures.filter((item) => item !== value) }),
+    next: withFilter(query, { exposures: query.exposures.filter((item) => item !== value) }),
   })),
   ...query.sizes.map((value) => ({
-    label: `Taille ${value}`,
-    next: withFilters(query, { sizes: query.sizes.filter((item) => item !== value) }),
+    label: sizeLabel(value),
+    next: withFilter(query, { sizes: query.sizes.filter((item) => item !== value) }),
   })),
   ...(query.priceMin !== null
-    ? [{ label: `Dès ${query.priceMin} €`, next: withFilters(query, { priceMin: null }) }]
+    ? [{ label: `Dès ${query.priceMin} €`, next: withFilter(query, { priceMin: null }) }]
     : []),
   ...(query.priceMax !== null
-    ? [{ label: `Jusqu'à ${query.priceMax} €`, next: withFilters(query, { priceMax: null }) }]
+    ? [{ label: `Jusqu'à ${query.priceMax} €`, next: withFilter(query, { priceMax: null }) }]
     : []),
-  ...(query.inStock ? [{ label: 'En stock', next: withFilters(query, { inStock: false }) }] : []),
+  ...(query.inStock ? [{ label: 'En stock', next: withFilter(query, { inStock: false }) }] : []),
 ]
 
 export const ActiveFilters = ({ path, query }: ActiveFiltersProps) => {
-  if (!isFilteredOrSorted(query)) return null
+  if (!isFiltered(query)) return null
 
   return (
     <Box

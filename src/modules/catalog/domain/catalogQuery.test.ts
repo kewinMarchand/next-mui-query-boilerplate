@@ -3,7 +3,7 @@ import {
   clearFilters,
   DEFAULT_QUERY,
   serializeCatalogQuery,
-  withFilters,
+  withFilter,
 } from './catalogQuery'
 import { parseCatalogQuery } from './parseCatalogQuery'
 
@@ -64,11 +64,11 @@ describe('serializeCatalogQuery', () => {
   })
 })
 
-describe('withFilters et clearFilters', () => {
+describe('withFilter et clearFilters', () => {
   it('revient à la page 1 en conservant les autres paramètres', () => {
     const query = { ...DEFAULT_QUERY, view: 'liste' as const, sort: 'nom' as const, page: 3 }
 
-    expect(withFilters(query, { inStock: true })).toEqual({ ...query, inStock: true, page: 1 })
+    expect(withFilter(query, { inStock: true })).toEqual({ ...query, inStock: true, page: 1 })
   })
 
   it('efface filtres et tri mais garde la vue', () => {

@@ -16,23 +16,29 @@ const ICONS_WRAPPER = {
   group: ['lucide-react'],
   message: 'Les icônes passent par le wrapper @/shared/ui/kit/Icon.',
 }
-const FRAMEWORKS = {
-  group: [
-    'react',
-    'react/*',
-    'react-dom',
-    'react-dom/*',
-    'next',
-    'next/*',
-    '@mui/*',
-    '@emotion/*',
-    '@tanstack/*',
-    'react-hook-form',
-    '@hookform/*',
-    'embla-carousel',
-    'embla-carousel-*',
-  ],
+const FRAMEWORK_PACKAGES = [
+  'react',
+  'react/*',
+  'react-dom',
+  'react-dom/*',
+  'next',
+  'next/*',
+  '@mui/*',
+  '@emotion/*',
+  '@tanstack/*',
+  'react-hook-form',
+  '@hookform/*',
+  'embla-carousel',
+  'embla-carousel-*',
+]
+const FRAMEWORKS_IN_DOMAIN = {
+  group: FRAMEWORK_PACKAGES,
   message: 'Le domaine ne dépend d’aucun framework : données immuables et fonctions pures.',
+}
+const FRAMEWORKS_IN_APPLICATION = {
+  group: FRAMEWORK_PACKAGES,
+  message:
+    'L’application ne dépend d’aucun framework : elle renvoie une union que l’interface traduit.',
 }
 
 const sameModule = (type) => ({
@@ -168,7 +174,19 @@ const config = [
   {
     files: ['src/modules/*/domain/**'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, FRAMEWORKS] }],
+      'no-restricted-imports': [
+        'error',
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, FRAMEWORKS_IN_DOMAIN] },
+      ],
+    },
+  },
+  {
+    files: ['src/modules/*/application/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, FRAMEWORKS_IN_APPLICATION] },
+      ],
     },
   },
   {
