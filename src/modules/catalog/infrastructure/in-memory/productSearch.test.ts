@@ -1,20 +1,16 @@
-import {
-  countFacets,
-  filterProducts,
-  paginate,
-  paginationWindow,
-  sortProducts,
-} from './catalogFilters'
-import { DEFAULT_QUERY } from './catalogQuery'
+import { DEFAULT_QUERY } from '@/modules/catalog/domain/catalogQuery'
+import { Price } from '@/modules/catalog/domain/price'
 
-import type { Catalog } from './catalog'
+import { countFacets, filterProducts, paginate, sortProducts } from './productSearch'
+
+import type { Catalog } from '@/modules/catalog/domain/catalog'
 
 const product = (id: string, overrides: Partial<Catalog.Product>): Catalog.Product => ({
   id,
   slug: id,
   name: id,
   categorySlug: 'monstera',
-  price: 1000,
+  price: Price.fromCents(1000),
   exposure: 'soleil',
   size: 'M',
   inStock: true,
@@ -23,9 +19,9 @@ const product = (id: string, overrides: Partial<Catalog.Product>): Catalog.Produ
 })
 
 const PRODUCTS = [
-  product('b', { exposure: 'soleil', size: 'S', price: 3000 }),
-  product('a', { exposure: 'ombre', size: 'M', price: 1000, inStock: false }),
-  product('c', { exposure: 'ombre', size: 'L', price: 2000 }),
+  product('b', { exposure: 'soleil', size: 'S', price: Price.fromCents(3000) }),
+  product('a', { exposure: 'ombre', size: 'M', price: Price.fromCents(1000), inStock: false }),
+  product('c', { exposure: 'ombre', size: 'L', price: Price.fromCents(2000) }),
 ]
 
 describe('filterProducts', () => {
@@ -66,17 +62,5 @@ describe('paginate', () => {
     expect(paginate(items, 3)).toEqual({ items: [24], page: 3, pageCount: 3 })
     expect(paginate(items, 9).page).toBe(3)
     expect(paginate([], 1)).toEqual({ items: [], page: 1, pageCount: 1 })
-  })
-})
-
-describe('paginationWindow', () => {
-  it('liste toutes les pages jusqu’à 7', () => {
-    expect(paginationWindow(4, 7)).toEqual([1, 2, 3, 4, 5, 6, 7])
-  })
-
-  it('insère des ellipses au-delà de 7 pages', () => {
-    expect(paginationWindow(5, 10)).toEqual([1, 'ellipsis', 4, 5, 6, 'ellipsis', 10])
-    expect(paginationWindow(1, 10)).toEqual([1, 2, 'ellipsis', 10])
-    expect(paginationWindow(10, 10)).toEqual([1, 'ellipsis', 9, 10])
   })
 })

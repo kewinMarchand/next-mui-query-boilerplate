@@ -1,3 +1,5 @@
+import type { Price } from './price'
+
 export const EXPOSURES = ['soleil', 'mi-ombre', 'ombre'] as const
 export const SIZES = ['S', 'M', 'L'] as const
 export const SORTS = ['pertinence', 'prix-asc', 'prix-desc', 'nom'] as const
@@ -29,7 +31,7 @@ export declare namespace Catalog {
     slug: string
     name: string
     categorySlug: string
-    price: number
+    price: Price
     exposure: Exposure
     size: Size
     inStock: boolean
@@ -71,6 +73,3 @@ export declare namespace Catalog {
     facets: Facets
   }
 }
-
-export const formatPrice = (cents: number) =>
-  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(cents / 100)

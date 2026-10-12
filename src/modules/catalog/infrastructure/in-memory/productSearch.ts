@@ -1,14 +1,19 @@
-import { EXPOSURES, PAGE_SIZE, SIZES } from './catalog'
+/**
+ * Simulateur de l'API : filtre, comptage disjonctif, tri et pagination appartiennent au
+ * fournisseur. Au branchement de l'API, ce dossier disparaît ou ne sert plus qu'aux tests.
+ */
+import { EXPOSURES, PAGE_SIZE, SIZES } from '@/modules/catalog/domain/catalog'
+import { eurosToCents } from '@/modules/catalog/domain/price'
 
-import type { Catalog } from './catalog'
+import type { Catalog } from '@/modules/catalog/domain/catalog'
 
 type Criteria = Omit<Catalog.Query, 'sort' | 'view' | 'page'>
 
 const matches = (product: Catalog.Product, criteria: Criteria) =>
   (!criteria.exposures.length || criteria.exposures.includes(product.exposure)) &&
   (!criteria.sizes.length || criteria.sizes.includes(product.size)) &&
-  (criteria.priceMin === null || product.price >= criteria.priceMin * 100) &&
-  (criteria.priceMax === null || product.price <= criteria.priceMax * 100) &&
+  (criteria.priceMin === null || product.price >= eurosToCents(criteria.priceMin)) &&
+  (criteria.priceMax === null || product.price <= eurosToCents(criteria.priceMax)) &&
   (!criteria.inStock || product.inStock)
 
 export const filterProducts = (products: Catalog.Product[], criteria: Criteria) =>
@@ -49,23 +54,4 @@ export const paginate = <T>(items: T[], page: number, pageSize = PAGE_SIZE) => {
     page: current,
     pageCount,
   }
-}
-
-export type PaginationEntry = number | 'ellipsis'
-
-const MAX_PAGES_WITHOUT_ELLIPSIS = 7
-
-/** 1, courante − 1, courante, courante + 1, dernière, avec ellipses au-delà de 7 pages. */
-export const paginationWindow = (current: number, pageCount: number): PaginationEntry[] => {
-  if (pageCount <= MAX_PAGES_WITHOUT_ELLIPSIS) {
-    return Array.from({ length: pageCount }, (_, index) => index + 1)
-  }
-
-  const pages = [1, current - 1, current, current + 1, pageCount].filter(
-    (page, index, all) => page >= 1 && page <= pageCount && all.indexOf(page) === index,
-  )
-  return pages.flatMap((page, index) => {
-    const previous = pages[index - 1]
-    return previous !== undefined && page - previous > 1 ? ['ellipsis' as const, page] : [page]
-  })
 }

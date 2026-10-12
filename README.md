@@ -88,7 +88,8 @@ src/
     catalog/              forme complète
       domain/             types (namespace Catalog), value objects, règles pures, sans framework
       application/        cas d'utilisation : chargement de page, menu, chemins du sitemap, sans framework
-      infrastructure/     accès aux données (ici en mémoire, avec latence)
+      infrastructure/     accès aux données : catalogRepository.ts (signature stable au branchement de l'API)
+        in-memory/        simulateur de l'API : jeu de données, filtre, comptage disjonctif, tri, pagination
       ui/                 vue serveur, filtres et tri client, cartes, pagination, métadonnées SEO
       index.ts            seul export public
     blog/, contact/, task/   forme réduite : domain/, infrastructure/, ui/, sans application/
@@ -134,7 +135,7 @@ Les conventions de code viennent du `CLAUDE.md` global de l'auteur. Le `CLAUDE.m
 ### Ajouter une catégorie ou une facette au catalogue
 
 - Catégorie : ajouter le nœud dans `CATEGORY_TREE` (`src/modules/catalog/infrastructure/catalogData.ts`). Le menu, le plan du site, le sitemap et le fil d'Ariane suivent. Un slug absent de l'arbre répond 404.
-- Facette : ajouter le champ au produit et à `Catalog.Query`, le lire et l'écrire dans `catalogQuery.ts` (zod ignore les valeurs invalides), le filtrer et le compter dans `catalogFilters.ts`, l'afficher dans `FiltersForm.tsx`. Chaque étape a son test unitaire à côté.
+- Facette : ajouter le champ au produit et à `Catalog.Query`, le lire et l'écrire dans `catalogQuery.ts` (zod ignore les valeurs invalides), le filtrer et le compter dans le simulateur de l'API (`infrastructure/in-memory/productSearch.ts`), l'afficher dans `FiltersForm.tsx`. Chaque étape a son test unitaire à côté.
 - Tout changement de filtre passe par `withFilter`, qui remet la page à 1 et conserve le reste (vue comprise).
 
 ### Charger des données avec TanStack Query

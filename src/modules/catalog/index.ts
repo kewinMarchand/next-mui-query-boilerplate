@@ -1,4 +1,5 @@
 export type { Catalog } from './domain/catalog'
+export { Price } from './domain/price'
 export { buildCatalogMetadata } from './ui/catalogMetadata'
 export { getCategoryMenu, listCatalogPaths } from './application/catalogNavigation'
 export { CatalogView } from './ui/CatalogView'

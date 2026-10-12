@@ -2,8 +2,8 @@ import Box from '@mui/material/Box'
 
 import { VISUALLY_HIDDEN } from '@/shared/ui/kit'
 
+import { paginationWindow } from './pagination'
 import { TitleFocusLink } from './TitleFocusLink'
-import { paginationWindow } from '../domain/catalogFilters'
 import { catalogHref } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'

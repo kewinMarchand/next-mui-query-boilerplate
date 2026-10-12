@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
 import { BlogGrid } from '@/modules/blog'
-import { ProductCard } from '@/modules/catalog'
+import { Price, ProductCard } from '@/modules/catalog'
 import { Picture } from '@/shared/ui/kit'
 
 import { StyleguideSection } from '../StyleguideSection'
@@ -12,7 +12,7 @@ const PRODUCT = {
   slug: 'exemple',
   name: 'Heliconia rostrata',
   categorySlug: 'heliconia',
-  price: 3290,
+  price: Price.fromCents(3290),
   exposure: 'soleil',
   size: 'M',
   inStock: false,
