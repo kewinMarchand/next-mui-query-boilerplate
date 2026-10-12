@@ -1,7 +1,9 @@
+import Box from '@mui/material/Box'
 import MuiLink from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 
 import { SITE } from '@/shared/config'
+import { isAudienceMeasurementEnabled } from '@/shared/observability'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
 import { LegalSection } from './LegalSection'
@@ -62,5 +64,18 @@ export const PersonalDataView = () => (
         transmise.
       </Typography>
     </LegalSection>
+
+    {isAudienceMeasurementEnabled && (
+      <Box data-testid="legal-audience-measurement">
+        <LegalSection title="Mesure d'audience">
+          <Typography>
+            La fréquentation du site est mesurée avec Matomo, hébergé par l'éditeur, configuré sans
+            cookie et sans identifiant : aucun suivi d'un site à l'autre, adresse IP anonymisée,
+            aucune donnée transmise à un tiers. Les statistiques produites sont anonymes et servent
+            uniquement à améliorer le site. Les données brutes sont conservées 25 mois au plus.
+          </Typography>
+        </LegalSection>
+      </Box>
+    )}
   </PageContainer>
 )

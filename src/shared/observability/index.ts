@@ -1,3 +1,5 @@
 export { SCENARIO_HEADER, shouldReportError } from './errorReporting'
 export { reportClientError, scheduleClientErrorReporting } from './errorReporting.client'
+export { isAudienceMeasurementEnabled } from './matomo'
+export { MatomoTracker } from './MatomoTracker'
 export { useReportError } from './useReportError'

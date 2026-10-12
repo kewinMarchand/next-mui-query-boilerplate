@@ -8,6 +8,13 @@ const LEGAL_LINKS = [
 ]
 
 test.describe('Pages légales', () => {
+  test('n’affiche pas la mesure d’audience sans Matomo', async ({ page }) => {
+    await page.goto('/donnees-personnelles')
+
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    await expect(page.getByTestId('legal-audience-measurement')).toHaveCount(0)
+  })
+
   test('le footer mène aux quatre pages légales', async ({ page }) => {
     await page.goto('/')
 

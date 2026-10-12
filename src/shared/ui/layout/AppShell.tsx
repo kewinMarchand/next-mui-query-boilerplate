@@ -1,4 +1,7 @@
 import Box from '@mui/material/Box'
+import { Suspense } from 'react'
+
+import { isAudienceMeasurementEnabled, MatomoTracker } from '@/shared/observability'
 
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -20,5 +23,11 @@ export const AppShell = ({ categoryMenu, children }: AppShellProps) => (
       {children}
     </Box>
     <Footer />
+    {isAudienceMeasurementEnabled && (
+      // useSearchParams impose une frontière Suspense sur les pages statiques.
+      <Suspense fallback={null}>
+        <MatomoTracker />
+      </Suspense>
+    )}
   </Box>
 )
