@@ -20,7 +20,7 @@ export const A11yModeToggle = () => {
       aria-pressed={isEnhanced}
       aria-label={LABEL}
       onClick={toggle}
-      startIcon={<Icon name="accessibility" />}
+      startIcon={<Icon name="person-standing" />}
       data-testid="a11y-mode-toggle"
       sx={(theme) => ({
         flexShrink: 0,

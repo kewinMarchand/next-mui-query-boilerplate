@@ -9,7 +9,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - **Design system** : MUI v9, branché via `@mui/material-nextjs/v16-appRouter` (`AppRouterCacheProvider` dans `src/app/layout.tsx`). Thème dans `src/shared/theme/theme.ts` (`cssVariables: true`).
 - **Données serveur côté client** : TanStack Query. Un `QueryClient` par navigateur, créé par `useState(makeQueryClient)` dans `src/shared/providers/Providers.tsx`. Devtools en développement uniquement.
 - **Formulaires** : react-hook-form + zod (`@hookform/resolvers/zod`), schéma dans `domain/` du module. Champs obligatoires : `required` sur le champ (astérisque de MUI, masqué aux lecteurs d'écran) et mention « Les champs marqués d'un astérisque (*) sont obligatoires. » en tête du formulaire (RGAA 11.10).
-- **Icônes** : `lucide-react`, uniquement via `src/shared/ui/kit/Icon.tsx` (règle ESLint).
+- **Icônes** : sprite SVG tiré de Lucide (section 17 de la spec commune). La liste des noms Lucide est dans `icons.json`. `make icons` (`tools/icons.mts`) génère `public/icons.svg` et le type `IconName` (`src/shared/ui/kit/iconNames.ts`), les trois sont versionnés. `make qa` échoue si le sprite ou le type sont périmés (`make icons-check`). Un seul composant `Icon.tsx` : `<svg>` natif avec `<use href="/icons.svg#nom">`, décoratif par défaut, `role="img"` et `aria-label` avec `label`. `SvgIcon` de MUI n'est pas utilisé : il impose son `viewBox` et sa taille en `em`, le `<svg>` natif garde la taille en pixels des icônes Lucide d'avant. Le mode renforcé utilise `person-standing`.
 - **Unité de police** : `px`. Police Inter via `next/font/google` (servie localement au build).
 - **Images** : composant `Picture` (`src/shared/ui/kit/Picture.tsx`), qui sert les variantes AVIF puis WebP générées à l'avance dans `public/images/` (`<nom>-<largeur>.<ext>`). Exception assumée à « toujours `next/image` » : l'optimiseur de Next encode à la première requête, et Lighthouse CI, qui ne passe qu'une fois sur chaque page, mesurait l'accueil entre 0,83 et 0,92 selon que le cache était chaud. Avec les variantes statiques, toutes les pages passent 0,9. La règle `@next/next/no-img-element` est désactivée pour ce seul fichier.
 - **Langue** : français uniquement. URLs en français (`/taches`, `/contact`, `/catalogue`).
@@ -46,6 +46,9 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 
 ## Dépendances de développement ajoutées
 
+- `@iconify-json/lucide` 1.2 (dev, 640 Ko installés, aucun effet sur le bundle) : les tracés Lucide (licence ISC) au format Iconify, lus par `tools/icons.mts`. Remplace `lucide-react`, retiré.
+- `svgstore` 3.0 (dev, 140 Ko installés hors dépendances, aucun effet sur le bundle) : assemble le sprite, un `<symbol>` par icône avec son `viewBox`. Il ne publie pas de types : `tools/svgstore.d.ts` déclare la seule API utilisée.
+
 - `@boundaries/eslint-plugin` 7.2 (dev, 4,8 Mo installés avec `@boundaries/elements`, aucun effet sur le bundle) : vérifie les règles de dépendance entre couches et modules (D6). Contrairement à `no-restricted-imports`, qui compare la chaîne d'import, il résout le chemin réel : un import relatif `../infrastructure/x` ne le contourne pas. Compatible ESLint 9 (peer `>=6`), vérifié par l'auto-test. Il s'appuie sur `eslint-import-resolver-typescript`, déjà fourni et configuré par `eslint-config-next` : aucun résolveur à ajouter, contrairement au dépôt SvelteKit.
 
 ## Règles ESLint propres au projet
@@ -54,7 +57,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 - `boundaries/dependencies` (refus par défaut) : routage (`src/app/` et les fichiers à la racine de `src/`) vers vues, index des modules et socle. Vues vers index des modules et socle. Index d'un module vers ses propres couches. `domain/` vers son module et les types du socle (`import type` seulement). `application/` vers domaine et infrastructure du module, et types du socle. `infrastructure/` vers domaine du module et `shared/api`. `ui/` vers domaine, application, interface du module et socle, plus infrastructure si le module n'a pas d'`application/` (liste calculée en lisant le disque). Socle vers socle seulement. La valeur capturée `module` interdit tout import d'un module à l'autre.
 - `no-restricted-imports` :
   - frameworks interdits dans `domain/` et `application/` (`react`, `react-dom`, `next`, `@mui/*`, `@emotion/*`, `@tanstack/*`, `react-hook-form`, `@hookform/*`, `embla-carousel*`) ;
-  - `lucide-react` interdit hors du wrapper `Icon.tsx` ;
+  - `@iconify-json/*` et `svgstore` interdits hors de `tools/icons.mts` ;
   - `@sentry/*` interdit hors de `shared/observability/` ;
   - chemins relatifs à plus d'un niveau interdits.
 - `make arch-selftest` (`tools/archSelftest.mts`, lancé par `make qa`) : écrit une violation volontaire de chaque règle (domaine vers infrastructure par chemin relatif, domaine vers framework, application vers framework, module vers module, interface vers infrastructure dans le catalogue, socle vers module, vue et routage vers l'intérieur d'un module, types générés hors infrastructure), exige l'échec d'ESLint avec le message attendu, puis retire le fichier. Extension `.mts` : le `package.json` n'est pas en `"type": "module"` et Node avertirait sinon.

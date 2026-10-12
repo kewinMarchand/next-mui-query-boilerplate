@@ -31,7 +31,6 @@
     "@tanstack/react-query": "^5.104.0",
     "embla-carousel-react": "^8",
     "embla-carousel-wheel-gestures": "^8",
-    "lucide-react": "^1.49.0",
     "next": "16.3.7",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
@@ -41,6 +40,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@boundaries/eslint-plugin": "^7.2.0",
+    "@iconify-json/lucide": "^1.2.143",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.63.0",
     "@tanstack/react-query-devtools": "^5.104.0",
@@ -59,6 +59,7 @@
     "lint-staged": "^17.6.0",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.9",
+    "svgstore": "^3.0.1",
     "typescript": "~6.0.3",
     "vite": "^8",
     "vitest": "^5.0.3"

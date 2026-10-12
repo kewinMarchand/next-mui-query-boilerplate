@@ -25,7 +25,7 @@ Le header porte le logo, la navigation, le menu de catégories (cascade sur ordi
 | TanStack Query 5                       | Cache et synchronisation des données serveur côté client                  |
 | react-hook-form + zod 4                | Formulaires, validation et types dérivés du même schéma                   |
 | Embla Carousel 8 + wheel-gestures      | Carrousel (glisser, swipe, molette), dans `shared/ui/carousel` uniquement |
-| lucide-react                           | Icônes, via le wrapper `Icon`                                             |
+| Lucide (sprite SVG)                    | Icônes : `icons.json`, `make icons`, composant `Icon`                     |
 | ESLint 9, Prettier, Husky, lint-staged | Qualité du code et règles d’architecture, vérifiées à chaque commit       |
 | Vitest 5 + Testing Library             | Tests unitaires et fonctionnels                                           |
 | Playwright + axe-core                  | Tests end-to-end et accessibilité, desktop et mobile                      |
@@ -63,20 +63,21 @@ Variables d'environnement :
 
 `make help` liste toutes les commandes. Les principales :
 
-| Commande                               | Effet                                                                                      |
-| -------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `make up`                              | Serveur de développement                                                                   |
-| `make build` / `make start`            | Build de production, puis le servir                                                        |
-| `make qa`                              | QA rapide : lint (dont architecture), auto-test des règles, format, types, tests unitaires |
-| `make arch-selftest`                   | Écrit une violation de chaque règle d'architecture, exige l'échec d'ESLint, puis la retire |
-| `make qa-full`                         | QA complète : QA rapide, e2e, accessibilité, pages de dev, Lighthouse                      |
-| `make test-unit`                       | Vitest                                                                                     |
-| `make test-e2e`                        | Playwright, desktop et mobile, sur le build de production (port 3100)                      |
-| `make test-a11y`                       | axe-core, WCAG 2.1 AA, sur chaque page, dans les deux modes d'affichage                    |
-| `make test-dev`                        | Charte graphique, servie par `next dev` (port 3101)                                        |
-| `make metrics`                         | Lighthouse CI : échoue sous 90 en performance ou sous 100 en accessibilité et SEO          |
-| `make api-types`                       | Génère `src/shared/api/schema.d.ts` depuis `API_SCHEMA_URL`                                |
-| `make docker-build` / `make docker-up` | Image de production, sur le port `PORT` (3000 par défaut)                                  |
+| Commande                               | Effet                                                                                                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `make up`                              | Serveur de développement                                                                                     |
+| `make build` / `make start`            | Build de production, puis le servir                                                                          |
+| `make qa`                              | QA rapide : lint (dont architecture), auto-test des règles, format, types, tests unitaires                   |
+| `make arch-selftest`                   | Écrit une violation de chaque règle d'architecture, exige l'échec d'ESLint, puis la retire                   |
+| `make qa-full`                         | QA complète : QA rapide, e2e, accessibilité, pages de dev, Lighthouse                                        |
+| `make test-unit`                       | Vitest                                                                                                       |
+| `make test-e2e`                        | Playwright, desktop et mobile, sur le build de production (port 3100)                                        |
+| `make test-a11y`                       | axe-core, WCAG 2.1 AA, sur chaque page, dans les deux modes d'affichage                                      |
+| `make test-dev`                        | Charte graphique, servie par `next dev` (port 3101)                                                          |
+| `make metrics`                         | Lighthouse CI : échoue sous 90 en performance ou sous 100 en accessibilité et SEO                            |
+| `make icons` / `make icons-check`      | Génère le sprite `public/icons.svg` et le type `IconName` depuis `icons.json`, ou vérifie qu'ils sont à jour |
+| `make api-types`                       | Génère `src/shared/api/schema.d.ts` depuis `API_SCHEMA_URL`                                                  |
+| `make docker-build` / `make docker-up` | Image de production, sur le port `PORT` (3000 par défaut)                                                    |
 
 ## Architecture
 
@@ -159,7 +160,7 @@ Les données utiles au référencement (blog de l'accueil, catalogue) sont au co
 
 ### Ajouter une icône
 
-Importer l'icône lucide dans `src/shared/ui/kit/Icon.tsx` et l'ajouter à `ICONS`. Ne jamais importer `lucide-react` ailleurs, ESLint le refuse. La charte graphique liste automatiquement les icônes du wrapper.
+Ajouter son nom Lucide dans `icons.json`, puis lancer `make icons` : le sprite `public/icons.svg` et le type `IconName` sont régénérés, à versionner tous les deux. `make qa` échoue s'ils sont périmés. Les outils d'icônes (`@iconify-json/lucide`, `svgstore`) ne s'importent que dans `tools/icons.mts`, ESLint le refuse ailleurs. La charte graphique liste automatiquement les icônes du wrapper.
 
 ### Ajuster le mode accessibilité renforcée
 

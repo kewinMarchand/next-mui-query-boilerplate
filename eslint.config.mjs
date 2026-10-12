@@ -13,8 +13,9 @@ const MODULES_WITHOUT_APPLICATION = readdirSync(MODULES_ROOT).filter(
 
 const RELATIVE_DEPTH = { group: ['../../*'], message: 'Utiliser l’alias @/ au-delà d’un niveau.' }
 const ICONS_WRAPPER = {
-  group: ['lucide-react'],
-  message: 'Les icônes passent par le wrapper @/shared/ui/kit/Icon.',
+  group: ['@iconify-json/*', 'svgstore'],
+  message:
+    'Les icônes passent par le sprite : nom dans icons.json, make icons, puis @/shared/ui/kit/Icon.',
 }
 const OBSERVABILITY_WRAPPER = {
   group: ['@sentry/*'],
@@ -214,8 +215,8 @@ const config = [
     rules: { 'no-console': 'off' },
   },
   {
-    files: ['src/shared/ui/kit/Icon.tsx'],
-    rules: { 'no-restricted-imports': 'off' },
+    files: ['tools/icons.mts'],
+    rules: { 'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH] }] },
   },
   {
     files: ['src/shared/ui/kit/Picture.tsx'],

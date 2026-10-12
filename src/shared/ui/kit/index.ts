@@ -1,5 +1,6 @@
-export { Icon, ICON_NAMES } from './Icon'
-export type { IconName } from './Icon'
+export { Icon } from './Icon'
+export { ICON_NAMES } from './iconNames'
+export type { IconName } from './iconNames'
 export { Link } from './Link'
 export { LogoMark } from './LogoMark'
 export { VISUALLY_HIDDEN } from './visuallyHidden'

@@ -1,43 +1,4 @@
-import {
-  ArrowLeft,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  CircleAlert,
-  CircleCheck,
-  LayoutGrid,
-  List,
-  ListTodo,
-  Mail,
-  Menu,
-  PersonStanding,
-  RotateCw,
-  SlidersHorizontal,
-  X,
-} from 'lucide-react'
-
-const ICONS = {
-  // Personnage debout bras ouverts : le mode vise la lecture, pas le handicap moteur.
-  accessibility: PersonStanding,
-  'arrow-left': ArrowLeft,
-  'chevron-down': ChevronDown,
-  'chevron-left': ChevronLeft,
-  'chevron-right': ChevronRight,
-  'circle-alert': CircleAlert,
-  'circle-check': CircleCheck,
-  'layout-grid': LayoutGrid,
-  list: List,
-  'list-todo': ListTodo,
-  mail: Mail,
-  menu: Menu,
-  'rotate-cw': RotateCw,
-  'sliders-horizontal': SlidersHorizontal,
-  x: X,
-} as const
-
-export type IconName = keyof typeof ICONS
-
-export const ICON_NAMES = Object.keys(ICONS).filter((name): name is IconName => name in ICONS)
+import type { IconName } from './iconNames'
 
 interface IconProps {
   name: IconName
@@ -45,12 +6,16 @@ interface IconProps {
   label?: string
 }
 
-export const Icon = ({ name, size = 20, label }: IconProps) => {
-  const Component = ICONS[name]
+const SPRITE = '/icons.svg'
 
-  if (label) {
-    return <Component size={size} role="img" aria-label={label} />
-  }
-
-  return <Component size={size} aria-hidden="true" focusable="false" />
-}
+/** Symbole du sprite `public/icons.svg` (Lucide), décoratif sauf si un libellé est fourni. */
+export const Icon = ({ name, size = 20, label }: IconProps) =>
+  label ? (
+    <svg width={size} height={size} role="img" aria-label={label}>
+      <use href={`${SPRITE}#${name}`} />
+    </svg>
+  ) : (
+    <svg width={size} height={size} aria-hidden="true" focusable="false">
+      <use href={`${SPRITE}#${name}`} />
+    </svg>
+  )
