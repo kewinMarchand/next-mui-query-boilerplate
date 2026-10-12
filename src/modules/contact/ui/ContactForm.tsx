@@ -4,6 +4,7 @@ import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 
 import { Icon } from '@/shared/ui/kit'
 
@@ -15,6 +16,9 @@ export const ContactForm = () => {
 
   return (
     <Stack component="form" spacing={2} noValidate onSubmit={onSubmit} sx={{ maxWidth: 560 }}>
+      <Typography variant="body2" data-testid="contact-required-legend">
+        Les champs marqués d'un astérisque (*) sont obligatoires.
+      </Typography>
       <TextField
         label="Nom"
         autoComplete="name"

@@ -14,6 +14,17 @@ const renderForm = () =>
   )
 
 describe('ContactForm', () => {
+  it('explique le marqueur des champs obligatoires et les déclare required', () => {
+    renderForm()
+
+    expect(screen.getByTestId('contact-required-legend')).toHaveTextContent(
+      "Les champs marqués d'un astérisque (*) sont obligatoires.",
+    )
+    for (const testId of ['contact-name', 'contact-email', 'contact-message']) {
+      expect(screen.getByTestId(testId)).toBeRequired()
+    }
+  })
+
   it('lie le message d’erreur au champ invalide', async () => {
     renderForm()
     await userEvent.click(screen.getByTestId('contact-submit'))
