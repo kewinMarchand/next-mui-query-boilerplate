@@ -192,7 +192,7 @@ Démarrer le serveur avec `MAINTENANCE=1`. Toutes les routes répondent 503 avec
 
 ## Intégration continue
 
-`.github/workflows/ci.yml` lance `make install`, `make qa`, puis les tests e2e, accessibilité, pages de développement et Lighthouse, à chaque push sur `main` et sur chaque pull request. En cas d'échec, le rapport Playwright est joint au run.
+`.github/workflows/ci.yml` lance `make install`, `make qa`, puis, contre l'API Hono clonée et lancée dans le job (`API_URL=http://localhost:8091`), les tests e2e, accessibilité, pages de développement et Lighthouse, à chaque push sur `main` et sur chaque pull request. En cas d'échec, le rapport Playwright est joint au run.
 
 ## Licence
 
