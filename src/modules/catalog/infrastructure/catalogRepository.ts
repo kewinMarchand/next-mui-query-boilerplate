@@ -1,5 +1,5 @@
 import { ApiError } from '@/shared/api/client'
-import { serverApiClient } from '@/shared/api/client.server'
+import { serverApiClient, staticApiClient } from '@/shared/api/client.server'
 
 import { toCatalogPage, toCategory, toProductsQuery } from './http/catalogTranslation'
 
@@ -10,7 +10,7 @@ export interface CatalogPage extends Catalog.Result {
 }
 
 export const findCategoryTree = async (): Promise<Catalog.Category[]> => {
-  const { data, response } = await (await serverApiClient()).GET('/api/categories')
+  const { data, response } = await staticApiClient().GET('/api/categories')
   if (!data) throw new ApiError(response)
   return data.map(toCategory)
 }

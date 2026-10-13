@@ -10,9 +10,9 @@ import { AppShell } from '@/shared/ui/layout'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
-// Chaque page lit l'API à la requête (menu de catégories, X-Scenario relayé) : rendu dynamique
-// déclaré, sans pré-rendu au build qui buterait sur headers().
-export const dynamic = 'force-dynamic'
+// Le menu de catégories vient de l'API : les pages statiques se régénèrent toutes les 5 minutes,
+// y compris celles construites sans API joignable (menu vide en repli).
+export const revalidate = 300
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 

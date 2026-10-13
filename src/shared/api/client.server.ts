@@ -2,12 +2,17 @@ import { headers } from 'next/headers'
 
 import { createApiClient } from './client'
 
+const apiUrl = () => process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || ''
+
 /**
- * Client de la requête en cours : `API_URL` relue à l'exécution (repli sur la valeur du build) et
- * `X-Scenario` reçu relayé à l'API. Lire les en-têtes rend la route dynamique.
+ * Données communes aux pages (menu, blog, sitemap) : sans `X-Scenario`, la page reste statique et se
+ * régénère selon le `revalidate` de sa route. `API_URL` est relue à chaque régénération.
+ */
+export const staticApiClient = () => createApiClient(apiUrl())
+
+/**
+ * Client de la requête en cours : `X-Scenario` reçu relayé à l'API, pour les états d'erreur et de
+ * liste vide des tests e2e. Lire les en-têtes rend la route dynamique.
  */
 export const serverApiClient = async () =>
-  createApiClient(
-    process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || '',
-    (await headers()).get('X-Scenario'),
-  )
+  createApiClient(apiUrl(), (await headers()).get('X-Scenario'))

@@ -1,16 +1,16 @@
 import { listCategoryPaths, resolveCategoryPath, toCategoryMenu } from '../domain/categoryPath'
 import { findCategoryTree } from '../infrastructure/catalogRepository'
 
-/** Menu des catégories. API indisponible : menu vide, la page reste servie. */
-export const getCategoryMenu = async () =>
-  toCategoryMenu(
-    await findCategoryTree().catch((error: unknown) => {
-      console.error(error)
-      return []
-    }),
-  )
+/** API indisponible, au build compris : arbre vide, la page reste servie. */
+const findCategoryTreeOrEmpty = () =>
+  findCategoryTree().catch((error: unknown) => {
+    console.error(error)
+    return []
+  })
 
-export const listCatalogPaths = async () => listCategoryPaths(await findCategoryTree())
+export const getCategoryMenu = async () => toCategoryMenu(await findCategoryTreeOrEmpty())
+
+export const listCatalogPaths = async () => listCategoryPaths(await findCategoryTreeOrEmpty())
 
 export const findCategoryPath = async (slugs: string[]) =>
   resolveCategoryPath(await findCategoryTree(), slugs)
