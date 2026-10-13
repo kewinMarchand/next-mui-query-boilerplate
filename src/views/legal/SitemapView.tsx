@@ -24,20 +24,24 @@ const CategoryList = ({ nodes }: { nodes: NavigationNode[] }) => (
   </ul>
 )
 
-export const SitemapView = () => (
-  <PageContainer breadcrumb={buildBreadcrumb('/plan-du-site')}>
-    <Typography variant="h1" gutterBottom>
-      Plan du site
-    </Typography>
-    <Box component="ul" data-testid="legal-sitemap">
-      {SITE_MAP.map(({ href, label }) => (
-        <li key={href}>
-          <MuiLink component={Link} href={href} sx={LINK_SX}>
-            {label}
-          </MuiLink>
-          {href === CATALOG_NAVIGATION.href && <CategoryList nodes={getCategoryMenu()} />}
-        </li>
-      ))}
-    </Box>
-  </PageContainer>
-)
+export const SitemapView = async () => {
+  const categoryMenu = await getCategoryMenu()
+
+  return (
+    <PageContainer breadcrumb={buildBreadcrumb('/plan-du-site')}>
+      <Typography variant="h1" gutterBottom>
+        Plan du site
+      </Typography>
+      <Box component="ul" data-testid="legal-sitemap">
+        {SITE_MAP.map(({ href, label }) => (
+          <li key={href}>
+            <MuiLink component={Link} href={href} sx={LINK_SX}>
+              {label}
+            </MuiLink>
+            {href === CATALOG_NAVIGATION.href && <CategoryList nodes={categoryMenu} />}
+          </li>
+        ))}
+      </Box>
+    </PageContainer>
+  )
+}

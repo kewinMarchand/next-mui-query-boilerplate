@@ -2,9 +2,14 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+import { sendContactMessage } from '@/modules/contact/infrastructure/sendContactMessage'
 import { makeQueryClient } from '@/shared/providers'
 
 import { ContactForm } from './ContactForm'
+
+vi.mock('@/modules/contact/infrastructure/sendContactMessage', () => ({
+  sendContactMessage: vi.fn(async () => ({ status: 'sent' })),
+}))
 
 const renderForm = () =>
   render(
@@ -42,5 +47,25 @@ describe('ContactForm', () => {
     await userEvent.click(screen.getByTestId('contact-submit'))
 
     expect(await screen.findByTestId('contact-success')).toBeInTheDocument()
+  })
+
+  it('relaie sous le champ la violation 422 renvoyée par l’API', async () => {
+    vi.mocked(sendContactMessage).mockResolvedValueOnce({
+      status: 'invalid',
+      fieldErrors: [{ field: 'name', message: 'Votre nom ne doit pas dépasser 255 caractères.' }],
+    })
+    renderForm()
+    await userEvent.type(screen.getByTestId('contact-name'), 'Ada')
+    await userEvent.type(screen.getByTestId('contact-email'), 'ada@exemple.fr')
+    await userEvent.type(screen.getByTestId('contact-message'), 'Bonjour, ceci est un message.')
+    await userEvent.click(screen.getByTestId('contact-submit'))
+
+    const name = screen.getByTestId('contact-name')
+    expect(
+      await screen.findByText('Votre nom ne doit pas dépasser 255 caractères.'),
+    ).toBeInTheDocument()
+    expect(name).toHaveAttribute('aria-invalid', 'true')
+    expect(name).toHaveAccessibleDescription('Votre nom ne doit pas dépasser 255 caractères.')
+    expect(screen.queryByTestId('contact-success')).not.toBeInTheDocument()
   })
 })

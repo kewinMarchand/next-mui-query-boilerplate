@@ -49,6 +49,8 @@ make install   # image de dev (Node, Chromium) et dépendances
 make up        # http://localhost:3000, rechargement à chaud
 ```
 
+Le site lit ses données dans une API de test lancée à côté : [api-platform-test-api](https://github.com/kewinMarchand/api-platform-test-api) sur le port 8090 (défaut) ou [hono-mongo-test-api](https://github.com/kewinMarchand/hono-mongo-test-api) sur le port 8091, au même contrat. `API_URL` choisit l'une ou l'autre. Les tests e2e ont besoin de l'API lancée.
+
 Le port vient de `DEV_PORT` (3000 par défaut), pour `make up` comme pour `make start`. Le conteneur partage le réseau de la machine. Le navigateur appelle l'API directement : un autre port doit être autorisé par la configuration CORS de l'API, par exemple `DEV_PORT=3150 make up` si le 3000 est déjà pris.
 
 Variables d'environnement :
@@ -99,8 +101,8 @@ src/
     catalog/              forme complète
       domain/             types (namespace Catalog), value objects, règles pures, sans framework
       application/        cas d'utilisation : chargement de page, menu, chemins du sitemap, sans framework
-      infrastructure/     accès aux données : catalogRepository.ts (signature stable au branchement de l'API)
-        in-memory/        simulateur de l'API : jeu de données, filtre, comptage disjonctif, tri, pagination
+      infrastructure/     accès aux données : catalogRepository.ts appelle l'API
+        http/             traduction entre le contrat de l'API et le domaine (seule à importer les types générés)
       ui/                 vue serveur, filtres et tri client, cartes, pagination, métadonnées SEO
       index.ts            seul export public
     blog/, contact/, task/   forme réduite : domain/, infrastructure/, ui/, sans application/
@@ -129,7 +131,7 @@ Règles de dépendance, vérifiées par ESLint (`@boundaries/eslint-plugin`) :
 
 - `src/shared/config/site.ts` : nom, description, URL, éditeur (valeurs fictives), état d'audit d'accessibilité.
 - `src/shared/config/navigation.ts` : navigation principale et liens légaux. Le header, le footer, le plan du site, le sitemap XML et le fil d'Ariane en dérivent.
-- `src/modules/catalog/infrastructure/catalogData.ts` : arbre des catégories, donnée du module catalogue. Le layout racine en tire le menu (`getCategoryMenu`), le plan du site et le sitemap leurs liens (`listCatalogPaths`).
+- `GET /api/categories` : arbre des catégories, lu par le module catalogue. Le layout racine en tire le menu (`getCategoryMenu`), le plan du site et le sitemap leurs liens (`listCatalogPaths`).
 - `src/shared/seo/` : `buildMetadata` construit title, description, canonique, robots, Open Graph et Twitter de chaque route. Les JSON-LD (`Organization`, `WebSite`, `BreadcrumbList`, `ItemList`) en partagent les URL absolues.
 
 Les conventions de code viennent du `CLAUDE.md` global de l'auteur. Le `CLAUDE.md` de ce dépôt note les choix propres au projet, les versions épinglées et les pièges rencontrés.
@@ -145,15 +147,15 @@ Les conventions de code viennent du `CLAUDE.md` global de l'auteur. Le `CLAUDE.m
 
 ### Ajouter une catégorie ou une facette au catalogue
 
-- Catégorie : ajouter le nœud dans `CATEGORY_TREE` (`src/modules/catalog/infrastructure/catalogData.ts`). Le menu, le plan du site, le sitemap et le fil d'Ariane suivent. Un slug absent de l'arbre répond 404.
-- Facette : ajouter le champ au produit et à `Catalog.Query`, le lire et l'écrire dans `catalogQuery.ts` (zod ignore les valeurs invalides), le filtrer et le compter dans le simulateur de l'API (`infrastructure/in-memory/productSearch.ts`), l'afficher dans `FiltersForm.tsx`. Chaque étape a son test unitaire à côté.
+- Catégorie : l'ajouter dans l'API. Le menu, le plan du site, le sitemap et le fil d'Ariane suivent. Un slug absent de l'arbre répond 404.
+- Facette : ajouter le champ au produit et à `Catalog.Query`, le lire et l'écrire dans `catalogQuery.ts` (zod ignore les valeurs invalides), le traduire en paramètre de l'API dans `infrastructure/http/catalogTranslation.ts`, l'afficher dans `FiltersForm.tsx`. Chaque étape a son test unitaire à côté.
 - Tout changement de filtre passe par `withFilter`, qui remet la page à 1 et conserve le reste (vue comprise).
 
 ### Charger des données avec TanStack Query
 
 Le pattern est dans `src/modules/task/` :
 
-- `infrastructure/taskRepository.ts` fournit la donnée. Pour brancher une vraie API, remplacer son contenu par un appel typé, sans toucher à l'UI.
+- `infrastructure/taskRepository.ts` appelle `GET /api/tasks` depuis le navigateur avec le client typé, `infrastructure/http/taskTranslation.ts` traduit la réponse en `Task.Entity`.
 - `ui/hooks/useTasks.ts` encapsule `useQuery`, avec une clé de cache exportée et une erreur de chargement (`TasksLoadError`).
 - `ui/TaskList.tsx` affiche les trois états à partir de props, ce qui le rend testable sans réseau.
 - `ui/TasksPanel.tsx` est le seul composant client : il relie le hook au composant d'affichage.

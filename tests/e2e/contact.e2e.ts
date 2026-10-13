@@ -23,4 +23,17 @@ test.describe('Contact', () => {
 
     await expect(page.getByTestId('contact-success')).toBeVisible()
   })
+
+  test('affiche sous le champ la violation 422 renvoyée par l’API', async ({ page }) => {
+    await page.goto('/contact')
+    await page.getByTestId('contact-name').fill('A'.repeat(256))
+    await page.getByTestId('contact-email').fill('ada@exemple.fr')
+    await page.getByTestId('contact-message').fill('Bonjour, ceci est un message.')
+    await page.getByTestId('contact-submit').click()
+
+    const name = page.getByTestId('contact-name')
+    await expect(name).toHaveAttribute('aria-invalid', 'true')
+    await expect(name).toHaveAccessibleDescription('Votre nom ne doit pas dépasser 255 caractères.')
+    await expect(page.getByTestId('contact-success')).toHaveCount(0)
+  })
 })

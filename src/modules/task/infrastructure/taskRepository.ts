@@ -1,12 +1,12 @@
+import { ApiError, browserApiClient } from '@/shared/api/client'
+
+import { toTask } from './http/taskTranslation'
+
 import type { Task } from '../domain/task'
 
-const TASKS: Task.Entity[] = [
-  { id: '1', title: 'Brancher la vraie API', done: false },
-  { id: '2', title: 'Générer les types OpenAPI', done: false },
-  { id: '3', title: 'Lancer make qa', done: true },
-]
-
-const LATENCY_MS = 300
-
-export const findAllTasks = (): Promise<Task.Entity[]> =>
-  new Promise((resolve) => setTimeout(() => resolve(TASKS), LATENCY_MS))
+/** Appelée dans le navigateur, par TanStack Query. */
+export const findAllTasks = async (): Promise<Task.Entity[]> => {
+  const { data, response } = await browserApiClient().GET('/api/tasks')
+  if (!data) throw new ApiError(response)
+  return data.map(toTask)
+}

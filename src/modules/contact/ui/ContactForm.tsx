@@ -58,7 +58,7 @@ export const ContactForm = () => {
         Envoyer
       </Button>
       <div aria-live="polite">
-        {mutation.isSuccess && (
+        {mutation.data?.status === 'sent' && (
           <Alert severity="success" data-testid="contact-success">
             Merci, votre message a bien été envoyé.
           </Alert>

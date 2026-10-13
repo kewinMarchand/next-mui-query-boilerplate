@@ -1,23 +1,57 @@
 import { loadCatalogPage } from './loadCatalogPage'
-import { findCatalogPage } from '../infrastructure/catalogRepository'
+import { findCatalogPage, findCategoryTree } from '../infrastructure/catalogRepository'
 
-import type * as CatalogRepository from '../infrastructure/catalogRepository'
+import type { Catalog } from '../domain/catalog'
+import type { CatalogPage } from '../infrastructure/catalogRepository'
 
-vi.mock('../infrastructure/catalogRepository', async (importOriginal) => {
-  const original = await importOriginal<typeof CatalogRepository>()
-  return { ...original, findCatalogPage: vi.fn(original.findCatalogPage) }
-})
+vi.mock('../infrastructure/catalogRepository', () => ({
+  findCategoryTree: vi.fn(),
+  findCatalogPage: vi.fn(),
+}))
+
+const TREE: Catalog.Category[] = [
+  {
+    slug: 'plantes-interieur',
+    name: "Plantes d'intérieur",
+    children: [
+      {
+        slug: 'feuillages',
+        name: 'Feuillages',
+        children: [
+          { slug: 'monstera', name: 'Monstera', children: [] },
+          { slug: 'fougeres', name: 'Fougères', children: [] },
+        ],
+      },
+    ],
+  },
+]
+
+const PAGE: CatalogPage = {
+  products: [],
+  total: 0,
+  page: 1,
+  pageCount: 1,
+  facets: { exposure: [], size: [] },
+  subcategories: [],
+}
 
 describe('loadCatalogPage', () => {
-  it('renvoie la page d’une catégorie connue', async () => {
+  beforeEach(() => {
+    vi.mocked(findCategoryTree).mockResolvedValue(TREE)
+    vi.mocked(findCatalogPage).mockResolvedValue(PAGE)
+  })
+
+  it('renvoie la page d’une catégorie connue, avec l’état de recherche lu dans l’URL', async () => {
     const load = await loadCatalogPage(['plantes-interieur', 'feuillages'], { tri: 'nom' })
 
-    expect(load.status).toBe('ok')
-    if (load.status !== 'ok' || load.result.status !== 'success') throw new Error('page attendue')
-    expect(load.query.sort).toBe('nom')
+    expect(findCatalogPage).toHaveBeenCalledWith(
+      ['plantes-interieur', 'feuillages'],
+      expect.objectContaining({ sort: 'nom' }),
+    )
+    expect(load).toMatchObject({ status: 'ok', result: { status: 'success', page: PAGE } })
+    if (load.status !== 'ok') throw new Error('page attendue')
     expect(load.categoryPath.map((link) => link.slug)).toEqual(['plantes-interieur', 'feuillages'])
     expect(load.subcategories.map((link) => link.slug)).toEqual(['monstera', 'fougeres'])
-    expect(load.result.page.total).toBeGreaterThan(0)
   })
 
   it('déclare introuvables une catégorie inconnue et un chemin trop profond', async () => {
@@ -25,16 +59,27 @@ describe('loadCatalogPage', () => {
     expect(await loadCatalogPage(['a', 'b', 'c', 'd'], {})).toEqual({ status: 'not-found' })
   })
 
-  it('transforme un échec du dépôt en résultat d’erreur affichable', async () => {
+  it('transforme un échec de l’API en résultat d’erreur affichable', async () => {
     vi.mocked(findCatalogPage).mockRejectedValueOnce(new Error('panne'))
     vi.spyOn(console, 'error').mockImplementationOnce(() => {})
 
-    const load = await loadCatalogPage([], {})
+    expect(await loadCatalogPage(['plantes-interieur'], {})).toMatchObject({
+      status: 'ok',
+      categoryPath: [{ slug: 'plantes-interieur' }],
+      result: { status: 'error', message: 'Impossible de charger le catalogue pour le moment.' },
+    })
+  })
 
-    expect(load).toMatchObject({
+  it('affiche l’erreur à la racine du catalogue quand l’arbre ne peut pas être lu', async () => {
+    vi.mocked(findCategoryTree).mockRejectedValueOnce(new Error('panne'))
+    vi.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    expect(await loadCatalogPage(['plantes-interieur'], {})).toMatchObject({
       status: 'ok',
       query: expect.objectContaining({ page: 1 }),
-      result: { status: 'error', message: 'Impossible de charger le catalogue pour le moment.' },
+      categoryPath: [],
+      subcategories: [],
+      result: { status: 'error' },
     })
   })
 })

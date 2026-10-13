@@ -20,20 +20,33 @@ export type CatalogPageLoad =
       result: CatalogPageResult
     }
 
+const unavailable = (error: unknown): CatalogPageResult => {
+  console.error(error)
+  return { status: 'error', message: new CatalogLoadError().message }
+}
+
 /**
  * Cas d'utilisation « afficher une page du catalogue » : valide le chemin contre l'arbre, lit
  * l'état de recherche, interroge le dépôt, puis décide. Catégorie inconnue : introuvable. Échec
- * du dépôt : résultat en erreur, que l'interface affiche avec une relance.
+ * de l'API : résultat en erreur, que l'interface affiche avec une relance (à la racine du
+ * catalogue si l'arbre lui-même n'a pas pu être lu).
  */
 export const loadCatalogPage = async (
   slugs: string[],
   searchParams: SearchParams,
 ): Promise<CatalogPageLoad> => {
-  const tree = findCategoryTree()
+  const query = parseCatalogQuery(searchParams)
+
+  let tree: Catalog.Category[]
+  try {
+    tree = await findCategoryTree()
+  } catch (error) {
+    return { status: 'ok', query, categoryPath: [], subcategories: [], result: unavailable(error) }
+  }
+
   const categoryPath = resolveCategoryPath(tree, slugs)
   if (!categoryPath) return { status: 'not-found' }
 
-  const query = parseCatalogQuery(searchParams)
   const base = {
     status: 'ok' as const,
     query,
@@ -44,7 +57,6 @@ export const loadCatalogPage = async (
   try {
     return { ...base, result: { status: 'success', page: await findCatalogPage(slugs, query) } }
   } catch (error) {
-    console.error(error)
-    return { ...base, result: { status: 'error', message: new CatalogLoadError().message } }
+    return { ...base, result: unavailable(error) }
   }
 }

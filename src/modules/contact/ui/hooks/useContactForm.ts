@@ -18,7 +18,10 @@ export const useContactForm = () => {
 
   const mutation = useMutation({
     mutationFn: sendContactMessage,
-    onSuccess: () => form.reset(DEFAULT_VALUES),
+    onSuccess: (result) => {
+      if (result.status === 'sent') return form.reset(DEFAULT_VALUES)
+      for (const { field, message } of result.fieldErrors) form.setError(field, { message })
+    },
   })
 
   const onSubmit = form.handleSubmit((values) => mutation.mutate(values))

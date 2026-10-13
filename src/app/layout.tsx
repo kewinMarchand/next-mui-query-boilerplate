@@ -10,6 +10,10 @@ import { AppShell } from '@/shared/ui/layout'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
+// Chaque page lit l'API à la requête (menu de catégories, X-Scenario relayé) : rendu dynamique
+// déclaré, sans pré-rendu au build qui buterait sur headers().
+export const dynamic = 'force-dynamic'
+
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 
 export const metadata: Metadata = {
@@ -26,7 +30,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={inter.variable} suppressHydrationWarning>
       <head>
@@ -35,7 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <AppRouterCacheProvider>
           <Providers>
-            <AppShell categoryMenu={getCategoryMenu()}>{children}</AppShell>
+            <AppShell categoryMenu={await getCategoryMenu()}>{children}</AppShell>
           </Providers>
         </AppRouterCacheProvider>
       </body>

@@ -11,8 +11,12 @@ import type { Metadata } from 'next'
 const ROOT_DESCRIPTION =
   'Catalogue de démonstration d’une jardinerie tropicale : plantes d’intérieur, d’extérieur et aquatiques, filtrables par exposition, taille, prix et stock.'
 
-export const buildCatalogMetadata = (slugs: string[], searchParams: SearchParams): Metadata => {
-  const categoryPath = findCategoryPath(slugs)
+export const buildCatalogMetadata = async (
+  slugs: string[],
+  searchParams: SearchParams,
+): Promise<Metadata> => {
+  // API indisponible : métadonnées de la racine du catalogue, la page affiche l'erreur.
+  const categoryPath = await findCategoryPath(slugs).catch(() => [])
   if (!categoryPath) return { title: 'Page introuvable', robots: { index: false, follow: true } }
 
   const query = parseCatalogQuery(searchParams)

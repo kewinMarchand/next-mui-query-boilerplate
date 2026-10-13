@@ -22,7 +22,7 @@ test.describe("Fil d'Ariane", () => {
     await expect(breadcrumb.getByRole('listitem')).toHaveText([
       'Accueil',
       'Catalogue',
-      'Plantes d’intérieur',
+      "Plantes d'intérieur",
       'Feuillages',
     ])
     await expect(breadcrumb.getByRole('listitem').last()).toHaveAttribute('aria-current', 'page')

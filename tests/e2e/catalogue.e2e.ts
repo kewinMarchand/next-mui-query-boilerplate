@@ -146,7 +146,30 @@ test.describe('Catalogue', () => {
       await page.getByTestId('catalog-filters-submit').locator('visible=true').click()
 
       await expect(page).toHaveURL(/\/catalogue\?tri=nom&taille=L&prix_min=&prix_max=$/)
-      await expect(page.getByTestId('catalog-results-count')).toHaveText('7 produits')
+      await expect(page.getByTestId('catalog-results-count')).toHaveText('9 produits')
     })
+  })
+})
+
+test.describe('Catalogue, API en erreur (X-Scenario: error)', () => {
+  test.use({ extraHTTPHeaders: { 'X-Scenario': 'error' } })
+
+  test('affiche l’erreur et la relance', async ({ page }) => {
+    await page.goto('/catalogue')
+
+    await expect(page.getByTestId('catalog-error')).toBeVisible()
+    await expect(page.getByTestId('catalog-retry')).toBeVisible()
+    await expect(page.getByTestId('catalog-product')).toHaveCount(0)
+  })
+})
+
+test.describe('Catalogue, API sans données (X-Scenario: empty)', () => {
+  test.use({ extraHTTPHeaders: { 'X-Scenario': 'empty' } })
+
+  test('affiche le message de liste vide', async ({ page }) => {
+    await page.goto('/catalogue')
+
+    await expect(page.getByTestId('catalog-empty')).toBeVisible()
+    await expect(page.getByTestId('catalog-error')).toHaveCount(0)
   })
 })
