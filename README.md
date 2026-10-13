@@ -49,19 +49,20 @@ make install   # image de dev (Node, Chromium) et dépendances
 make up        # http://localhost:3000, rechargement à chaud
 ```
 
-Le port publié vient de `DEV_PORT` (3000 par défaut) : `DEV_PORT=3160 make up` sert l'application sur http://localhost:3160 si le 3000 est déjà pris. Il vaut aussi pour `make start`.
+Le port vient de `DEV_PORT` (3000 par défaut), pour `make up` comme pour `make start`. Le conteneur partage le réseau de la machine. Le navigateur appelle l'API directement : un autre port doit être autorisé par la configuration CORS de l'API, par exemple `DEV_PORT=3150 make up` si le 3000 est déjà pris.
 
 Variables d'environnement :
 
-| Variable                                               | Rôle                                                                                                                |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`                                 | URL publique, utilisée pour les URL canoniques, Open Graph, JSON-LD et le sitemap                                   |
-| `API_SCHEMA_URL`                                       | Schéma OpenAPI de l'API consommée, lu par `make api-types`                                                          |
-| `MAINTENANCE`                                          | `1` : toutes les pages répondent 503 avec `Retry-After` (page autonome, `src/proxy.ts`)                             |
-| `GLITCHTIP_DSN`, `NEXT_PUBLIC_GLITCHTIP_DSN`           | Suivi des erreurs GlitchTip, serveur et navigateur. Vides : aucun SDK chargé, aucune requête                        |
-| `NEXT_PUBLIC_GLITCHTIP_ENVIRONMENT`                    | Environnement des erreurs remontées (défaut : `development` ou `production`)                                        |
-| `NEXT_PUBLIC_MATOMO_URL`, `NEXT_PUBLIC_MATOMO_SITE_ID` | Mesure d'audience Matomo sans cookie. Vides : aucun script, aucune requête, pas de paragraphe « Mesure d'audience » |
-| `ENABLE_TEST_ROUTES`                                   | `1` : active `/_erreur-test` sur un build de production. Posée par Playwright seulement                             |
+| Variable                                               | Rôle                                                                                                                                                                                     |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                                 | URL publique, utilisée pour les URL canoniques, Open Graph, JSON-LD et le sitemap                                                                                                        |
+| `API_URL`                                              | Origine de l'API : `http://localhost:8090` (API Platform, défaut) ou `http://localhost:8091` (Hono), même contrat. Relue à l'exécution par le serveur, figée au build pour le navigateur |
+| `API_SCHEMA_URL`                                       | Schéma OpenAPI de l'API consommée, lu par `make api-types`                                                                                                                               |
+| `MAINTENANCE`                                          | `1` : toutes les pages répondent 503 avec `Retry-After` (page autonome, `src/proxy.ts`)                                                                                                  |
+| `GLITCHTIP_DSN`, `NEXT_PUBLIC_GLITCHTIP_DSN`           | Suivi des erreurs GlitchTip, serveur et navigateur. Vides : aucun SDK chargé, aucune requête                                                                                             |
+| `NEXT_PUBLIC_GLITCHTIP_ENVIRONMENT`                    | Environnement des erreurs remontées (défaut : `development` ou `production`)                                                                                                             |
+| `NEXT_PUBLIC_MATOMO_URL`, `NEXT_PUBLIC_MATOMO_SITE_ID` | Mesure d'audience Matomo sans cookie. Vides : aucun script, aucune requête, pas de paragraphe « Mesure d'audience »                                                                      |
+| `ENABLE_TEST_ROUTES`                                   | `1` : active `/_erreur-test` sur un build de production. Posée par Playwright seulement                                                                                                  |
 
 ## Commandes
 
@@ -104,7 +105,7 @@ src/
       index.ts            seul export public
     blog/, contact/, task/   forme réduite : domain/, infrastructure/, ui/, sans application/
   shared/                 socle sans métier : config, seo, theme, providers,
-                          ui/ (kit, layout, carousel, a11y-mode, hooks), api/ (types générés)
+                          ui/ (kit, layout, carousel, a11y-mode, hooks), api/ (client typé, types générés)
 tests/
   e2e/                    un fichier par page ou par brique transverse
   a11y/                   audit axe de chaque page, dans les deux modes

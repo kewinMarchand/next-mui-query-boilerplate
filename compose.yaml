@@ -19,12 +19,13 @@ services:
     user: '${UID:-1000}:${GID:-1000}'
     init: true
     ipc: host
-    ports:
-      - '${DEV_PORT:-3000}:3000'
+    network_mode: host
     environment:
       HOME: /tmp
       CI: ${CI:-}
       NEXT_TELEMETRY_DISABLED: '1'
+      API_URL:
+      API_SCHEMA_URL: ${API_SCHEMA_URL:-http://localhost:8090/api/docs.jsonopenapi}
     volumes:
       - .:/app
       - node_modules:/app/node_modules

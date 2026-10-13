@@ -17,6 +17,10 @@ const ICONS_WRAPPER = {
   message:
     'Les icônes passent par le sprite : nom dans icons.json, make icons, puis @/shared/ui/kit/Icon.',
 }
+const API_CLIENT_WRAPPER = {
+  group: ['openapi-fetch'],
+  message: 'L’API passe par le client typé @/shared/api/client.',
+}
 const OBSERVABILITY_WRAPPER = {
   group: ['@sentry/*'],
   message: 'Le SDK GlitchTip passe par le wrapper @/shared/observability.',
@@ -143,7 +147,7 @@ const config = [
       ],
       'no-restricted-imports': [
         'error',
-        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, OBSERVABILITY_WRAPPER] },
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, API_CLIENT_WRAPPER, OBSERVABILITY_WRAPPER] },
       ],
     },
   },
@@ -186,7 +190,15 @@ const config = [
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, OBSERVABILITY_WRAPPER, FRAMEWORKS_IN_DOMAIN] },
+        {
+          patterns: [
+            RELATIVE_DEPTH,
+            ICONS_WRAPPER,
+            API_CLIENT_WRAPPER,
+            OBSERVABILITY_WRAPPER,
+            FRAMEWORKS_IN_DOMAIN,
+          ],
+        },
       ],
     },
   },
@@ -199,6 +211,7 @@ const config = [
           patterns: [
             RELATIVE_DEPTH,
             ICONS_WRAPPER,
+            API_CLIENT_WRAPPER,
             OBSERVABILITY_WRAPPER,
             FRAMEWORKS_IN_APPLICATION,
           ],
@@ -208,7 +221,21 @@ const config = [
   },
   {
     files: ['src/shared/observability/**'],
-    rules: { 'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER] }] },
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, API_CLIENT_WRAPPER] },
+      ],
+    },
+  },
+  {
+    files: ['src/shared/api/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, OBSERVABILITY_WRAPPER] },
+      ],
+    },
   },
   {
     files: ['tools/**'],
@@ -216,7 +243,9 @@ const config = [
   },
   {
     files: ['tools/icons.mts'],
-    rules: { 'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH] }] },
+    rules: {
+      'no-restricted-imports': ['error', { patterns: [RELATIVE_DEPTH, API_CLIENT_WRAPPER] }],
+    },
   },
   {
     files: ['src/shared/ui/kit/Picture.tsx'],
