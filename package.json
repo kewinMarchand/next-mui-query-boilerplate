@@ -42,7 +42,7 @@
     "@boundaries/eslint-plugin": "^7.2.0",
     "@iconify-json/lucide": "^1.2.143",
     "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.63.0",
+    "@playwright/test": "1.64.0",
     "@tanstack/react-query-devtools": "^5.104.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",

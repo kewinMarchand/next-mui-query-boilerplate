@@ -33,9 +33,11 @@ Le header porte le logo, la navigation, le menu de catégories (cascade sur ordi
 
 ## Prérequis
 
-- Node.js 24.14 ou plus (`.nvmrc`)
-- Yarn 1
-- Docker, pour l'image de production (optionnel)
+- Docker avec Compose
+- `make`
+- git
+
+Rien d'autre : ni Node, ni Yarn, ni navigateur sur la machine. Chaque commande `make` lance `docker compose run` sur le service `node` (image officielle Playwright, à la version exacte de `@playwright/test`). Les dépendances vivent dans le volume nommé `node_modules`, et le conteneur tourne avec l'UID et le GID de la machine : les fichiers générés ne sont pas à root.
 
 ## Démarrage
 
@@ -43,9 +45,11 @@ Le header porte le logo, la navigation, le menu de catégories (cascade sur ordi
 git clone https://github.com/kewinMarchand/next-mui-query-boilerplate.git
 cd next-mui-query-boilerplate
 cp .env.example .env.local
-make install   # dépendances + navigateur Chromium des tests e2e
-make up        # http://localhost:3000
+make install   # image de dev (Node, Chromium) et dépendances
+make up        # http://localhost:3000, rechargement à chaud
 ```
+
+Le port publié vient de `DEV_PORT` (3000 par défaut) : `DEV_PORT=3160 make up` sert l'application sur http://localhost:3160 si le 3000 est déjà pris. Il vaut aussi pour `make start`.
 
 Variables d'environnement :
 
@@ -65,7 +69,8 @@ Variables d'environnement :
 
 | Commande                               | Effet                                                                                                        |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `make up`                              | Serveur de développement                                                                                     |
+| `make install`                         | Construit l'image de développement et installe les dépendances                                               |
+| `make up`                              | Serveur de développement (port `DEV_PORT`, 3000 par défaut)                                                  |
 | `make build` / `make start`            | Build de production, puis le servir                                                                          |
 | `make qa`                              | QA rapide : lint (dont architecture), auto-test des règles, format, types, tests unitaires                   |
 | `make arch-selftest`                   | Écrit une violation de chaque règle d'architecture, exige l'échec d'ESLint, puis la retire                   |
@@ -78,6 +83,7 @@ Variables d'environnement :
 | `make icons` / `make icons-check`      | Génère le sprite `public/icons.svg` et le type `IconName` depuis `icons.json`, ou vérifie qu'ils sont à jour |
 | `make api-types`                       | Génère `src/shared/api/schema.d.ts` depuis `API_SCHEMA_URL`                                                  |
 | `make docker-build` / `make docker-up` | Image de production, sur le port `PORT` (3000 par défaut)                                                    |
+| `make docker-down`                     | Arrête les conteneurs, dont ceux du profil de développement                                                  |
 
 ## Architecture
 
@@ -183,7 +189,7 @@ Démarrer le serveur avec `MAINTENANCE=1`. Toutes les routes répondent 503 avec
 
 ## Intégration continue
 
-`.github/workflows/ci.yml` lance `make qa`, puis les tests e2e, accessibilité, pages de développement et Lighthouse, à chaque push sur `main` et sur chaque pull request. En cas d'échec, le rapport Playwright est joint au run.
+`.github/workflows/ci.yml` lance `make install`, `make qa`, puis les tests e2e, accessibilité, pages de développement et Lighthouse, à chaque push sur `main` et sur chaque pull request. En cas d'échec, le rapport Playwright est joint au run.
 
 ## Licence
 

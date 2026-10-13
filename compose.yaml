@@ -6,3 +6,28 @@ services:
     environment:
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
       GLITCHTIP_DSN: ${GLITCHTIP_DSN:-}
+
+  node:
+    profiles: [dev]
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        PLAYWRIGHT_VERSION: ${PLAYWRIGHT_VERSION:-}
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    user: '${UID:-1000}:${GID:-1000}'
+    init: true
+    ipc: host
+    ports:
+      - '${DEV_PORT:-3000}:3000'
+    environment:
+      HOME: /tmp
+      CI: ${CI:-}
+      NEXT_TELEMETRY_DISABLED: '1'
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:
