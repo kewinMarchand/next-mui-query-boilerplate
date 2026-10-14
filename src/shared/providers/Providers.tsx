@@ -12,8 +12,6 @@ import { makeQueryClient } from './makeQueryClient'
 
 import type { ReactNode } from 'react'
 
-import '@kewinmarchand/boilerplates-ui/tokens/tokens.css'
-
 interface ProvidersProps {
   children: ReactNode
 }

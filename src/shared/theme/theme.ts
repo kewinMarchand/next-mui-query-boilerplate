@@ -3,16 +3,16 @@
 import { createTheme } from '@mui/material/styles'
 
 import { ENHANCED_MODE_STYLES } from '../ui/a11y-mode/a11yMode'
-import { MUI_TOKENS } from './tokens'
+import { MUI_TOKENS, ROOT_VARIABLES } from './tokens'
 
 import type { ThemeOptions } from '@mui/material/styles'
 
 // Points de rupture, palette, typographie et rayon viennent des tokens de boilerplates-ui ; le mode renforcé agrandit
-// le texte par les variables --bui-font-size-* de tokens.css. Seule la police reste celle de next/font.
+// le texte par les variables --bui-font-size-* redéfinies sous son attribut. Seule la police reste celle de next/font.
 const SITE_OPTIONS: ThemeOptions = {
   cssVariables: true,
   components: {
-    MuiCssBaseline: { styleOverrides: ENHANCED_MODE_STYLES },
+    MuiCssBaseline: { styleOverrides: { ':root': ROOT_VARIABLES, ...ENHANCED_MODE_STYLES } },
     MuiContainer: {
       // Largeur maximale du contenu : token container-content (1440 px), plus large que le point de rupture xl
       defaultProps: { maxWidth: false },

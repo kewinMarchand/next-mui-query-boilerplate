@@ -1,4 +1,4 @@
-import { channel, ENHANCED_COLORS } from '@/shared/theme/tokens'
+import { channel, ENHANCED_COLORS, ENHANCED_VARIABLES } from '@/shared/theme/tokens'
 
 export const A11Y_MODE = {
   attribute: 'data-a11y-mode',
@@ -22,7 +22,7 @@ export const ENHANCED_MODE_STYLES = {
   [ENHANCED]: {
     fontSize: '20px',
     scrollBehavior: 'auto',
-    // Tailles du texte : variables --bui-font-size-* de tokens.css, redéfinies sous le même attribut
+    ...ENHANCED_VARIABLES,
     '--mui-palette-text-primary': ENHANCED_COLORS.text,
     '--mui-palette-text-secondary': ENHANCED_COLORS['text-muted'],
     '--mui-palette-background-default': ENHANCED_COLORS.surface,
