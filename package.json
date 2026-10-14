@@ -26,6 +26,7 @@
     "@emotion/styled": "^11.14.1",
     "@hookform/resolvers": "^5.9.1",
     "@kewinmarchand/boilerplates-ui": "github:kewinMarchand/boilerplates-ui#v0.3.0",
+    "@kewinmarchand/csp": "github:kewinMarchand/csp#v0.1.1",
     "@mui/material": "^9.4.0",
     "@mui/material-nextjs": "^9.4.0",
     "@sentry/nextjs": "^11.6.0",

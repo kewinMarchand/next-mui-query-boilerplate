@@ -167,6 +167,18 @@ Les données utiles au référencement (blog de l'accueil, catalogue) sont au co
 1. Ajouter le champ et son message d'erreur dans `src/modules/contact/domain/contactSchema.ts`. Le type du formulaire en découle.
 2. Ajouter le `TextField` dans `ContactForm.tsx` avec `{...form.register('champ')}`, `error` et `helperText`. MUI relie le message au champ par `aria-describedby`.
 
+### CSP et rapports de violation
+
+Chaque réponse porte un en-tête `Content-Security-Policy-Report-Only` construit par [`@kewinmarchand/csp`](https://github.com/kewinMarchand/csp), dans `src/shared/security/` : rien n'est bloqué, le navigateur signale chaque ressource qu'une CSP stricte refuserait à `POST /api/csp-report`, qui écrit une ligne lisible sur la sortie standard du serveur :
+
+```
+[csp-report] https://cdn.exemple.com a besoin d'une autorisation de type script (script-src) — bloqué sur /contact
+```
+
+- **Lire les logs** : `docker compose logs -f web` pour l'image de production, la sortie de `make up` en développement, la console de l'hébergeur en production. Au démarrage, `[next-mui-query-boilerplate] serveur démarré (production)` permet de retrouver le bon fichier.
+- **Autoriser une origine** : l'ajouter à sa directive (le nom est entre parenthèses dans la ligne) dans `siteCsp()` de `src/shared/security/csp.ts`. L'API (`API_URL`), Matomo et GlitchTip y sont déjà, quand leur variable est renseignée. L'en-tête est figé au build, comme les `NEXT_PUBLIC_*`.
+- **Pourquoi Report-Only et `'unsafe-inline'`** : on collecte d'abord ce que le site charge vraiment avant de bloquer quoi que ce soit ; l'hydratation de Next et le CSS-in-JS de MUI écrivent du code en ligne, et un nonce par réponse rendrait toutes les pages dynamiques.
+
 ### Ajouter une icône
 
 Ajouter son nom Lucide dans `icons.json`, puis lancer `make icons` : le sprite `public/icons.svg` et le type `IconName` sont régénérés, à versionner tous les deux. `make qa` échoue s'ils sont périmés. Les outils d'icônes (`@iconify-json/lucide`, `svgstore`) ne s'importent que dans `tools/icons.mts`, ESLint le refuse ailleurs. La charte graphique liste automatiquement les icônes du wrapper.

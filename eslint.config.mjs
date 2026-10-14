@@ -25,6 +25,10 @@ const OBSERVABILITY_WRAPPER = {
   group: ['@sentry/*'],
   message: 'Le SDK GlitchTip passe par le wrapper @/shared/observability.',
 }
+const CSP_WRAPPER = {
+  group: ['@kewinmarchand/csp'],
+  message: 'La CSP passe par le wrapper @/shared/security.',
+}
 
 const FRAMEWORK_PACKAGES = [
   'react',
@@ -166,7 +170,15 @@ const config = [
       'simple-import-sort/exports': 'error',
       'no-restricted-imports': [
         'error',
-        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, API_CLIENT_WRAPPER, OBSERVABILITY_WRAPPER] },
+        {
+          patterns: [
+            RELATIVE_DEPTH,
+            ICONS_WRAPPER,
+            API_CLIENT_WRAPPER,
+            OBSERVABILITY_WRAPPER,
+            CSP_WRAPPER,
+          ],
+        },
       ],
     },
   },
@@ -215,6 +227,7 @@ const config = [
             ICONS_WRAPPER,
             API_CLIENT_WRAPPER,
             OBSERVABILITY_WRAPPER,
+            CSP_WRAPPER,
             FRAMEWORKS_IN_DOMAIN,
           ],
         },
@@ -232,6 +245,7 @@ const config = [
             ICONS_WRAPPER,
             API_CLIENT_WRAPPER,
             OBSERVABILITY_WRAPPER,
+            CSP_WRAPPER,
             FRAMEWORKS_IN_APPLICATION,
           ],
         },
@@ -244,6 +258,15 @@ const config = [
       'no-restricted-imports': [
         'error',
         { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, API_CLIENT_WRAPPER] },
+      ],
+    },
+  },
+  {
+    files: ['src/shared/security/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, API_CLIENT_WRAPPER, OBSERVABILITY_WRAPPER] },
       ],
     },
   },
