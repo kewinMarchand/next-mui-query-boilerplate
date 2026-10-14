@@ -24,7 +24,7 @@ export const HomeHero = () => (
   >
     <Picture
       src="/images/hero"
-      widths={[640, 1280, 1920]}
+      widths={[640, 960, 1280, 1920]}
       width={1920}
       height={1080}
       alt=""
