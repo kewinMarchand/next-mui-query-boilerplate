@@ -79,9 +79,9 @@ Variables d'environnement :
 | `make arch-selftest`                   | Écrit une violation de chaque règle d'architecture, exige l'échec d'ESLint, puis la retire                   |
 | `make qa-full`                         | QA complète : QA rapide, e2e, accessibilité, pages de dev, Lighthouse                                        |
 | `make test-unit`                       | Vitest                                                                                                       |
-| `make test-e2e`                        | Playwright, desktop et mobile, sur le build de production (port 3100)                                        |
+| `make test-e2e`                        | Playwright, desktop et mobile, sur le build de production (port 3150)                                        |
 | `make test-a11y`                       | axe-core, WCAG 2.1 AA, sur chaque page, dans les deux modes d'affichage                                      |
-| `make test-dev`                        | Charte graphique, servie par `next dev` (port 3101)                                                          |
+| `make test-dev`                        | Charte graphique, servie par `next dev` (port 3151)                                                          |
 | `make metrics`                         | Lighthouse CI : échoue sous 90 en performance ou sous 100 en accessibilité et SEO                            |
 | `make icons` / `make icons-check`      | Génère le sprite `public/icons.svg` et le type `IconName` depuis `icons.json`, ou vérifie qu'ils sont à jour |
 | `make api-types`                       | Génère `src/shared/api/schema.d.ts` depuis `API_SCHEMA_URL`                                                  |
@@ -198,9 +198,9 @@ Démarrer le serveur avec `MAINTENANCE=1`. Toutes les routes répondent 503 avec
 ## Tests
 
 - **Unitaires et fonctionnels** : fichiers `*.test.ts(x)` à côté du code testé.
-- **End-to-end** : Playwright sert le build de production sur le port 3100, avec `ENABLE_TEST_ROUTES=1` pour la route de test de la 500. Les éléments sont ciblés par `data-testid`, préfixé par le module ou la zone (`tasks-list`, `catalog-product`, `layout-breadcrumb`). Chaque rendu conditionnel est testé présent et absent. Un test vérifie qu'aucune page ne déborde horizontalement à 375, 768 et 1280 px dans les deux modes et enregistre des captures de l'accueil et du catalogue dans `test-results/`.
+- **End-to-end** : Playwright sert le build de production sur le port 3150, avec `ENABLE_TEST_ROUTES=1` pour la route de test de la 500. Les éléments sont ciblés par `data-testid`, préfixé par le module ou la zone (`tasks-list`, `catalog-product`, `layout-breadcrumb`). Chaque rendu conditionnel est testé présent et absent. Un test vérifie qu'aucune page ne déborde horizontalement à 375, 768 et 1280 px dans les deux modes et enregistre des captures de l'accueil et du catalogue dans `test-results/`.
 - **Accessibilité** : `tests/a11y/` passe axe-core sur chaque route de `tests/e2e/routes.ts`, sur le catalogue filtré, la 404, la 500 et les menus ouverts, dans les deux modes. Axe ne couvre qu'une partie du RGAA, un audit manuel reste nécessaire.
-- **Pages de développement** : `tests/dev/` vérifie la charte graphique sur `next dev` (port 3101). Le build de production, lui, vérifie qu'elle répond 404.
+- **Pages de développement** : `tests/dev/` vérifie la charte graphique sur `next dev` (port 3151). Le build de production, lui, vérifie qu'elle répond 404.
 
 ## Intégration continue
 
