@@ -15,7 +15,7 @@ test.describe('Menu de catégories, ordinateur', () => {
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
     await expect(menu).toBeVisible()
 
-    const indoor = menu.getByRole('link', { name: "Plantes d'intérieur" })
+    const indoor = menu.getByRole('link', { name: 'Plantes d’intérieur' })
     await indoor.hover()
     await expect(indoor).toHaveAttribute('aria-expanded', 'true')
     await expect(menu.getByRole('link', { name: 'Feuillages' })).toBeVisible()
@@ -42,7 +42,7 @@ test.describe('Menu de catégories, ordinateur', () => {
     await page.getByTestId('layout-category-menu-toggle').click()
     const menu = page.getByTestId('layout-category-menu')
 
-    await menu.getByRole('link', { name: "Plantes d'intérieur" }).hover()
+    await menu.getByRole('link', { name: 'Plantes d’intérieur' }).hover()
     await menu.getByRole('link', { name: 'Feuillages' }).hover()
     await menu.getByRole('link', { name: 'Monstera' }).click()
 
@@ -66,7 +66,7 @@ test.describe('Menu de catégories, ordinateur', () => {
       await toggle.click()
       await page
         .getByTestId('layout-category-menu')
-        .getByRole('link', { name: "Plantes d'intérieur" })
+        .getByRole('link', { name: 'Plantes d’intérieur' })
         .hover()
       const button = await toggle.boundingBox()
       const panel = await page.getByTestId('layout-category-menu').boundingBox()
@@ -96,7 +96,7 @@ test.describe('Menu mobile', () => {
     await expect(menu.getByRole('heading', { name: 'Catalogue' })).toBeFocused()
 
     await page.getByTestId('layout-mobile-menu-descend-plantes-interieur').click()
-    await expect(menu.getByRole('heading', { name: "Plantes d'intérieur" })).toBeFocused()
+    await expect(menu.getByRole('heading', { name: 'Plantes d’intérieur' })).toBeFocused()
     await expect(page.getByTestId('layout-mobile-menu-back')).toHaveText('Retour : Catalogue')
     await expect(menu.getByRole('link', { name: 'Voir toute la catégorie' })).toHaveAttribute(
       'href',

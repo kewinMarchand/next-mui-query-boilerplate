@@ -12,7 +12,7 @@ vi.mock('../infrastructure/catalogRepository', () => ({
 const TREE: Catalog.Category[] = [
   {
     slug: 'plantes-interieur',
-    name: "Plantes d'intérieur",
+    name: 'Plantes d’intérieur',
     children: [
       {
         slug: 'feuillages',
