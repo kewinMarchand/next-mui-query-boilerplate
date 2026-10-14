@@ -19,14 +19,12 @@ const renderForm = () =>
   )
 
 describe('ContactForm', () => {
-  it('explique le marqueur des champs obligatoires et les déclare required', () => {
+  it('signale chaque champ obligatoire dans son libellé et le déclare required', () => {
     renderForm()
 
-    expect(screen.getByTestId('contact-required-legend')).toHaveTextContent(
-      "Les champs marqués d'un astérisque (*) sont obligatoires.",
-    )
     for (const testId of ['contact-name', 'contact-email', 'contact-message']) {
       expect(screen.getByTestId(testId)).toBeRequired()
+      expect(screen.getByTestId(testId)).toHaveAccessibleName(/\(obligatoire\)$/)
     }
   })
 
