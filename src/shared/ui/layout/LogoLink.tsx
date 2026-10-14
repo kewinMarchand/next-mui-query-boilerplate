@@ -23,7 +23,7 @@ export const LogoLink = () => {
         color: 'inherit',
         textDecoration: 'none',
         typography: 'h6',
-        fontSize: { xs: theme.typography.body1.fontSize, md: theme.typography.h6.fontSize },
+        fontSize: { xs: theme.typography.body1.fontSize, lg: theme.typography.h6.fontSize },
         fontWeight: 700,
         minWidth: 0,
         mr: 'auto',

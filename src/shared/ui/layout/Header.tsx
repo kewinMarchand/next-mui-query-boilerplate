@@ -20,15 +20,15 @@ interface HeaderProps {
 export const Header = ({ categoryMenu }: HeaderProps) => (
   <AppBar position="static" component="header">
     <Container>
-      <Toolbar disableGutters sx={{ flexWrap: { xs: 'nowrap', md: 'wrap' }, columnGap: 1, py: 1 }}>
+      <Toolbar disableGutters sx={{ flexWrap: { xs: 'nowrap', lg: 'wrap' }, columnGap: 1, py: 1 }}>
         <LogoLink />
-        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+        <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
           <MobileMenu navigation={MAIN_NAVIGATION} categoryMenu={categoryMenu} />
         </Box>
         <Box
           component="nav"
           aria-label="Navigation principale"
-          sx={{ display: { xs: 'none', md: 'block' } }}
+          sx={{ display: { xs: 'none', lg: 'block' } }}
         >
           <Box
             component="ul"

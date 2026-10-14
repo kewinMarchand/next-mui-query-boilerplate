@@ -789,6 +789,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@kewinmarchand/boilerplates-ui@github:kewinMarchand/boilerplates-ui#v0.3.0":
+  version "0.3.0"
+  resolved "https://codeload.github.com/kewinMarchand/boilerplates-ui/tar.gz/cf248d0d67746e2c57ee95f05bb98f6d768559e5"
+
 "@kobalte/core@^0.13.14":
   version "0.13.14"
   resolved "https://registry.yarnpkg.com/@kobalte/core/-/core-0.13.14.tgz#6d46ada9a427e07f73fb61123a03220277a793d7"

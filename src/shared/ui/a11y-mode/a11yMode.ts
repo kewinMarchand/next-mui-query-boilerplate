@@ -1,3 +1,5 @@
+import { channel, ENHANCED_COLORS } from '@/shared/theme/tokens'
+
 export const A11Y_MODE = {
   attribute: 'data-a11y-mode',
   storageKey: 'a11y-mode',
@@ -20,15 +22,19 @@ export const ENHANCED_MODE_STYLES = {
   [ENHANCED]: {
     fontSize: '20px',
     scrollBehavior: 'auto',
-    '--font-scale': '1.25',
-    '--mui-palette-text-primary': '#000',
-    '--mui-palette-text-secondary': '#000',
-    '--mui-palette-background-default': '#fff',
-    '--mui-palette-background-paper': '#fff',
-    '--mui-palette-primary-main': '#1e3a8a',
-    '--mui-palette-primary-mainChannel': '30 58 138',
-    '--mui-palette-primary-dark': '#172554',
-    '--mui-palette-primary-darkChannel': '23 37 84',
+    // Tailles du texte : variables --bui-font-size-* de tokens.css, redéfinies sous le même attribut
+    '--mui-palette-text-primary': ENHANCED_COLORS.text,
+    '--mui-palette-text-secondary': ENHANCED_COLORS['text-muted'],
+    '--mui-palette-background-default': ENHANCED_COLORS.surface,
+    '--mui-palette-background-paper': ENHANCED_COLORS.surface,
+    '--mui-palette-primary-main': ENHANCED_COLORS.primary,
+    '--mui-palette-primary-mainChannel': channel(ENHANCED_COLORS.primary),
+    '--mui-palette-primary-dark': ENHANCED_COLORS['primary-dark'],
+    '--mui-palette-primary-darkChannel': channel(ENHANCED_COLORS['primary-dark']),
+    '--mui-palette-secondary-main': ENHANCED_COLORS.secondary,
+    '--mui-palette-secondary-mainChannel': channel(ENHANCED_COLORS.secondary),
+    '--mui-palette-secondary-dark': ENHANCED_COLORS['secondary-dark'],
+    '--mui-palette-secondary-darkChannel': channel(ENHANCED_COLORS['secondary-dark']),
   },
   [CONTENT_TEXT]: {
     lineHeight: 1.8,

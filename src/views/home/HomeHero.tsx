@@ -17,7 +17,7 @@ export const HomeHero = () => (
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
-      minHeight: { xs: 480, md: 'min(80vh, 720px)' },
+      minHeight: { xs: 480, lg: 'min(80vh, 720px)' },
       color: '#fff',
       overflow: 'hidden',
     }}
@@ -49,7 +49,7 @@ export const HomeHero = () => (
         <Typography variant="h1" id="home-hero-title" gutterBottom>
           {SITE.name}
         </Typography>
-        <Typography sx={{ mb: 4, fontSize: 'calc(18px * var(--font-scale, 1))' }}>
+        <Typography sx={{ mb: 4, fontSize: 'var(--bui-font-size-lead)' }}>
           {SITE.description}
         </Typography>
         <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ gap: 2 }}>

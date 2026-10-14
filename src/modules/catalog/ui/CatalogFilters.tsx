@@ -57,7 +57,7 @@ export const CatalogFilters = ({
   return (
     <>
       {!isHydrated && (
-        <Box component="details" sx={{ display: { md: 'none' } }}>
+        <Box component="details" sx={{ display: { lg: 'none' } }}>
           <Box
             component="summary"
             data-testid="catalog-filters-summary"
@@ -85,7 +85,7 @@ export const CatalogFilters = ({
           aria-controls={drawerId}
           onClick={() => setIsOpen(true)}
           data-testid="catalog-filters-open"
-          sx={{ display: { md: 'none' } }}
+          sx={{ display: { lg: 'none' } }}
         >
           {filterLabel}
         </Button>
@@ -95,13 +95,9 @@ export const CatalogFilters = ({
         <Box
           component="aside"
           aria-labelledby={titleId}
-          sx={{ display: { xs: 'none', md: 'block' } }}
+          sx={{ display: { xs: 'none', lg: 'block' } }}
         >
-          <Typography
-            variant="h2"
-            id={titleId}
-            sx={{ fontSize: 'calc(20px * var(--font-scale, 1))' }}
-          >
+          <Typography variant="h2" id={titleId} sx={{ fontSize: 'var(--bui-font-size-title)' }}>
             Filtres
           </Typography>
           {form}
@@ -126,7 +122,7 @@ export const CatalogFilters = ({
           <Typography
             variant="h2"
             id={`${drawerId}-title`}
-            sx={{ flexGrow: 1, fontSize: 'calc(20px * var(--font-scale, 1))' }}
+            sx={{ flexGrow: 1, fontSize: 'var(--bui-font-size-title)' }}
           >
             Filtres
           </Typography>

@@ -31,7 +31,7 @@ export const MediaSection = () => (
   <StyleguideSection title="Médias et cartes">
     <BlogGrid status="success" articles={[ARTICLE]} />
     <Box
-      sx={{ display: 'grid', gap: 2, mt: 3, gridTemplateColumns: { xs: '1fr', md: '280px 1fr' } }}
+      sx={{ display: 'grid', gap: 2, mt: 3, gridTemplateColumns: { xs: '1fr', lg: '280px 1fr' } }}
     >
       <ProductCard product={PRODUCT} position={1} isPriority={false} />
       <ProductCard product={PRODUCT} position={2} isPriority={false} />

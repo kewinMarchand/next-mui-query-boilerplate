@@ -71,8 +71,8 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
           <Box
             sx={{
               display: 'grid',
-              gap: { xs: 2, md: 6 },
-              gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: '280px minmax(0, 1fr)' },
+              gap: { xs: 2, lg: 6 },
+              gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '280px minmax(0, 1fr)' },
               alignItems: 'start',
             }}
           >

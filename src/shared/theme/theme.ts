@@ -2,33 +2,24 @@
 
 import { createTheme } from '@mui/material/styles'
 
+import { MUI_TOKENS } from './tokens'
 import { ENHANCED_MODE_STYLES } from '../ui/a11y-mode/a11yMode'
 
-export const theme = createTheme({
+import type { ThemeOptions } from '@mui/material/styles'
+
+// Points de rupture, palette, typographie et rayon viennent des tokens de boilerplates-ui ; le mode renforcé agrandit
+// le texte par les variables --bui-font-size-* de tokens.css. Seule la police reste celle de next/font.
+const SITE_OPTIONS: ThemeOptions = {
   cssVariables: true,
-  breakpoints: { values: { xs: 0, sm: 600, md: 1024, lg: 1200, xl: 1440 } },
-  palette: {
-    primary: { main: '#1d4ed8' },
-    secondary: { main: '#7c3aed' },
-  },
-  typography: {
-    fontFamily: 'var(--font-inter), system-ui, sans-serif',
-    htmlFontSize: 16,
-    fontSize: 16,
-    h1: { fontSize: 'calc(40px * var(--font-scale, 1))', fontWeight: 700 },
-    h2: { fontSize: 'calc(28px * var(--font-scale, 1))', fontWeight: 600 },
-    h3: { fontSize: 'calc(20px * var(--font-scale, 1))', fontWeight: 600 },
-    body1: { fontSize: 'calc(16px * var(--font-scale, 1))' },
-    body2: { fontSize: 'calc(14px * var(--font-scale, 1))' },
-  },
-  shape: { borderRadius: 8 },
   components: {
     MuiCssBaseline: { styleOverrides: ENHANCED_MODE_STYLES },
     MuiContainer: {
-      defaultProps: { maxWidth: 'xl' },
+      // Largeur maximale du contenu : token container-content (1440 px), plus large que le point de rupture xl
+      defaultProps: { maxWidth: false },
       styleOverrides: {
         root: ({ theme }) => ({
-          [theme.breakpoints.up('md')]: { paddingInline: theme.spacing(4) },
+          maxWidth: 'var(--bui-container-content)',
+          [theme.breakpoints.up('lg')]: { paddingInline: theme.spacing(4) },
         }),
       },
     },
@@ -43,4 +34,12 @@ export const theme = createTheme({
     },
     MuiLink: { defaultProps: { underline: 'hover' } },
   },
+}
+
+// Police fusionnée avant createTheme : chaque variante (h1, body1…) recopie fontFamily à sa création, une
+// surcharge passée en second argument n'atteindrait que la valeur générale
+export const theme = createTheme({
+  ...MUI_TOKENS,
+  ...SITE_OPTIONS,
+  typography: { ...MUI_TOKENS.typography, fontFamily: 'var(--font-inter), system-ui, sans-serif' },
 })

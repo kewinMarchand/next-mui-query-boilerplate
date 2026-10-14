@@ -25,14 +25,14 @@ export const A11yModeToggle = () => {
       sx={(theme) => ({
         flexShrink: 0,
         minWidth: 44,
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
           px: 0,
           '& .MuiButton-startIcon': { mx: 0 },
           '&.Mui-focusVisible': { outline: '2px solid currentColor', outlineOffset: 2 },
         },
       })}
     >
-      <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+      <Box component="span" sx={{ display: { xs: 'none', lg: 'inline' } }}>
         {LABEL}
       </Box>
     </Button>

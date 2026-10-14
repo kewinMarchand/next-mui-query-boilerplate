@@ -125,7 +125,7 @@ export const Carousel = ({ title, slides, 'data-testid': testId }: CarouselProps
                 aria-label={`${position + 1} sur ${slides.length}`}
                 data-testid="carousel-slide"
                 sx={{
-                  flex: { xs: '0 0 100%', sm: '0 0 50%', md: '0 0 calc(100% / 3)' },
+                  flex: { xs: '0 0 100%', sm: '0 0 50%', lg: '0 0 calc(100% / 3)' },
                   minWidth: 0,
                   pl: GAP,
                   scrollSnapAlign: 'start',
