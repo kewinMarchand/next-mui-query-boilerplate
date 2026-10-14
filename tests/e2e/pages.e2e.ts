@@ -24,6 +24,13 @@ test('une route inconnue affiche la page 404', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1, name: 'Page introuvable' })).toBeVisible()
 })
 
+test('une page du catalogue au-delà de la dernière affiche la page 404', async ({ page }) => {
+  const response = await page.goto('/catalogue?page=99')
+
+  expect(response?.status()).toBe(404)
+  await expect(page.getByRole('heading', { level: 1, name: 'Page introuvable' })).toBeVisible()
+})
+
 test('le footer reste collé en bas sur une page courte', async ({ page }) => {
   await page.goto('/route-inexistante')
 

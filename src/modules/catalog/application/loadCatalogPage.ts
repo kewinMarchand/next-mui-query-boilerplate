@@ -27,9 +27,9 @@ const unavailable = (error: unknown): CatalogPageResult => {
 
 /**
  * Cas d'utilisation « afficher une page du catalogue » : valide le chemin contre l'arbre, lit
- * l'état de recherche, interroge le dépôt, puis décide. Catégorie inconnue : introuvable. Échec
- * de l'API : résultat en erreur, que l'interface affiche avec une relance (à la racine du
- * catalogue si l'arbre lui-même n'a pas pu être lu).
+ * l'état de recherche, interroge le dépôt, puis décide. Catégorie inconnue ou page au-delà de la
+ * dernière : introuvable. Échec de l'API : résultat en erreur, que l'interface affiche avec une
+ * relance (à la racine du catalogue si l'arbre lui-même n'a pas pu être lu).
  */
 export const loadCatalogPage = async (
   slugs: string[],
@@ -54,9 +54,12 @@ export const loadCatalogPage = async (
     subcategories: subcategoryLinks(tree, slugs),
   }
 
+  let page: CatalogPage
   try {
-    return { ...base, result: { status: 'success', page: await findCatalogPage(slugs, query) } }
+    page = await findCatalogPage(slugs, query)
   } catch (error) {
     return { ...base, result: unavailable(error) }
   }
+  if (query.page > page.pageCount) return { status: 'not-found' }
+  return { ...base, result: { status: 'success', page } }
 }

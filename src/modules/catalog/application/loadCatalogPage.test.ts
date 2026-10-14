@@ -59,6 +59,14 @@ describe('loadCatalogPage', () => {
     expect(await loadCatalogPage(['a', 'b', 'c', 'd'], {})).toEqual({ status: 'not-found' })
   })
 
+  it('déclare introuvable une page au-delà de la dernière', async () => {
+    vi.mocked(findCatalogPage).mockResolvedValueOnce({ ...PAGE, page: 9, pageCount: 2 })
+
+    expect(await loadCatalogPage(['plantes-interieur'], { page: '9' })).toEqual({
+      status: 'not-found',
+    })
+  })
+
   it('transforme un échec de l’API en résultat d’erreur affichable', async () => {
     vi.mocked(findCatalogPage).mockRejectedValueOnce(new Error('panne'))
     vi.spyOn(console, 'error').mockImplementationOnce(() => {})
