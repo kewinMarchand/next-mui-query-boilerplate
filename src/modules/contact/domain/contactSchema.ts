@@ -1,12 +1,18 @@
-import { z } from 'zod'
+import * as z from 'zod/mini'
 
+// zod/mini plutôt que zod : le schéma part dans le JavaScript du navigateur avec le formulaire,
+// et l'API fonctionnelle de zod/mini n'y embarque que les validations utilisées.
 export const contactSchema = z.object({
-  name: z.string().trim().min(2, { error: 'Indiquez votre nom (2 caractères minimum).' }),
+  name: z
+    .string()
+    .check(z.trim(), z.minLength(2, { error: 'Indiquez votre nom (2 caractères minimum).' })),
   email: z.email({ error: 'Indiquez une adresse e-mail valide, par exemple nom@domaine.fr.' }),
   message: z
     .string()
-    .trim()
-    .min(10, { error: 'Votre message doit contenir au moins 10 caractères.' }),
+    .check(
+      z.trim(),
+      z.minLength(10, { error: 'Votre message doit contenir au moins 10 caractères.' }),
+    ),
 })
 
 export declare namespace Contact {
