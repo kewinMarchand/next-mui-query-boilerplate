@@ -10,9 +10,9 @@ import { useId, useState } from 'react'
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 import { Icon } from '@/shared/ui/kit'
 
+import { countActiveFilters } from '../domain/catalogQuery'
 import { FiltersForm } from './FiltersForm'
 import { useCatalogNavigation } from './hooks/useCatalogNavigation'
-import { countActiveFilters } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 

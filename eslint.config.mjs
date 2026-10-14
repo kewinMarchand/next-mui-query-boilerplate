@@ -1,8 +1,8 @@
 import { existsSync, readdirSync } from 'node:fs'
-
 import boundaries from '@boundaries/eslint-plugin'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
 const MODULES_ROOT = 'src/modules'
 const LAYERS = ['domain', 'application', 'infrastructure', 'ui']
@@ -130,21 +130,40 @@ const config = [
     ],
   },
   {
-    settings: { 'import/internal-regex': '^@/' },
+    plugins: { 'simple-import-sort': simpleImportSort },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'react/no-unescaped-entities': 'off',
-      'import/order': [
+      'import/order': 'off',
+      'simple-import-sort/imports': [
         'error',
         {
-          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'type'],
-          'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          // Ordre de standards-front : 1 tiers (framework compris), 2 bibliothèque commune, 3 socle, 4 modules
+          // (index public, puis couches domain, application, infrastructure, ui), 5 vues, 6 relatifs, 7 types,
+          // 8 effets de bord (styles) en dernier, leur ordre ayant un effet. Le motif de l'index d'un module exclut
+          // \u0000, que le plugin ajoute aux imports de type.
+          groups: [
+            ['^node:', '^(?!@kewinmarchand/)@?\\w'],
+            ['^@kewinmarchand/'],
+            ['^@/shared/'],
+            [
+              '^@/modules/[^/\\u0000]+(/index)?$',
+              '^@/modules/[^/]+/domain/',
+              '^@/modules/[^/]+/application/',
+              '^@/modules/[^/]+/infrastructure/',
+              '^@/modules/[^/]+/ui/',
+            ],
+            ['^@/views/'],
+            ['^\\.'],
+            ['^.+\\u0000$'],
+            ['^\\u0000'],
+          ],
         },
       ],
+      'simple-import-sort/exports': 'error',
       'no-restricted-imports': [
         'error',
         { patterns: [RELATIVE_DEPTH, ICONS_WRAPPER, API_CLIENT_WRAPPER, OBSERVABILITY_WRAPPER] },

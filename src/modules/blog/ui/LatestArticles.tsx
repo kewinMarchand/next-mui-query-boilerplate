@@ -1,6 +1,6 @@
-import { BlogGrid } from './BlogGrid'
 import { findLatestArticles } from '../infrastructure/articleRepository'
 import { ArticlesLoadError } from '../infrastructure/ArticlesLoadError'
+import { BlogGrid } from './BlogGrid'
 
 export const LatestArticles = async () => {
   const articles = await findLatestArticles().catch((error: unknown) => {

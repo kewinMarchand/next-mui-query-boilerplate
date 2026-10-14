@@ -1,4 +1,5 @@
 import { buildMetadata } from '@/shared/seo'
+
 import { AccessibilityView } from '@/views/legal'
 
 import type { Metadata } from 'next'

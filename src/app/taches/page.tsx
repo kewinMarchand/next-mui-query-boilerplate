@@ -1,5 +1,6 @@
-import { TasksView } from '@/modules/task'
 import { buildMetadata } from '@/shared/seo'
+
+import { TasksView } from '@/modules/task'
 
 import type { Metadata } from 'next'
 

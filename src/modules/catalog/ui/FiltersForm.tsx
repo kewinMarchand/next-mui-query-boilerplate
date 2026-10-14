@@ -14,9 +14,9 @@ import { useId } from 'react'
 
 import { Link, VISUALLY_HIDDEN } from '@/shared/ui/kit'
 
+import { withFilter } from '../domain/catalogQuery'
 import { EXPOSURE_LABELS, sizeLabel } from './labels'
 import { QueryHiddenFields } from './QueryHiddenFields'
-import { withFilter } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 import type { FocusEvent, FormEvent, ReactNode } from 'react'

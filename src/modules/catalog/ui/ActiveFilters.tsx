@@ -3,9 +3,9 @@ import Chip from '@mui/material/Chip'
 
 import { Icon, Link } from '@/shared/ui/kit'
 
+import { catalogHref, clearFilters, isFiltered, withFilter } from '../domain/catalogQuery'
 import { EXPOSURE_LABELS, sizeLabel } from './labels'
 import { TitleFocusLink } from './TitleFocusLink'
-import { catalogHref, clearFilters, isFiltered, withFilter } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 

@@ -3,9 +3,10 @@ import Chip from '@mui/material/Chip'
 import MuiLink from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 
-import { CatalogPagination } from '@/modules/catalog'
 import { Icon, Link } from '@/shared/ui/kit'
 import { Breadcrumb, buildBreadcrumb } from '@/shared/ui/layout'
+
+import { CatalogPagination } from '@/modules/catalog'
 
 import { StyleguideSection } from '../StyleguideSection'
 

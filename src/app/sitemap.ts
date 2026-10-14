@@ -1,5 +1,6 @@
-import { listCatalogPaths } from '@/modules/catalog'
 import { SITE, SITE_MAP } from '@/shared/config'
+
+import { listCatalogPaths } from '@/modules/catalog'
 
 import type { MetadataRoute } from 'next'
 

@@ -2,8 +2,8 @@
 
 import { createTheme } from '@mui/material/styles'
 
-import { MUI_TOKENS } from './tokens'
 import { ENHANCED_MODE_STYLES } from '../ui/a11y-mode/a11yMode'
+import { MUI_TOKENS } from './tokens'
 
 import type { ThemeOptions } from '@mui/material/styles'
 

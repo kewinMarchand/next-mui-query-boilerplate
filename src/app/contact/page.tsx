@@ -1,5 +1,6 @@
-import { ContactView } from '@/modules/contact'
 import { buildMetadata } from '@/shared/seo'
+
+import { ContactView } from '@/modules/contact'
 
 import type { Metadata } from 'next'
 

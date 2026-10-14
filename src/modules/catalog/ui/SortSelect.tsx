@@ -10,11 +10,11 @@ import { useId } from 'react'
 
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 
+import { SORTS } from '../domain/catalog'
+import { withFilter } from '../domain/catalogQuery'
 import { useCatalogNavigation } from './hooks/useCatalogNavigation'
 import { SORT_LABELS } from './labels'
 import { QueryHiddenFields } from './QueryHiddenFields'
-import { SORTS } from '../domain/catalog'
-import { withFilter } from '../domain/catalogQuery'
 
 import type { Catalog } from '../domain/catalog'
 

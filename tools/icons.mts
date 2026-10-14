@@ -1,5 +1,4 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-
 import lucide from '@iconify-json/lucide/icons.json' with { type: 'json' }
 import svgstore from 'svgstore'
 

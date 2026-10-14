@@ -1,7 +1,7 @@
-import { CatalogLoadError } from './CatalogLoadError'
 import { resolveCategoryPath, subcategoryLinks } from '../domain/categoryPath'
 import { parseCatalogQuery } from '../domain/parseCatalogQuery'
 import { findCatalogPage, findCategoryTree } from '../infrastructure/catalogRepository'
+import { CatalogLoadError } from './CatalogLoadError'
 
 import type { Catalog } from '../domain/catalog'
 import type { SearchParams } from '../domain/catalogQuery'

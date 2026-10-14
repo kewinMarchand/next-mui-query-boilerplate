@@ -49,6 +49,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 
 ## Dépendances de développement ajoutées
 
+- `eslint-plugin-simple-import-sort` 14 (dev, aucun effet sur le bundle) : trie les imports par groupes de motifs, ce que `import/order` ne sait pas faire par couche d'architecture (domain, application, infrastructure, ui). Même version que le dépôt SvelteKit.
 - `@iconify-json/lucide` 1.2 (dev, 640 Ko installés, aucun effet sur le bundle) : les tracés Lucide (licence ISC) au format Iconify, lus par `tools/icons.mts`. Remplace `lucide-react`, retiré.
 - `svgstore` 3.0 (dev, 140 Ko installés hors dépendances, aucun effet sur le bundle) : assemble le sprite, un `<symbol>` par icône avec son `viewBox`. Il ne publie pas de types : `tools/svgstore.d.ts` déclare la seule API utilisée.
 
@@ -66,7 +67,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
   - chemins relatifs à plus d'un niveau interdits.
 - `make arch-selftest` (`tools/archSelftest.mts`, lancé par `make qa`) : écrit une violation volontaire de chaque règle (domaine vers infrastructure par chemin relatif, domaine vers framework, application vers framework, module vers module, interface vers infrastructure dans le catalogue, socle vers module, vue et routage vers l'intérieur d'un module, types générés hors infrastructure), exige l'échec d'ESLint avec le message attendu, puis retire le fichier. Extension `.mts` : le `package.json` n'est pas en `"type": "module"` et Node avertirait sinon.
 - `no-console` désactivé dans `tools/` : ce sont des outils en ligne de commande dont la sortie est le résultat.
-- `import/internal-regex: ^@/` : place les imports `@/` en « internes » et laisse les imports de type en dernier.
+- `simple-import-sort/imports` (à la place de `import/order`, coupée) : ordre de standards-front, tiers (framework compris), bibliothèque commune, socle (`@/shared/`), modules (index public, puis couches `domain`, `application`, `infrastructure`, `ui`), vues, relatifs, types, puis styles. Le motif de l'index d'un module exclut `\u0000`, que le plugin ajoute aux imports de type : sans cela, un `import type` d'un module resterait dans le groupe des modules. `simple-import-sort/exports` trie aussi les réexports des index.
 
 ## Pièges connus
 

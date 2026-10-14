@@ -10,9 +10,9 @@ import { theme } from '@/shared/theme/theme'
 
 import { makeQueryClient } from './makeQueryClient'
 
-import '@kewinmarchand/boilerplates-ui/tokens/tokens.css'
-
 import type { ReactNode } from 'react'
+
+import '@kewinmarchand/boilerplates-ui/tokens/tokens.css'
 
 interface ProvidersProps {
   children: ReactNode

@@ -5,11 +5,11 @@ import Toolbar from '@mui/material/Toolbar'
 
 import { CATALOG_NAVIGATION, MAIN_NAVIGATION } from '@/shared/config'
 
+import { A11yModeToggle } from '../a11y-mode/A11yModeToggle'
 import { CategoryMenu } from './CategoryMenu'
 import { LogoLink } from './LogoLink'
 import { MobileMenu } from './MobileMenu'
 import { NavLink } from './NavLink'
-import { A11yModeToggle } from '../a11y-mode/A11yModeToggle'
 
 import type { NavigationNode } from '@/shared/config'
 

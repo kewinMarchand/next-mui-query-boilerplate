@@ -1,5 +1,6 @@
 import { SITE } from '@/shared/config'
 import { buildMetadata } from '@/shared/seo'
+
 import { HomeView } from '@/views/home'
 
 import type { Metadata } from 'next'

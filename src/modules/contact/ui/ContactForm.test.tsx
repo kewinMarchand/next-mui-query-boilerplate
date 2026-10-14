@@ -2,8 +2,9 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { sendContactMessage } from '@/modules/contact/infrastructure/sendContactMessage'
 import { makeQueryClient } from '@/shared/providers'
+
+import { sendContactMessage } from '@/modules/contact/infrastructure/sendContactMessage'
 
 import { ContactForm } from './ContactForm'
 

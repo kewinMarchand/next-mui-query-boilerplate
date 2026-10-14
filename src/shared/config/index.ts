@@ -1,5 +1,5 @@
 export { ACCESSIBILITY_COMPLIANCE } from './accessibility'
-export { CATALOG_NAVIGATION, LEGAL_NAVIGATION, MAIN_NAVIGATION, SITE_MAP } from './navigation'
 export type { NavigationItem, NavigationNode } from './navigation'
-export { SITE } from './site'
+export { CATALOG_NAVIGATION, LEGAL_NAVIGATION, MAIN_NAVIGATION, SITE_MAP } from './navigation'
 export type { SiteConfig } from './site'
+export { SITE } from './site'

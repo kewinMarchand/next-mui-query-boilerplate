@@ -1,9 +1,10 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
+import { Picture } from '@/shared/ui/kit'
+
 import { BlogGrid } from '@/modules/blog'
 import { Price, ProductCard } from '@/modules/catalog'
-import { Picture } from '@/shared/ui/kit'
 
 import { StyleguideSection } from '../StyleguideSection'
 

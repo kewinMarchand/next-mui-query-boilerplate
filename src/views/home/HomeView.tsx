@@ -1,9 +1,10 @@
 import Box from '@mui/material/Box'
 
-import { BlogSection } from '@/modules/blog'
 import { JsonLd, organizationJsonLd, websiteJsonLd } from '@/shared/seo'
 import { Carousel } from '@/shared/ui/carousel'
 import { PageContainer } from '@/shared/ui/layout'
+
+import { BlogSection } from '@/modules/blog'
 
 import { FEATURED_SLIDES } from './featuredSlides'
 import { HomeHero } from './HomeHero'

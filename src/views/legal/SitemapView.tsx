@@ -2,10 +2,11 @@ import Box from '@mui/material/Box'
 import MuiLink from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 
-import { getCategoryMenu } from '@/modules/catalog'
 import { CATALOG_NAVIGATION, SITE_MAP } from '@/shared/config'
 import { Link } from '@/shared/ui/kit'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
+
+import { getCategoryMenu } from '@/modules/catalog'
 
 import type { NavigationNode } from '@/shared/config'
 
