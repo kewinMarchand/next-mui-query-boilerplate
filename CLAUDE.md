@@ -45,7 +45,7 @@ Boilerplate personnel. Les conventions générales sont dans `~/.claude/CLAUDE.m
 ## Dépendances ajoutées
 
 - `@kewinmarchand/csp` (dépendance git sur l'étiquette `v0.1.1`, JavaScript compilé sans dépendance, quelques Ko, côté serveur seulement) : en-tête CSP Report-Only, route de rapport et ligne de démarrage, communs aux boilerplates.
-- `@kewinmarchand/boilerplates-ui` (dépendance git sur l'étiquette `v0.3.0`, livrée en sources) : tokens communs aux boilerplates (section 19 de la spec commune). Next garde MUI comme kit (« chacun garde son kit natif ») : seuls `mui.json`, `tokens.json` et `tokens.css` sont lus. Aucun composant de la bibliothèque n'est importé.
+- `@kewinmarchand/boilerplates-ui` (dépendance git sur l'étiquette `v0.5.0`, livrée en sources) : tokens communs aux boilerplates (section 19 de la spec commune). Next garde MUI comme kit (« chacun garde son kit natif ») : seuls `mui.json`, `tokens.json` et `tokens.css` sont lus. Aucun composant de la bibliothèque n'est importé.
 - `@sentry/nextjs` 11.6 (dépendance d'exécution) : SDK GlitchTip imposé par la spec (section 16), même version majeure que le dépôt SvelteKit. Côté navigateur, il ne vit que dans un chunk chargé à la demande, après l'affichage et seulement avec un DSN : le JS initial ne gagne que le module de programmation (`errorReporting.client.ts`). Poids du chunk non mesuré à ce jour. Environ 85 Mo installés dans `node_modules/@sentry`.
 - `openapi-fetch` 0.17 (dépendance d'exécution, 17 Ko non minifié, 4,4 Ko gzip avant minification, dépendance `openapi-typescript-helpers` en types seuls) : client typé par les `paths` générés, sans code généré, même version que le dépôt SvelteKit. Seul `shared/api/` l'importe (règle ESLint).
 
