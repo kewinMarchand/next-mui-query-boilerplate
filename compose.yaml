@@ -29,6 +29,7 @@ services:
     volumes:
       - .:/app
       - node_modules:/app/node_modules
+      - ${GIT_COMMUN:-/dev/null}:${GIT_COMMUN:-/tmp/sans-git} # dépôt git d'un worktree (Makefile)
 
 volumes:
   node_modules:
