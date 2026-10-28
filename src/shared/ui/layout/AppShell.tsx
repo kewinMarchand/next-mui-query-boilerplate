@@ -17,17 +17,19 @@ interface AppShellProps {
 
 export const AppShell = ({ categoryMenu, children }: AppShellProps) => (
   <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    {isAudienceMeasurementEnabled && (
+      // Avant la page : React exécute les effets dans l'ordre du rendu, ceux du traceur (dont
+      // disableCookies) passent ainsi avant ceux d'une page qui envoie un événement au chargement.
+      // useSearchParams impose une frontière Suspense sur les pages statiques.
+      <Suspense fallback={null}>
+        <MatomoTracker />
+      </Suspense>
+    )}
     <SkipLink />
     <Header categoryMenu={categoryMenu} />
     <Box component="main" id="main" tabIndex={-1} sx={{ flexGrow: 1 }}>
       {children}
     </Box>
     <Footer />
-    {isAudienceMeasurementEnabled && (
-      // useSearchParams impose une frontière Suspense sur les pages statiques.
-      <Suspense fallback={null}>
-        <MatomoTracker />
-      </Suspense>
-    )}
   </Box>
 )
