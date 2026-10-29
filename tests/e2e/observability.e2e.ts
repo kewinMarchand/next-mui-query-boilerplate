@@ -193,4 +193,26 @@ test.describe('Observabilité, avec un DSN et une instance Matomo factices', () 
     await page.goto(`${APP_URL}/donnees-personnelles`)
     await expect(page.getByTestId('legal-audience-measurement')).toBeVisible()
   })
+
+  test('un visiteur qui s’oppose à la mesure n’est plus mesuré, même après rechargement', async ({
+    page,
+  }) => {
+    await page.goto(`${APP_URL}/donnees-personnelles`)
+    await expect.poll(() => pageViews.length).toBe(1)
+
+    await page.getByTestId('legal-opposition-mesure').check()
+    await expect(page.getByTestId('legal-opposition-etat')).toHaveText(/ne sont plus mesurées/)
+
+    // Le refus est lu avant la première commande : la file Matomo n'est jamais créée, donc aucun
+    // traceur chargé ni aucune requête, sans dépendre d'un délai d'attente.
+    await page.reload()
+    await expect(page.getByTestId('legal-opposition-etat')).toHaveText(/ne sont plus mesurées/)
+    expect(
+      await page.evaluate(() => (window as unknown as { _paq?: unknown })._paq),
+    ).toBeUndefined()
+    expect(pageViews).toHaveLength(1)
+
+    await page.getByTestId('legal-opposition-mesure').uncheck()
+    await expect(page.getByTestId('legal-opposition-etat')).toHaveText(/sont mesurées, de façon/)
+  })
 })

@@ -4,6 +4,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 import { MATOMO_CONFIG, pageViewCommands, setupCommands } from './matomo'
+import { mesureRefusee } from './oppositionMesure'
 
 import type { MatomoCommand } from './matomo'
 
@@ -27,7 +28,7 @@ export const useMatomo = () => {
   const previousUrl = useRef<string | undefined>(undefined)
 
   useEffect(() => {
-    if (!MATOMO_CONFIG) return
+    if (!MATOMO_CONFIG || mesureRefusee()) return
     const pending: MatomoCommand[] = []
     const queue = (window._paq ??= pending)
     if (previousUrl.current === undefined) {

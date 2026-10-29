@@ -7,6 +7,7 @@ import { isAudienceMeasurementEnabled } from '@/shared/observability'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
 import { LegalSection } from './LegalSection'
+import { OppositionMesure } from './OppositionMesure'
 
 const { publisher } = SITE
 
@@ -74,6 +75,11 @@ export const PersonalDataView = () => (
             un tiers. Les statistiques produites sont anonymes et servent uniquement à améliorer le
             site. Les données brutes sont conservées 25 mois au plus.
           </Typography>
+          <Typography>
+            Vous pouvez vous opposer à cette mesure : votre choix est gardé dans ce navigateur, sans
+            cookie.
+          </Typography>
+          <OppositionMesure />
         </LegalSection>
       </Box>
     )}
