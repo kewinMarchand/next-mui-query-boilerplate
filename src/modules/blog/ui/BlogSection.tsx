@@ -1,17 +1,16 @@
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import { Suspense } from 'react'
 
 import { BlogGrid } from './BlogGrid'
+import styles from './BlogSection.module.css'
 import { LatestArticles } from './LatestArticles'
 
 export const BlogSection = () => (
-  <Box component="section" aria-labelledby="home-blog-title" data-testid="home-blog">
-    <Typography variant="h2" id="home-blog-title" sx={{ mb: 2 }}>
+  <section aria-labelledby="home-blog-title" data-testid="home-blog">
+    <h2 id="home-blog-title" className={`bui-text bui-text--h2 ${styles.title}`}>
       Derniers articles
-    </Typography>
+    </h2>
     <Suspense fallback={<BlogGrid status="pending" articles={undefined} />}>
       <LatestArticles />
     </Suspense>
-  </Box>
+  </section>
 )

@@ -1,13 +1,12 @@
 'use client'
 
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import { useId } from 'react'
+
+import { Cluster } from '@kewinmarchand/boilerplates-ui/react'
 
 import { AfterHydration, Icon, Picture } from '@/shared/ui/kit'
 
+import styles from './Carousel.module.css'
 import { useCarousel } from './hooks/useCarousel'
 
 export declare namespace Carousel {
@@ -24,8 +23,6 @@ interface CarouselProps {
   slides: Carousel.Slide[]
   'data-testid'?: string
 }
-
-const GAP = 3
 
 export const Carousel = ({ title, slides, 'data-testid': testId }: CarouselProps) => {
   const titleId = useId()
@@ -45,65 +42,49 @@ export const Carousel = ({ title, slides, 'data-testid': testId }: CarouselProps
   } = useCarousel()
 
   return (
-    <Box
-      component="section"
-      aria-labelledby={titleId}
-      aria-roledescription="carrousel"
-      data-testid={testId}
-    >
-      <Stack
-        direction="row"
-        sx={{ justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}
-      >
-        <Typography variant="h2" id={titleId}>
+    <section aria-labelledby={titleId} aria-roledescription="carrousel" data-testid={testId}>
+      <Cluster justify="between" gap="4">
+        <h2 id={titleId} className="bui-text bui-text--h2">
           {title}
-        </Typography>
-        <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
-          <Button
+        </h2>
+        <Cluster gap="2">
+          <button
             ref={prevRef}
-            variant="outlined"
+            type="button"
+            className="bui-button bui-button--outline"
             aria-controls={trackId}
             disabled={!canPrev}
             onClick={goPrev}
-            startIcon={<Icon name="chevron-left" />}
             data-testid="carousel-prev"
           >
+            <Icon name="chevron-left" />
             Précédent
-          </Button>
-          <Button
+          </button>
+          <button
             ref={nextRef}
-            variant="outlined"
+            type="button"
+            className="bui-button bui-button--outline"
             aria-controls={trackId}
             disabled={!canNext}
             onClick={goNext}
-            endIcon={<Icon name="chevron-right" />}
             data-testid="carousel-next"
           >
             Suivant
-          </Button>
-        </Stack>
-      </Stack>
+            <Icon name="chevron-right" />
+          </button>
+        </Cluster>
+      </Cluster>
 
-      <Box
+      <div
         ref={viewportRef}
         role="group"
         aria-label="Diapositives"
         tabIndex={0}
         data-embla-ready={isReady || undefined}
         data-testid="carousel-viewport"
-        sx={{
-          mt: 2,
-          overflowX: 'auto',
-          scrollSnapType: 'x mandatory',
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': { display: 'none' },
-          '&[data-embla-ready]': { overflow: 'hidden', scrollSnapType: 'none' },
-        }}
+        className={styles.viewport}
       >
-        <Box
-          id={trackId}
-          sx={{ display: 'flex', touchAction: 'pan-y pinch-zoom', ml: -GAP, userSelect: 'none' }}
-        >
+        <div id={trackId} className={styles.track}>
           {slides.map((slide, position) => {
             const slideImage = (
               <Picture
@@ -118,71 +99,40 @@ export const Carousel = ({ title, slides, 'data-testid': testId }: CarouselProps
               />
             )
             return (
-              <Box
+              <div
                 key={slide.id}
                 role="group"
                 aria-roledescription="diapositive"
                 aria-label={`${position + 1} sur ${slides.length}`}
                 data-testid="carousel-slide"
-                sx={{
-                  flex: { xs: '0 0 100%', sm: '0 0 50%', lg: '0 0 calc(100% / 3)' },
-                  minWidth: 0,
-                  pl: GAP,
-                  scrollSnapAlign: 'start',
-                }}
+                className={styles.slide}
               >
-                <AfterHydration
-                  placeholder={
-                    <Box sx={{ aspectRatio: '16 / 9', bgcolor: 'grey.100', borderRadius: 1 }} />
-                  }
-                >
+                <AfterHydration placeholder={<div className={styles.placeholder} />}>
                   {slideImage}
                 </AfterHydration>
-                <Typography variant="h3" sx={{ mt: 2, mb: 1 }}>
-                  {slide.title}
-                </Typography>
-                <Typography>{slide.text}</Typography>
-              </Box>
+                <h3 className={`bui-text bui-text--h3 ${styles.slideTitle}`}>{slide.title}</h3>
+                <p className="bui-text">{slide.text}</p>
+              </div>
             )
           })}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {isReady && snapCount > 1 && (
-        <Stack direction="row" sx={{ justifyContent: 'center', mt: 1 }}>
+        <div className={styles.dots}>
           {Array.from({ length: snapCount }, (_, index) => (
-            <Box
+            <button
               key={index}
-              component="button"
               type="button"
               aria-label={`Aller à la diapositive ${index + 1}`}
               aria-current={index === selected ? 'true' : undefined}
               onClick={() => goTo(index)}
               data-testid="carousel-dot"
-              sx={{
-                width: 44,
-                height: 44,
-                p: 0,
-                border: 0,
-                bgcolor: 'transparent',
-                cursor: 'pointer',
-                display: 'grid',
-                placeItems: 'center',
-                '&::after': {
-                  content: '""',
-                  width: 12,
-                  height: 12,
-                  borderRadius: '50%',
-                  border: '2px solid',
-                  borderColor: 'primary.main',
-                },
-                '&[aria-current="true"]::after': { bgcolor: 'primary.main' },
-                '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main' },
-              }}
+              className={styles.dot}
             />
           ))}
-        </Stack>
+        </div>
       )}
-    </Box>
+    </section>
   )
 }

@@ -1,90 +1,58 @@
 'use client'
 
-import Alert from '@mui/material/Alert'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
+import { Alert, Button, TextArea, TextField } from '@kewinmarchand/boilerplates-ui/react'
 
-import { Icon } from '@/shared/ui/kit'
-
+import styles from './ContactForm.module.css'
 import { useContactForm } from './hooks/useContactForm'
-
-// Mention écrite dans le libellé (RGAA 11.10), plutôt que l'astérisque de MUI, masqué aux lecteurs d'écran
-const requiredLabel = (label: string) => (
-  <>
-    {label}
-    <Box component="span" sx={{ color: 'text.secondary' }}>
-      &nbsp;(obligatoire)
-    </Box>
-  </>
-)
 
 export const ContactForm = () => {
   const { form, mutation, onSubmit } = useContactForm()
   const { errors } = form.formState
 
   return (
-    <Stack component="form" spacing={2} noValidate onSubmit={onSubmit} sx={{ maxWidth: 560 }}>
+    <form noValidate onSubmit={onSubmit} className={`bui-stack ${styles.form}`}>
       <TextField
-        label={requiredLabel('Nom')}
+        id="contact-nom"
+        label="Nom"
         autoComplete="name"
         required
-        error={!!errors.name}
-        helperText={errors.name?.message}
-        slotProps={{
-          inputLabel: { required: false },
-          htmlInput: { 'data-testid': 'contact-name' },
-        }}
+        error={errors.name?.message ?? ''}
+        data-testid="contact-name"
         {...form.register('name')}
       />
       <TextField
-        label={requiredLabel('E-mail')}
+        id="contact-email"
+        label="E-mail"
         type="email"
         autoComplete="email"
         required
-        error={!!errors.email}
-        helperText={errors.email?.message}
-        slotProps={{
-          inputLabel: { required: false },
-          htmlInput: { 'data-testid': 'contact-email' },
-        }}
+        error={errors.email?.message ?? ''}
+        data-testid="contact-email"
         {...form.register('email')}
       />
-      <TextField
-        label={requiredLabel('Message')}
-        multiline
-        minRows={4}
+      <TextArea
+        id="contact-message"
+        label="Message"
         required
-        error={!!errors.message}
-        helperText={errors.message?.message}
-        slotProps={{
-          inputLabel: { required: false },
-          htmlInput: { 'data-testid': 'contact-message' },
-        }}
+        error={errors.message?.message ?? ''}
+        data-testid="contact-message"
         {...form.register('message')}
       />
-      <Button
-        type="submit"
-        variant="contained"
-        loading={mutation.isPending}
-        startIcon={<Icon name="mail" />}
-        data-testid="contact-submit"
-      >
+      <Button type="submit" icon="mail" loading={mutation.isPending} data-testid="contact-submit">
         Envoyer
       </Button>
       <div aria-live="polite">
         {mutation.data?.status === 'sent' && (
-          <Alert severity="success" data-testid="contact-success">
-            Merci, votre message a bien été envoyé.
-          </Alert>
+          <div data-testid="contact-success">
+            <Alert variant="success">Merci, votre message a bien été envoyé.</Alert>
+          </div>
         )}
         {mutation.isError && (
-          <Alert severity="error" data-testid="contact-error">
-            L'envoi a échoué. Réessayez dans quelques instants.
-          </Alert>
+          <div data-testid="contact-error">
+            <Alert variant="error">L'envoi a échoué. Réessayez dans quelques instants.</Alert>
+          </div>
         )}
       </div>
-    </Stack>
+    </form>
   )
 }

@@ -1,0 +1,23 @@
+.toggle {
+  flex-shrink: 0;
+  min-width: var(--bui-size-touch);
+  padding-inline: 0;
+}
+
+.toggle[aria-pressed='true'] {
+  border-color: currentcolor;
+}
+
+.label {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .toggle {
+    padding-inline: var(--bui-space-3);
+  }
+
+  .label {
+    display: inline;
+  }
+}

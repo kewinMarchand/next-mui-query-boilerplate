@@ -1,12 +1,9 @@
-import Alert from '@mui/material/Alert'
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Skeleton from '@mui/material/Skeleton'
-import Typography from '@mui/material/Typography'
+import { Alert, Skeleton } from '@kewinmarchand/boilerplates-ui/react'
 
 import { Picture } from '@/shared/ui/kit'
 
 import { formatPublishedAt } from '../domain/article'
+import styles from './BlogGrid.module.css'
 
 import type { Article } from '../domain/article'
 
@@ -16,54 +13,46 @@ interface BlogGridProps {
   errorMessage?: string
 }
 
-const GRID_SX = {
-  display: 'grid',
-  gap: 3,
-  gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
-} as const
-
 export const BlogGrid = ({ status, articles, errorMessage }: BlogGridProps) => {
   if (status === 'pending') {
     return (
-      <Box
+      <div
         role="status"
         aria-busy="true"
         aria-label="Chargement des articles"
         data-testid="home-blog-loading"
-        sx={GRID_SX}
+        className={styles.grid}
       >
         {[1, 2, 3].map((key) => (
-          <Skeleton key={key} variant="rounded" height={160} />
+          <Skeleton key={key} height="160px" />
         ))}
-      </Box>
+      </div>
     )
   }
 
   if (status === 'error') {
     return (
-      <Alert severity="error" data-testid="home-blog-error">
-        {errorMessage}
-      </Alert>
+      <div data-testid="home-blog-error">
+        <Alert variant="error">{errorMessage}</Alert>
+      </div>
     )
   }
 
   if (!articles?.length) {
     return (
-      <Alert severity="info" data-testid="home-blog-empty">
-        Aucun article publié pour l'instant. Revenez bientôt !
-      </Alert>
+      <div data-testid="home-blog-empty">
+        <Alert>Aucun article publié pour l'instant. Revenez bientôt !</Alert>
+      </div>
     )
   }
 
   return (
-    <Box sx={GRID_SX}>
+    <div className={styles.grid}>
       {articles.map((article) => (
-        <Card
+        <article
           key={article.id}
-          component="article"
-          variant="outlined"
           data-testid="home-blog-card"
-          sx={{ containerType: 'inline-size' }}
+          className={`bui-card ${styles.card}`}
         >
           <Picture
             src={article.image}
@@ -74,17 +63,15 @@ export const BlogGrid = ({ status, articles, errorMessage }: BlogGridProps) => {
             sizes="(min-width: 1440px) 460px, (min-width: 1024px) 33vw, (min-width: 600px) 50vw, 100vw"
             style={{ display: 'block', width: '100%', height: 'auto' }}
           />
-          <Box sx={{ p: 2, '@container (min-width: 360px)': { p: 3 } }}>
-            <Typography variant="h3" gutterBottom>
-              {article.title}
-            </Typography>
-            <Typography sx={{ mb: 2 }}>{article.excerpt}</Typography>
-            <Typography variant="body2" color="text.secondary">
+          <div className={styles.body}>
+            <h3 className={`bui-text bui-text--h3 ${styles.title}`}>{article.title}</h3>
+            <p className={`bui-text ${styles.excerpt}`}>{article.excerpt}</p>
+            <p className={`bui-text bui-text--body-sm ${styles.date}`}>
               <time dateTime={article.publishedAt}>{formatPublishedAt(article.publishedAt)}</time>
-            </Typography>
-          </Box>
-        </Card>
+            </p>
+          </div>
+        </article>
       ))}
-    </Box>
+    </div>
   )
 }

@@ -1,0 +1,16 @@
+.list {
+  margin: 0;
+  padding: var(--bui-space-2) 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-6);
+  padding: var(--bui-space-2) var(--bui-space-4);
+}
+
+.status {
+  color: var(--bui-color-text-muted);
+}
