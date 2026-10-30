@@ -1,4 +1,3 @@
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import { Inter } from 'next/font/google'
 
 import { SITE } from '@/shared/config'
@@ -13,6 +12,7 @@ import type { ReactNode } from 'react'
 
 import '@kewinmarchand/boilerplates-ui/tokens/tokens.css'
 import '@kewinmarchand/boilerplates-ui/css/index.css'
+import '@/shared/theme/global.css'
 
 // Le menu de catégories vient de l'API : les pages statiques se régénèrent toutes les 5 minutes,
 // y compris celles construites sans API joignable (menu vide en repli).
@@ -41,11 +41,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: A11Y_MODE_SCRIPT }} />
       </head>
       <body>
-        <AppRouterCacheProvider>
-          <Providers>
-            <AppShell categoryMenu={await getCategoryMenu()}>{children}</AppShell>
-          </Providers>
-        </AppRouterCacheProvider>
+        <Providers>
+          <AppShell categoryMenu={await getCategoryMenu()}>{children}</AppShell>
+        </Providers>
       </body>
     </html>
   )

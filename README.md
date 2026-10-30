@@ -1,6 +1,6 @@
 # next-mui-query-boilerplate
 
-Point de départ pour une application **Next.js App Router** avec **MUI**, **TanStack Query**, **react-hook-form + zod**, et toute la chaîne qualité : lint, format, types, tests unitaires, end-to-end, accessibilité et Lighthouse.
+Point de départ pour une application **Next.js App Router** avec les composants de **boilerplates-ui**, **TanStack Query**, **react-hook-form + zod**, et toute la chaîne qualité : lint, format, types, tests unitaires, end-to-end, accessibilité et Lighthouse.
 
 Les pages de démonstration montrent chaque brique en situation :
 
@@ -21,7 +21,7 @@ Le header porte le logo, la navigation, le menu de catégories (cascade sur ordi
 | -------------------------------------- | ------------------------------------------------------------------------- |
 | Next.js 16 (App Router, Turbopack)     | Routage, rendu serveur, metadata, sitemap                                 |
 | React 19, TypeScript 6 (strict)        | UI et typage                                                              |
-| MUI 9 + Emotion                        | Design system, thème dans `src/shared/theme/theme.ts`                     |
+| boilerplates-ui                        | Jetons, CSS et composants React communs ; styles du site en CSS Modules   |
 | TanStack Query 5                       | Cache et synchronisation des données serveur côté client                  |
 | react-hook-form + zod 4                | Formulaires, validation et types dérivés du même schéma                   |
 | Embla Carousel 8 + wheel-gestures      | Carrousel (glisser, swipe, molette), dans `shared/ui/carousel` uniquement |
@@ -165,7 +165,7 @@ Les données utiles au référencement (blog de l'accueil, catalogue) sont au co
 ### Ajouter un champ de formulaire
 
 1. Ajouter le champ et son message d'erreur dans `src/modules/contact/domain/contactSchema.ts`. Le type du formulaire en découle.
-2. Ajouter le `TextField` dans `ContactForm.tsx` avec `{...form.register('champ')}`, `error` et `helperText`. MUI relie le message au champ par `aria-describedby`.
+2. Ajouter le `TextField` de la bibliothèque dans `ContactForm.tsx` avec un `id`, `{...form.register('champ')}` et `error`. Le composant relie le message au champ par `aria-describedby`.
 
 ### CSP et rapports de violation
 
@@ -177,7 +177,7 @@ Chaque réponse porte un en-tête `Content-Security-Policy-Report-Only` construi
 
 - **Lire les logs** : `docker compose logs -f web` pour l'image de production, la sortie de `make up` en développement, la console de l'hébergeur en production. Au démarrage, `[next-mui-query-boilerplate] serveur démarré (production)` permet de retrouver le bon fichier.
 - **Autoriser une origine** : l'ajouter à sa directive (le nom est entre parenthèses dans la ligne) dans `siteCsp()` de `src/shared/security/csp.ts`. L'API (`API_URL`), Matomo et GlitchTip y sont déjà, quand leur variable est renseignée. L'en-tête est figé au build, comme les `NEXT_PUBLIC_*`.
-- **Pourquoi Report-Only et `'unsafe-inline'`** : on collecte d'abord ce que le site charge vraiment avant de bloquer quoi que ce soit ; l'hydratation de Next et le CSS-in-JS de MUI écrivent du code en ligne, et un nonce par réponse rendrait toutes les pages dynamiques.
+- **Pourquoi Report-Only et `'unsafe-inline'`** : on collecte d'abord ce que le site charge vraiment avant de bloquer quoi que ce soit ; l'hydratation de Next et les attributs `style` écrivent du code en ligne, et un nonce par réponse rendrait toutes les pages dynamiques.
 
 ### Ajouter une icône
 
@@ -185,7 +185,7 @@ Ajouter son nom Lucide dans `icons.json`, puis lancer `make icons` : le sprite `
 
 ### Ajuster le mode accessibilité renforcée
 
-Tout est dans `src/shared/ui/a11y-mode/a11yMode.ts` : le script inline qui pose `data-a11y-mode="enhanced"` sur `<html>` avant le premier rendu, et les surcharges CSS injectées par `MuiCssBaseline`. Les espacements de texte ne visent que le contenu de `<main>`, jamais le header, la navigation ni le footer. Un composant qui a besoin d'un style propre à ce mode utilise `ENHANCED_MODE_SELECTOR` dans son `sx`.
+Le script inline est dans `src/shared/ui/a11y-mode/a11yMode.ts` : il pose `data-a11y-mode="enhanced"` sur `<html>` avant le premier rendu, et ses surcharges CSS sont dans `src/shared/theme/global.css`. Les espacements de texte ne visent que le contenu de `<main>`, jamais le header, la navigation ni le footer. Un composant qui a besoin d'un style propre à ce mode le cible dans son CSS Module avec `:global(html[data-a11y-mode='enhanced']) .classe`.
 
 ### Déclarer un audit d'accessibilité
 

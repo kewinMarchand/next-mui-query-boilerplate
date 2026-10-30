@@ -21,14 +21,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@emotion/cache": "^11.14.0",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
     "@hookform/resolvers": "^5.9.1",
     "@kewinmarchand/boilerplates-ui": "github:kewinMarchand/boilerplates-ui#v0.9.0",
     "@kewinmarchand/csp": "github:kewinMarchand/csp#v0.1.1",
-    "@mui/material": "^9.4.0",
-    "@mui/material-nextjs": "^9.4.0",
     "@sentry/nextjs": "^11.6.0",
     "@tanstack/react-query": "^5.104.0",
     "embla-carousel-react": "^8",
@@ -82,5 +77,5 @@
     ]
   },
   "license": "MIT",
-  "description": "Boilerplate Next.js App Router, MUI, TanStack Query, react-hook-form et zod, avec lint, tests unitaires, e2e, accessibilité et Lighthouse"
+  "description": "Boilerplate Next.js App Router, boilerplates-ui, TanStack Query, react-hook-form et zod, avec lint, tests unitaires, e2e, accessibilité et Lighthouse"
 }
