@@ -1,0 +1,25 @@
+.breadcrumb {
+  margin-block-end: var(--bui-space-4);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Séparateur décoratif : texte de remplacement vide pour les lecteurs d'écran */
+.list li + li::before {
+  margin-inline: var(--bui-space-2);
+  color: var(--bui-color-text-muted);
+  content: '›' / '';
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--bui-size-touch);
+}

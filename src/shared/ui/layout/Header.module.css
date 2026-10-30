@@ -1,0 +1,38 @@
+.header {
+  background: var(--bui-color-primary);
+  box-shadow: var(--bui-shadow-sm);
+  color: var(--bui-color-on-primary);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: var(--bui-space-2);
+  min-height: 56px;
+  padding-block: var(--bui-space-2);
+}
+
+.desktop {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .toolbar {
+    min-height: 64px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  .desktop {
+    display: block;
+  }
+}

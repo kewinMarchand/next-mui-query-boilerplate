@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box'
 import { Suspense } from 'react'
 
 import { isAudienceMeasurementEnabled, MatomoTracker } from '@/shared/observability'
 
+import styles from './AppShell.module.css'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { SkipLink } from './SkipLink'
@@ -16,7 +16,7 @@ interface AppShellProps {
 }
 
 export const AppShell = ({ categoryMenu, children }: AppShellProps) => (
-  <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+  <div className={styles.shell}>
     {isAudienceMeasurementEnabled && (
       // Avant la page : React exécute les effets dans l'ordre du rendu, ceux du traceur (dont
       // disableCookies) passent ainsi avant ceux d'une page qui envoie un événement au chargement.
@@ -27,9 +27,9 @@ export const AppShell = ({ categoryMenu, children }: AppShellProps) => (
     )}
     <SkipLink />
     <Header categoryMenu={categoryMenu} />
-    <Box component="main" id="main" tabIndex={-1} sx={{ flexGrow: 1 }}>
+    <main id="main" tabIndex={-1} className={styles.main}>
       {children}
-    </Box>
+    </main>
     <Footer />
-  </Box>
+  </div>
 )

@@ -1,21 +1,7 @@
-import Box from '@mui/material/Box'
+import styles from './SkipLink.module.css'
 
 export const SkipLink = () => (
-  <Box
-    component="a"
-    href="#main"
-    sx={{
-      position: 'absolute',
-      left: 8,
-      top: -64,
-      zIndex: 'tooltip',
-      p: 1.5,
-      bgcolor: 'background.paper',
-      color: 'primary.main',
-      borderRadius: 1,
-      '&:focus-visible': { top: 8, outline: '3px solid', outlineColor: 'primary.main' },
-    }}
-  >
+  <a href="#main" className={styles.skip}>
     Aller au contenu principal
-  </Box>
+  </a>
 )

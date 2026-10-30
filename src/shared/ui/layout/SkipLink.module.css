@@ -1,0 +1,15 @@
+.skip {
+  position: absolute;
+  top: -64px;
+  left: var(--bui-space-2);
+  z-index: var(--bui-z-index-skip-link);
+  padding: var(--bui-space-3);
+  border-radius: var(--bui-radius-md);
+  background: var(--bui-color-surface);
+  color: var(--bui-color-primary);
+}
+
+.skip:focus-visible {
+  top: var(--bui-space-2);
+  outline: 3px solid var(--bui-color-primary);
+}

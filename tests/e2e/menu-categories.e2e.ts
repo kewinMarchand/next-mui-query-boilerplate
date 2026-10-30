@@ -121,6 +121,7 @@ test.describe('Menu mobile', () => {
     await menu.getByRole('link', { name: 'Nénuphars' }).click()
 
     await expect(page).toHaveURL(/\/catalogue\/plantes-aquatiques\/nenuphars$/)
-    await expect(menu).toHaveCount(0)
+    // Le tiroir est un <dialog> natif : fermé, il reste dans le DOM mais n'est plus affiché
+    await expect(menu).toBeHidden()
   })
 })

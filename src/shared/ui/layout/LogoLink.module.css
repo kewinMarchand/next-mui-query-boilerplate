@@ -1,0 +1,23 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bui-space-3);
+  min-width: 0;
+  min-height: var(--bui-size-touch);
+  margin-inline-end: auto;
+  color: inherit;
+  font-size: var(--bui-font-size-body);
+  font-weight: var(--bui-font-weight-bold);
+  text-decoration: none;
+}
+
+.logo:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}
+
+@media (min-width: 1024px) {
+  .logo {
+    font-size: var(--bui-font-size-title);
+  }
+}

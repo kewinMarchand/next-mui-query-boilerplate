@@ -1,9 +1,10 @@
 'use client'
 
-import Button from '@mui/material/Button'
 import { usePathname } from 'next/navigation'
 
 import { Link } from '@/shared/ui/kit'
+
+import styles from './NavLink.module.css'
 
 import type { NavigationItem } from '@/shared/config'
 
@@ -12,14 +13,8 @@ export const NavLink = ({ href, label }: NavigationItem) => {
   const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href)
 
   return (
-    <Button
-      component={Link}
-      href={href}
-      color="inherit"
-      aria-current={isActive ? 'page' : undefined}
-      sx={{ fontWeight: isActive ? 700 : 400, textDecoration: isActive ? 'underline' : 'none' }}
-    >
+    <Link href={href} className={styles.link} aria-current={isActive ? 'page' : undefined}>
       {label}
-    </Button>
+    </Link>
   )
 }

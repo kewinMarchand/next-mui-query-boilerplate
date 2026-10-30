@@ -1,0 +1,25 @@
+/* Lien de la barre d'en-tête, sur le fond primaire : il en prend la couleur de texte */
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--bui-size-touch);
+  padding: 6px var(--bui-space-2);
+  border-radius: var(--bui-radius-md);
+  color: inherit;
+  font-weight: var(--bui-font-weight-regular);
+  text-decoration: none;
+}
+
+.link:hover {
+  background: var(--bui-color-on-primary-overlay);
+}
+
+.link:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}
+
+.link[aria-current='page'] {
+  font-weight: var(--bui-font-weight-bold);
+  text-decoration: underline;
+}

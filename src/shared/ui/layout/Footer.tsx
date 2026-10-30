@@ -1,52 +1,32 @@
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
-import MuiLink from '@mui/material/Link'
-import Typography from '@mui/material/Typography'
+import { Container } from '@kewinmarchand/boilerplates-ui/react'
 
 import { ACCESSIBILITY_COMPLIANCE, LEGAL_NAVIGATION, SITE } from '@/shared/config'
 import { Link, LogoMark } from '@/shared/ui/kit'
+
+import styles from './Footer.module.css'
 
 // Le RGAA impose l'état de conformité dans le lien du pied de page, pas ailleurs.
 const ACCESSIBILITY_PATH = '/accessibilite'
 
 export const Footer = () => (
-  <Box component="footer" sx={{ py: 3, mt: 6, bgcolor: 'grey.100' }}>
+  <footer className={styles.footer}>
     <Container>
-      <Box
-        component="nav"
-        aria-label="Liens légaux"
-        sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 3, rowGap: 1, mb: 2 }}
-      >
+      <nav aria-label="Liens légaux" className={styles.links}>
         {LEGAL_NAVIGATION.map(({ href, label }) => (
-          <MuiLink
-            key={href}
-            component={Link}
-            href={href}
-            variant="body2"
-            sx={{ display: 'inline-flex', alignItems: 'center', minHeight: 44 }}
-          >
+          <Link key={href} href={href} className={`bui-link ${styles.link}`}>
             {href === ACCESSIBILITY_PATH ? `Accessibilité : ${ACCESSIBILITY_COMPLIANCE}` : label}
-          </MuiLink>
+          </Link>
         ))}
-      </Box>
+      </nav>
       {process.env.NODE_ENV !== 'production' && (
-        <MuiLink
-          component={Link}
-          href="/charte-graphique"
-          variant="body2"
-          sx={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
-        >
+        <Link href="/charte-graphique" className={`bui-link ${styles.link}`}>
           Charte graphique (développement)
-        </MuiLink>
+        </Link>
       )}
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-      >
+      <p className={`bui-text bui-text--body-sm ${styles.brand}`}>
         <LogoMark size={20} />
         {SITE.name}
-      </Typography>
+      </p>
     </Container>
-  </Box>
+  </footer>
 )

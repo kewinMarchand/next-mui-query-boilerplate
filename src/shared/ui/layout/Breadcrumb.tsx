@@ -1,8 +1,7 @@
-import Box from '@mui/material/Box'
-import MuiLink from '@mui/material/Link'
-
 import { breadcrumbJsonLd, JsonLd } from '@/shared/seo'
 import { Link } from '@/shared/ui/kit'
+
+import styles from './Breadcrumb.module.css'
 
 import type { BreadcrumbItem } from '@/shared/seo'
 
@@ -12,20 +11,8 @@ interface BreadcrumbProps {
 }
 
 export const Breadcrumb = ({ items, withJsonLd = true }: BreadcrumbProps) => (
-  <Box component="nav" aria-label="Fil d'Ariane" data-testid="layout-breadcrumb" sx={{ mb: 2 }}>
-    <Box
-      component="ol"
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        listStyle: 'none',
-        m: 0,
-        p: 0,
-        typography: 'body2',
-        '& li + li::before': { content: '"›" / ""', mx: 1, color: 'text.secondary' },
-      }}
-    >
+  <nav aria-label="Fil d'Ariane" data-testid="layout-breadcrumb" className={styles.breadcrumb}>
+    <ol className={`bui-text bui-text--body-sm ${styles.list}`}>
       {items.map((item, index) =>
         index === items.length - 1 ? (
           <li key={item.href} aria-current="page">
@@ -33,17 +20,13 @@ export const Breadcrumb = ({ items, withJsonLd = true }: BreadcrumbProps) => (
           </li>
         ) : (
           <li key={item.href}>
-            <MuiLink
-              component={Link}
-              href={item.href}
-              sx={{ display: 'inline-flex', alignItems: 'center', minHeight: 44 }}
-            >
+            <Link href={item.href} className={`bui-link ${styles.link}`}>
               {item.label}
-            </MuiLink>
+            </Link>
           </li>
         ),
       )}
-    </Box>
+    </ol>
     {withJsonLd && <JsonLd data={breadcrumbJsonLd(items)} />}
-  </Box>
+  </nav>
 )

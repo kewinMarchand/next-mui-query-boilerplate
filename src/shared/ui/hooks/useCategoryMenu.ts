@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import type { KeyboardEvent } from 'react'
 
@@ -8,8 +8,21 @@ const linksOf = (panel: HTMLElement | null, level: number) =>
 export const useCategoryMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [openPath, setOpenPath] = useState<string[]>([])
+  const rootRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+
+  // Un clic hors du menu le ferme.
+  useEffect(() => {
+    if (!isOpen) return
+    const handleClick = (event: MouseEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) return
+      setIsOpen(false)
+      setOpenPath([])
+    }
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [isOpen])
 
   // Recalé sur le bord droit du bouton quand les colonnes ouvertes dépassent du viewport.
   useLayoutEffect(() => {
@@ -65,5 +78,5 @@ export const useCategoryMenu = () => {
     }
   }
 
-  return { isOpen, openPath, buttonRef, panelRef, close, toggle, openBranch, onKeyDown }
+  return { isOpen, openPath, rootRef, buttonRef, panelRef, close, toggle, openBranch, onKeyDown }
 }

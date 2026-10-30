@@ -1,12 +1,10 @@
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
-import Toolbar from '@mui/material/Toolbar'
+import { Cluster, Container } from '@kewinmarchand/boilerplates-ui/react'
 
 import { CATALOG_NAVIGATION, MAIN_NAVIGATION } from '@/shared/config'
 
 import { A11yModeToggle } from '../a11y-mode/A11yModeToggle'
 import { CategoryMenu } from './CategoryMenu'
+import styles from './Header.module.css'
 import { LogoLink } from './LogoLink'
 import { MobileMenu } from './MobileMenu'
 import { NavLink } from './NavLink'
@@ -18,22 +16,15 @@ interface HeaderProps {
 }
 
 export const Header = ({ categoryMenu }: HeaderProps) => (
-  <AppBar position="static" component="header">
+  <header className={styles.header}>
     <Container>
-      <Toolbar disableGutters sx={{ flexWrap: { xs: 'nowrap', lg: 'wrap' }, columnGap: 1, py: 1 }}>
+      <div className={styles.toolbar}>
         <LogoLink />
-        <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
+        <div className={styles.mobile}>
           <MobileMenu navigation={MAIN_NAVIGATION} categoryMenu={categoryMenu} />
-        </Box>
-        <Box
-          component="nav"
-          aria-label="Navigation principale"
-          sx={{ display: { xs: 'none', lg: 'block' } }}
-        >
-          <Box
-            component="ul"
-            sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, listStyle: 'none', m: 0, p: 0 }}
-          >
+        </div>
+        <nav aria-label="Navigation principale" className={styles.desktop}>
+          <Cluster as="ul" gap="2">
             {MAIN_NAVIGATION.map((item) => (
               <li key={item.href}>
                 {item.href === CATALOG_NAVIGATION.href ? (
@@ -43,10 +34,10 @@ export const Header = ({ categoryMenu }: HeaderProps) => (
                 )}
               </li>
             ))}
-          </Box>
-        </Box>
+          </Cluster>
+        </nav>
         <A11yModeToggle />
-      </Toolbar>
+      </div>
     </Container>
-  </AppBar>
+  </header>
 )
