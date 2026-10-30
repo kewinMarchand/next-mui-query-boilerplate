@@ -682,9 +682,9 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kewinmarchand/boilerplates-ui@github:kewinMarchand/boilerplates-ui#v0.9.0":
-  version "0.9.0"
-  resolved "https://codeload.github.com/kewinMarchand/boilerplates-ui/tar.gz/1b4b1ce4375200b6dfb60c5c13eefece790ee28e"
+"@kewinmarchand/boilerplates-ui@github:kewinMarchand/boilerplates-ui#v0.10.0":
+  version "0.10.0"
+  resolved "https://codeload.github.com/kewinMarchand/boilerplates-ui/tar.gz/83a2c52f15c5838145c34a4d78443f15ae9a55cb"
 
 "@kewinmarchand/csp@github:kewinMarchand/csp#v0.1.1":
   version "0.1.1"
