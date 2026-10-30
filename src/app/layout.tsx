@@ -11,6 +11,9 @@ import { getCategoryMenu } from '@/modules/catalog'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
+import '@kewinmarchand/boilerplates-ui/tokens/tokens.css'
+import '@kewinmarchand/boilerplates-ui/css/index.css'
+
 // Le menu de catégories vient de l'API : les pages statiques se régénèrent toutes les 5 minutes,
 // y compris celles construites sans API joignable (menu vide en repli).
 export const revalidate = 300

@@ -1,5 +1,7 @@
-import mui from '@kewinmarchand/boilerplates-ui/tokens/mui.json'
 import generated from '@kewinmarchand/boilerplates-ui/tokens/tokens.json'
+
+// Thème MUI de boilerplates-ui 0.6.1, recopié le temps de retirer MUI (lot B1) : la bibliothèque ne le génère plus depuis la 0.7 (ADR 0003)
+import mui from './mui-provisoire.json'
 
 import type { ThemeOptions, TypographyVariantsOptions } from '@mui/material/styles'
 
