@@ -1,17 +1,21 @@
 [
   "arrow-left",
+  "check",
   "chevron-down",
   "chevron-left",
   "chevron-right",
   "circle-alert",
   "circle-check",
+  "info",
   "layout-grid",
   "list",
   "list-todo",
+  "loader-circle",
   "mail",
   "menu",
   "person-standing",
   "rotate-cw",
   "sliders-horizontal",
+  "triangle-alert",
   "x"
 ]
