@@ -1,13 +1,12 @@
-import Alert from '@mui/material/Alert'
-import Button from '@mui/material/Button'
-import Skeleton from '@mui/material/Skeleton'
-import Stack from '@mui/material/Stack'
+'use client'
+
+import { Alert, Button, Skeleton, Stack } from '@kewinmarchand/boilerplates-ui/react'
 
 import { Icon } from '@/shared/ui/kit'
 
 import { StyleguideSection } from '../StyleguideSection'
 
-const SEVERITIES = [
+const VARIANTS = [
   ['success', 'Message envoyé.'],
   ['info', 'Les filtres s’appliquent dès qu’ils changent.'],
   ['warning', 'Ce produit est bientôt en rupture.'],
@@ -16,21 +15,22 @@ const SEVERITIES = [
 
 export const FeedbackSection = () => (
   <StyleguideSection title="Retours">
-    <Stack sx={{ gap: 2 }}>
-      {SEVERITIES.map(([severity, message]) => (
-        <Alert key={severity} severity={severity}>
+    <Stack gap="4">
+      {VARIANTS.map(([variant, message]) => (
+        <Alert key={variant} variant={variant}>
           {message}
         </Alert>
       ))}
-      <Stack role="status" aria-label="Exemple de chargement" sx={{ gap: 1 }}>
-        <Skeleton variant="rounded" height={48} />
-        <Skeleton variant="rounded" height={48} />
+      <Stack role="status" aria-label="Exemple de chargement" gap="2">
+        <Skeleton height="48px" />
+        <Skeleton height="48px" />
       </Stack>
-      <Alert severity="info">Aucun élément pour l’instant. Tout est à jour.</Alert>
+      <Alert>Aucun élément pour l’instant. Tout est à jour.</Alert>
       <Alert
-        severity="error"
+        variant="error"
         action={
-          <Button color="inherit" startIcon={<Icon name="rotate-cw" />}>
+          <Button variant="ghost">
+            <Icon name="rotate-cw" />
             Réessayer
           </Button>
         }

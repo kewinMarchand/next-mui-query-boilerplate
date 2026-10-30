@@ -1,31 +1,41 @@
-'use client'
+import { Stack } from '@kewinmarchand/boilerplates-ui/react'
 
-import Stack from '@mui/material/Stack'
-import { useTheme } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
+import { TOKENS } from '@/shared/theme/tokens'
 
+import styles from '../styleguide.module.css'
 import { StyleguideSection } from '../StyleguideSection'
 
-const VARIANTS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'body1', 'body2'] as const
+const { size, 'line-height': lineHeight } = TOKENS.font
 
-export const TypographySection = () => {
-  const { typography } = useTheme()
+const VARIANTS = [
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'title',
+  'lead',
+  'body',
+  'body-sm',
+  'caption',
+  'overline',
+] as const
 
-  return (
-    <StyleguideSection title="Typographie">
-      <Stack sx={{ gap: 2 }}>
-        {VARIANTS.map((variant) => (
-          <div key={variant}>
-            <Typography variant={variant} component="p">
-              {variant} : Plantes tropicales de démonstration
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Taille {String(typography[variant].fontSize)}, interlignage{' '}
-              {String(typography[variant].lineHeight)}
-            </Typography>
-          </div>
-        ))}
-      </Stack>
-    </StyleguideSection>
-  )
-}
+const TIGHT = new Set(['h1', 'h2', 'h3', 'h4', 'title'])
+
+export const TypographySection = () => (
+  <StyleguideSection title="Typographie">
+    <Stack gap="4">
+      {VARIANTS.map((variant) => (
+        <div key={variant}>
+          <p className={`bui-text bui-text--${variant}`}>
+            {variant} : Plantes tropicales de démonstration
+          </p>
+          <p className={`bui-text bui-text--body-sm ${styles.muted}`}>
+            Taille {size[variant]}, interlignage{' '}
+            {TIGHT.has(variant) ? lineHeight.tight : lineHeight.normal}
+          </p>
+        </div>
+      ))}
+    </Stack>
+  </StyleguideSection>
+)

@@ -1,13 +1,11 @@
-import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
-import MuiLink from '@mui/material/Link'
-import Stack from '@mui/material/Stack'
+import { Chip, Cluster } from '@kewinmarchand/boilerplates-ui/react'
 
-import { Icon, Link } from '@/shared/ui/kit'
+import { Link } from '@/shared/ui/kit'
 import { Breadcrumb, buildBreadcrumb } from '@/shared/ui/layout'
 
 import { CatalogPagination } from '@/modules/catalog'
 
+import styles from '../styleguide.module.css'
 import { StyleguideSection } from '../StyleguideSection'
 
 const QUERY = {
@@ -35,31 +33,21 @@ export const NavigationSection = () => (
       page={5}
       pageCount={10}
     />
-    <Box component="ul" sx={{ display: 'flex', gap: 1, listStyle: 'none', p: 0, my: 3 }}>
+    <ul className={`bui-chip-list ${styles.chips}`}>
       <li>
-        <Chip
-          label="Mi-ombre"
-          icon={<Icon name="x" size={16} />}
-          aria-label="Retirer le filtre : Mi-ombre"
-          clickable
-        />
+        <Chip removable>Mi-ombre</Chip>
       </li>
       <li>
-        <Chip
-          label="Taille M"
-          icon={<Icon name="x" size={16} />}
-          aria-label="Retirer le filtre : Taille M"
-          clickable
-        />
+        <Chip removable>Taille M</Chip>
       </li>
-    </Box>
-    <Stack direction="row" sx={{ gap: 3, flexWrap: 'wrap' }}>
-      <MuiLink component={Link} href="/" underline="always">
+    </ul>
+    <Cluster gap="6">
+      <Link href="/" className="bui-link">
         Lien interne
-      </MuiLink>
-      <MuiLink href="https://www.w3.org/WAI/standards-guidelines/wcag/fr" underline="always">
+      </Link>
+      <a className="bui-link" href="https://www.w3.org/WAI/standards-guidelines/wcag/fr">
         Lien externe : les WCAG sur le site du W3C
-      </MuiLink>
-    </Stack>
+      </a>
+    </Cluster>
   </StyleguideSection>
 )

@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
+import styles from './styleguide.module.css'
 
 import type { ReactNode } from 'react'
 
@@ -9,10 +8,8 @@ interface StyleguideSectionProps {
 }
 
 export const StyleguideSection = ({ title, children }: StyleguideSectionProps) => (
-  <Box component="section" sx={{ mt: 6 }} data-testid="styleguide-section">
-    <Typography variant="h2" gutterBottom>
-      {title}
-    </Typography>
+  <section className={styles.section} data-testid="styleguide-section">
+    <h2 className={`bui-text bui-text--h2 ${styles.sectionTitle}`}>{title}</h2>
     {children}
-  </Box>
+  </section>
 )

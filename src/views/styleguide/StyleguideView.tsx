@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography'
+import { Text } from '@kewinmarchand/boilerplates-ui/react'
 
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
@@ -11,18 +11,17 @@ import { MediaSection } from './sections/MediaSection'
 import { NavigationSection } from './sections/NavigationSection'
 import { SpacingSection } from './sections/SpacingSection'
 import { TypographySection } from './sections/TypographySection'
+import styles from './styleguide.module.css'
 
 export const StyleguideView = () => (
   <PageContainer
     breadcrumb={buildBreadcrumb('/', [{ label: 'Charte graphique', href: '/charte-graphique' }])}
   >
-    <Typography variant="h1" gutterBottom>
-      Charte graphique
-    </Typography>
-    <Typography>
+    <h1 className={`bui-text bui-text--h1 ${styles.title}`}>Charte graphique</h1>
+    <Text>
       Page de développement : composants et jetons réels du projet. Le bouton « Accessibilité
       renforcée » de l'en-tête permet de comparer les deux modes.
-    </Typography>
+    </Text>
     <ColorsSection />
     <TypographySection />
     <SpacingSection />

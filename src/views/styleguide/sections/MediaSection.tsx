@@ -1,11 +1,9 @@
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-
 import { Picture } from '@/shared/ui/kit'
 
 import { BlogGrid } from '@/modules/blog'
 import { Price, ProductCard } from '@/modules/catalog'
 
+import styles from '../styleguide.module.css'
 import { StyleguideSection } from '../StyleguideSection'
 
 const PRODUCT = {
@@ -31,17 +29,15 @@ const ARTICLE = {
 export const MediaSection = () => (
   <StyleguideSection title="Médias et cartes">
     <BlogGrid status="success" articles={[ARTICLE]} />
-    <Box
-      sx={{ display: 'grid', gap: 2, mt: 3, gridTemplateColumns: { xs: '1fr', lg: '280px 1fr' } }}
-    >
+    <div className={styles.cards}>
       <ProductCard product={PRODUCT} position={1} isPriority={false} />
       <ProductCard product={PRODUCT} position={2} isPriority={false} />
-    </Box>
-    <Typography variant="body2" sx={{ mt: 1 }}>
+    </div>
+    <p className={`bui-text bui-text--body-sm ${styles.caption}`}>
       La même carte produit en grille (colonne étroite) et en liste (colonne large), via une requête
       de conteneur.
-    </Typography>
-    <Box sx={{ mt: 3, maxWidth: 480 }}>
+    </p>
+    <div className={styles.media}>
       <Picture
         src="/images/slide-2"
         widths={[640, 1280]}
@@ -51,7 +47,7 @@ export const MediaSection = () => (
         sizes="480px"
         style={{ width: '100%', height: 'auto', aspectRatio: '16 / 9', borderRadius: 8 }}
       />
-      <Typography variant="body2">Image au ratio 16:9, dimensions posées.</Typography>
-    </Box>
+      <p className="bui-text bui-text--body-sm">Image au ratio 16:9, dimensions posées.</p>
+    </div>
   </StyleguideSection>
 )

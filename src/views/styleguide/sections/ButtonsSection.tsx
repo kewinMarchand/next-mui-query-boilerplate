@@ -1,52 +1,42 @@
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+'use client'
 
+import { Button } from '@kewinmarchand/boilerplates-ui/react'
+
+import styles from '../styleguide.module.css'
 import { StyleguideSection } from '../StyleguideSection'
 
-const VARIANTS = ['contained', 'outlined', 'text'] as const
+const VARIANTS = ['primary', 'secondary', 'outline', 'ghost'] as const
 
 const STATES = [
-  { label: 'Défaut', props: {}, sx: {} },
-  { label: 'Survol', props: {}, sx: { bgcolor: 'action.hover' } },
-  {
-    label: 'Focus',
-    props: {},
-    sx: { outline: '3px solid', outlineColor: 'primary.dark', outlineOffset: 2 },
-  },
-  { label: 'Actif', props: {}, sx: { bgcolor: 'action.selected' } },
-  { label: 'Désactivé', props: { disabled: true }, sx: {} },
-  { label: 'Chargement', props: { loading: true }, sx: {} },
+  { label: 'Défaut', className: '' },
+  { label: 'Survol', className: 'bui-is-hover' },
+  { label: 'Focus', className: 'bui-is-focus' },
+  { label: 'Actif', className: 'bui-is-active' },
 ] as const
 
 export const ButtonsSection = () => (
   <StyleguideSection title="Boutons">
-    <Typography sx={{ mb: 2 }}>
-      Survol, focus et actif sont simulés avec les jetons du thème. Les vrais états se testent au
-      pointeur et au clavier sur la ligne « Défaut ».
-    </Typography>
+    <p className={`bui-text ${styles.group}`}>
+      Survol, focus et actif sont simulés par les classes d'état de la bibliothèque. Les vrais états
+      se testent au pointeur et au clavier sur la ligne « Défaut ».
+    </p>
     {VARIANTS.map((variant) => (
-      <Box key={variant} sx={{ mb: 2 }}>
-        <Typography variant="h3" component="h3" gutterBottom>
-          {variant}
-        </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+      <div key={variant} className={styles.group}>
+        <h3 className={`bui-text bui-text--h3 ${styles.sectionTitle}`}>{variant}</h3>
+        <div className="bui-cluster bui-gap-4">
           {STATES.map((state) => (
-            <Button
-              key={state.label}
-              variant={variant}
-              {...state.props}
-              sx={
-                variant === 'contained' && ['Survol', 'Actif'].includes(state.label)
-                  ? { bgcolor: 'primary.dark' }
-                  : state.sx
-              }
-            >
+            <Button key={state.label} variant={variant} className={state.className}>
               {state.label}
             </Button>
           ))}
-        </Box>
-      </Box>
+          <Button variant={variant} disabled>
+            Désactivé
+          </Button>
+          <Button variant={variant} loading>
+            Chargement
+          </Button>
+        </div>
+      </div>
     ))}
   </StyleguideSection>
 )

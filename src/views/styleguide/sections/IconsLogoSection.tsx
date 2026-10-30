@@ -1,72 +1,41 @@
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-
 import { SITE } from '@/shared/config'
 import { Icon, ICON_NAMES, LogoMark } from '@/shared/ui/kit'
 
+import styles from '../styleguide.module.css'
 import { StyleguideSection } from '../StyleguideSection'
 
 const LOGO_BACKGROUNDS = [
-  { label: 'Fond clair', bgcolor: 'background.paper', color: 'text.primary' },
-  { label: 'Fond sombre', bgcolor: 'primary.dark', color: 'common.white' },
+  { label: 'Fond clair', className: styles.logo },
+  { label: 'Fond sombre', className: `${styles.logo} ${styles.logoDark}` },
 ] as const
 
 export const IconsLogoSection = () => (
   <>
     <StyleguideSection title="Icônes">
-      <Box
-        component="ul"
-        sx={{
-          display: 'grid',
-          gap: 2,
-          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-          listStyle: 'none',
-          p: 0,
-        }}
-      >
+      <ul className={styles.icons}>
         {ICON_NAMES.map((name) => (
-          <Box component="li" key={name} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <li key={name} className={styles.icon}>
             <Icon name={name} size={24} />
-            <Typography variant="body2">{name}</Typography>
-          </Box>
+            <span className="bui-text bui-text--body-sm">{name}</span>
+          </li>
         ))}
-      </Box>
+      </ul>
     </StyleguideSection>
     <StyleguideSection title="Logo">
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+      <div className="bui-cluster bui-gap-4">
         {LOGO_BACKGROUNDS.map((background) => (
-          <Box
-            key={background.label}
-            sx={{
-              p: 3,
-              borderRadius: 1,
-              border: 1,
-              borderColor: 'divider',
-              bgcolor: background.bgcolor,
-              color: background.color,
-            }}
-          >
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              {background.label}
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <div key={background.label} className={background.className}>
+            <p className={`bui-text bui-text--body-sm ${styles.group}`}>{background.label}</p>
+            <div className="bui-cluster bui-gap-4">
               <LogoMark size={48} />
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 1.5,
-                  typography: 'h6',
-                  fontWeight: 700,
-                }}
-              >
+              <span className={styles.logoName}>
                 <LogoMark size={36} />
                 {SITE.name}
-              </Box>
-            </Box>
-          </Box>
+              </span>
+            </div>
+          </div>
         ))}
-      </Box>
+      </div>
     </StyleguideSection>
   </>
 )

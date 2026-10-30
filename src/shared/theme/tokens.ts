@@ -12,6 +12,9 @@ export const MUI_TOKENS = mui as ThemeOptions & { typography: TypographyVariants
 
 export const ENHANCED_COLORS = generated.enhanced.color
 
+/** Jetons du mode clair, montrés par la charte graphique. */
+export const TOKENS = generated.tokens
+
 const fontSizeVariables = (sizes: Record<string, string>) =>
   Object.fromEntries(Object.entries(sizes).map(([name, size]) => [`--bui-font-size-${name}`, size]))
 

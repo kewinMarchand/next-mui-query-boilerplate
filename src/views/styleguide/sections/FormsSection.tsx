@@ -1,69 +1,68 @@
 'use client'
 
-import Box from '@mui/material/Box'
-import Checkbox from '@mui/material/Checkbox'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormLabel from '@mui/material/FormLabel'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import Switch from '@mui/material/Switch'
-import TextField from '@mui/material/TextField'
+import {
+  Checkbox,
+  RadioGroup,
+  Select,
+  Switch,
+  TextArea,
+  TextField,
+} from '@kewinmarchand/boilerplates-ui/react'
 
+import styles from '../styleguide.module.css'
 import { StyleguideSection } from '../StyleguideSection'
+
+const EXPOSURES = [
+  { value: 'soleil', label: 'Soleil' },
+  { value: 'mi-ombre', label: 'Mi-ombre' },
+  { value: 'ombre', label: 'Ombre' },
+]
+
+const SIZES = [
+  { value: 'S', label: 'S' },
+  { value: 'M', label: 'M' },
+  { value: 'L', label: 'L' },
+]
 
 export const FormsSection = () => (
   <StyleguideSection title="Formulaires">
-    <Box
-      component="form"
-      noValidate
-      sx={{
-        display: 'grid',
-        gap: 2,
-        gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))',
-      }}
-    >
-      <TextField label="Nom" helperText="Aide : votre nom complet." autoComplete="name" />
+    <form noValidate className={styles.form}>
+      <TextField id="charte-nom" label="Nom" hint="Aide : votre nom complet." autoComplete="name" />
       <TextField
+        id="charte-email"
         label="E-mail"
         type="email"
-        error
-        helperText="Indiquez une adresse e-mail valide, par exemple nom@domaine.fr."
+        error="Indiquez une adresse e-mail valide, par exemple nom@domaine.fr."
         defaultValue="nom@"
         autoComplete="email"
       />
-      <TextField
-        label="Quantité"
-        type="number"
-        slotProps={{ htmlInput: { inputMode: 'numeric', min: 0 } }}
-      />
-      <TextField label="Désactivé" disabled defaultValue="Non modifiable" />
-      <TextField label="Message" multiline minRows={3} />
-      <TextField
-        select
-        label="Exposition"
-        slotProps={{ select: { native: true } }}
-        defaultValue="soleil"
-      >
-        <option value="soleil">Soleil</option>
-        <option value="mi-ombre">Mi-ombre</option>
-        <option value="ombre">Ombre</option>
-      </TextField>
-      <div>
-        <FormControlLabel control={<Checkbox defaultChecked />} label="Case cochée" />
-        <FormControlLabel control={<Checkbox disabled />} label="Case désactivée" />
-        <FormControlLabel
-          control={<Switch defaultChecked slotProps={{ input: { role: 'switch' } }} />}
-          label="Interrupteur"
+      <div className="bui-field">
+        <label className="bui-field__label" htmlFor="charte-quantite">
+          Quantité
+        </label>
+        <input
+          className="bui-field__input"
+          id="charte-quantite"
+          type="number"
+          inputMode="numeric"
+          min={0}
         />
       </div>
-      <Box component="fieldset" sx={{ border: 0, m: 0, p: 0 }}>
-        <FormLabel component="legend">Taille</FormLabel>
-        <RadioGroup name="taille" defaultValue="M" row>
-          <FormControlLabel value="S" control={<Radio />} label="S" />
-          <FormControlLabel value="M" control={<Radio />} label="M" />
-          <FormControlLabel value="L" control={<Radio />} label="L" disabled />
-        </RadioGroup>
-      </Box>
-    </Box>
+      <TextField id="charte-desactive" label="Désactivé" disabled defaultValue="Non modifiable" />
+      <TextArea id="charte-message" label="Message" rows={3} />
+      <Select id="charte-exposition" label="Exposition" options={EXPOSURES} defaultValue="soleil" />
+      <div>
+        <Checkbox id="charte-case" label="Case cochée" defaultChecked />
+        <Checkbox id="charte-case-desactivee" label="Case désactivée" disabled />
+        <Switch id="charte-interrupteur" label="Interrupteur" defaultChecked />
+      </div>
+      <RadioGroup
+        id="charte-taille"
+        legend="Taille"
+        name="taille"
+        options={SIZES}
+        defaultValue="M"
+      />
+    </form>
   </StyleguideSection>
 )
