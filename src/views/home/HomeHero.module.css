@@ -1,0 +1,59 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 480px;
+  overflow: hidden;
+  color: var(--bui-color-on-image);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    min-height: min(80vh, 720px);
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(0 0 0 / 78%) 0%, rgb(0 0 0 / 60%) 100%);
+}
+
+:global(html[data-a11y-mode='enhanced']) .overlay {
+  background: rgb(0 0 0 / 85%);
+}
+
+.content {
+  position: relative;
+  padding-block: var(--bui-space-12);
+}
+
+.inner {
+  max-width: 720px;
+}
+
+.overline,
+.title,
+.lead {
+  color: inherit;
+}
+
+.title {
+  margin-block-end: 0.35em;
+}
+
+.lead {
+  margin-block-end: var(--bui-space-8);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bui-space-4);
+}
+
+@media (min-width: 640px) {
+  .actions {
+    flex-direction: row;
+  }
+}

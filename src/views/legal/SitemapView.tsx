@@ -1,24 +1,22 @@
-import Box from '@mui/material/Box'
-import MuiLink from '@mui/material/Link'
-import Typography from '@mui/material/Typography'
-
 import { CATALOG_NAVIGATION, SITE_MAP } from '@/shared/config'
 import { Link } from '@/shared/ui/kit'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
 import { getCategoryMenu } from '@/modules/catalog'
 
+import styles from './legal.module.css'
+
 import type { NavigationNode } from '@/shared/config'
 
-const LINK_SX = { display: 'inline-flex', alignItems: 'center', minHeight: 44 } as const
+const LINK_CLASS = `bui-link ${styles.touchLink}`
 
 const CategoryList = ({ nodes }: { nodes: NavigationNode[] }) => (
   <ul>
     {nodes.map((node) => (
       <li key={node.id}>
-        <MuiLink component={Link} href={node.href} sx={LINK_SX}>
+        <Link href={node.href} className={LINK_CLASS}>
           {node.label}
-        </MuiLink>
+        </Link>
         {node.children.length > 0 && <CategoryList nodes={node.children} />}
       </li>
     ))}
@@ -30,19 +28,17 @@ export const SitemapView = async () => {
 
   return (
     <PageContainer breadcrumb={buildBreadcrumb('/plan-du-site')}>
-      <Typography variant="h1" gutterBottom>
-        Plan du site
-      </Typography>
-      <Box component="ul" data-testid="legal-sitemap">
+      <h1 className={`bui-text bui-text--h1 ${styles.title}`}>Plan du site</h1>
+      <ul data-testid="legal-sitemap">
         {SITE_MAP.map(({ href, label }) => (
           <li key={href}>
-            <MuiLink component={Link} href={href} sx={LINK_SX}>
+            <Link href={href} className={LINK_CLASS}>
               {label}
-            </MuiLink>
+            </Link>
             {href === CATALOG_NAVIGATION.href && <CategoryList nodes={categoryMenu} />}
           </li>
         ))}
-      </Box>
+      </ul>
     </PageContainer>
   )
 }

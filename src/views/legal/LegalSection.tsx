@@ -1,5 +1,6 @@
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
+import { Stack, Text } from '@kewinmarchand/boilerplates-ui/react'
+
+import styles from './legal.module.css'
 
 import type { ReactNode } from 'react'
 
@@ -9,10 +10,8 @@ interface LegalSectionProps {
 }
 
 export const LegalSection = ({ title, children }: LegalSectionProps) => (
-  <Box component="section" sx={{ mt: 4, '& p': { mb: 1.5 } }}>
-    <Typography variant="h2" gutterBottom>
-      {title}
-    </Typography>
+  <Stack as="section" gap="3" className={styles.section}>
+    <Text variant="h2">{title}</Text>
     {children}
-  </Box>
+  </Stack>
 )

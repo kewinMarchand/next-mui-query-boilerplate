@@ -1,0 +1,13 @@
+.title {
+  margin-block-end: 0.35em;
+}
+
+.section {
+  margin-block-start: var(--bui-space-8);
+}
+
+.touchLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--bui-size-touch);
+}

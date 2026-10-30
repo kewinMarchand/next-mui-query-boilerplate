@@ -1,51 +1,49 @@
-import MuiLink from '@mui/material/Link'
-import Typography from '@mui/material/Typography'
+import { Text } from '@kewinmarchand/boilerplates-ui/react'
 
 import { SITE } from '@/shared/config'
 import { buildBreadcrumb, PageContainer } from '@/shared/ui/layout'
 
+import styles from './legal.module.css'
 import { LegalSection } from './LegalSection'
 
 const { publisher } = SITE
 
 export const LegalNoticeView = () => (
   <PageContainer breadcrumb={buildBreadcrumb('/mentions-legales')}>
-    <Typography variant="h1" gutterBottom>
-      Mentions légales
-    </Typography>
-    <Typography>
+    <h1 className={`bui-text bui-text--h1 ${styles.title}`}>Mentions légales</h1>
+    <Text>
       Les informations ci-dessous sont des valeurs d'exemple, fictives, à remplacer dans
       <code> src/shared/config/site.ts</code>.
-    </Typography>
+    </Text>
 
     <LegalSection title="Éditeur">
-      <Typography>
+      <Text>
         {publisher.legalName}, {publisher.address}. SIRET : {publisher.siret}.
-      </Typography>
-      <Typography>
+      </Text>
+      <Text>
         Contact :{' '}
-        <MuiLink href={`mailto:${publisher.email}`} underline="always">
+        <a className="bui-link" href={`mailto:${publisher.email}`}>
           {publisher.email}
-        </MuiLink>
-      </Typography>
+        </a>
+      </Text>
     </LegalSection>
 
     <LegalSection title="Directeur de la publication">
-      <Typography>{publisher.publicationDirector}</Typography>
+      <Text>{publisher.publicationDirector}</Text>
     </LegalSection>
 
     <LegalSection title="Hébergeur">
-      <Typography>
+      <Text>
         {publisher.host.name}, {publisher.host.address}.
-      </Typography>
+      </Text>
     </LegalSection>
 
     <LegalSection title="Propriété intellectuelle">
-      <Typography>
+      <Text>
         L'ensemble des contenus de ce site (textes, images, code) est la propriété de{' '}
         {publisher.legalName}, sauf mention contraire. Toute reproduction sans autorisation écrite
         préalable est interdite.
-      </Typography>
+      </Text>
     </LegalSection>
   </PageContainer>
 )
