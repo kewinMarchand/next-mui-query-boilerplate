@@ -1,5 +1,3 @@
-'use client'
-
 import { Alert, Button, Skeleton, Stack } from '@kewinmarchand/boilerplates-ui/react'
 
 import { Icon } from '@/shared/ui/kit'
