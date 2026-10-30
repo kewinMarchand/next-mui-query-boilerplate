@@ -1,12 +1,10 @@
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Chip from '@mui/material/Chip'
-import Typography from '@mui/material/Typography'
+import { Badge } from '@kewinmarchand/boilerplates-ui/react'
 
 import { AfterHydration, Picture } from '@/shared/ui/kit'
 
 import { formatPrice } from '../domain/price'
 import { EXPOSURE_LABELS } from './labels'
+import styles from './ProductCard.module.css'
 
 import type { Catalog } from '../domain/catalog'
 
@@ -36,45 +34,35 @@ export const ProductCard = ({ product, position, isPriority }: ProductCardProps)
   )
 
   return (
-    <Card
-      component="article"
-      variant="outlined"
+    <article
       id={`produit-${position}`}
       data-testid="catalog-product"
-      sx={{ containerType: 'inline-size', height: '100%' }}
+      className={`bui-card ${styles.card}`}
     >
-      <Box
-        sx={{
-          display: 'grid',
-          '@container (min-width: 520px)': {
-            gridTemplateColumns: '200px 1fr',
-            alignItems: 'center',
-          },
-        }}
-      >
+      <div className={styles.layout}>
         {isPriority ? (
           image
         ) : (
           // Au-delà des premières, l'image attend l'hydratation pour laisser la bande passante à l'image LCP.
-          <AfterHydration placeholder={<Box sx={{ aspectRatio: '1 / 1', bgcolor: 'grey.100' }} />}>
+          <AfterHydration placeholder={<div className={styles.placeholder} />}>
             {image}
           </AfterHydration>
         )}
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h3" component="h2" gutterBottom>
-            {product.name}
-          </Typography>
-          <Typography sx={{ fontWeight: 700 }} data-testid="catalog-product-price">
+        <div className={styles.body}>
+          <h2 className={`bui-text bui-text--h3 ${styles.name}`}>{product.name}</h2>
+          <p className={`bui-text ${styles.price}`} data-testid="catalog-product-price">
             {formatPrice(product.price)}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
+          </p>
+          <p className={`bui-text bui-text--body-sm ${styles.meta}`}>
             Exposition : {EXPOSURE_LABELS[product.exposure]} · Taille {product.size}
-          </Typography>
+          </p>
           {!product.inStock && (
-            <Chip label="Rupture de stock" size="small" variant="outlined" sx={{ mt: 1 }} />
+            <p className={styles.stock}>
+              <Badge>Rupture de stock</Badge>
+            </p>
           )}
-        </Box>
-      </Box>
-    </Card>
+        </div>
+      </div>
+    </article>
   )
 }

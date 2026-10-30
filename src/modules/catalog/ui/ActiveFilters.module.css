@@ -1,0 +1,9 @@
+.filters {
+  margin-block-end: var(--bui-space-4);
+}
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--bui-size-touch);
+}

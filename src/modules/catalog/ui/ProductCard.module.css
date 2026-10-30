@@ -1,0 +1,41 @@
+.card {
+  height: 100%;
+  container-type: inline-size;
+}
+
+.layout {
+  display: grid;
+}
+
+/* Vue liste : image à gauche dès que la carte est assez large */
+@container (min-width: 520px) {
+  .layout {
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+}
+
+.placeholder {
+  aspect-ratio: 1 / 1;
+  background: var(--bui-color-surface-muted);
+}
+
+.body {
+  padding: var(--bui-space-4);
+}
+
+.name {
+  margin-block-end: 0.35em;
+}
+
+.price {
+  font-weight: var(--bui-font-weight-bold);
+}
+
+.meta {
+  color: var(--bui-color-text-muted);
+}
+
+.stock {
+  margin: var(--bui-space-2) 0 0;
+}

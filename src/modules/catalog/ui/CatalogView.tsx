@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
-import Typography from '@mui/material/Typography'
 import { notFound } from 'next/navigation'
+
+import { Cluster } from '@kewinmarchand/boilerplates-ui/react'
 
 import { itemListJsonLd, JsonLd } from '@/shared/seo'
 import { Link, PicturePreload } from '@/shared/ui/kit'
@@ -15,6 +14,7 @@ import { CatalogFilters } from './CatalogFilters'
 import { CatalogPagination } from './CatalogPagination'
 import { CatalogTitle } from './CatalogTitle'
 import { CatalogTransitionProvider, PendingResults } from './CatalogTransition'
+import styles from './CatalogView.module.css'
 import { productImage } from './ProductCard'
 import { ProductResults } from './ProductResults'
 import { SortSelect } from './SortSelect'
@@ -47,35 +47,19 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
       <PageContainer breadcrumb={buildBreadcrumb(CATALOG_ROOT_PATH, categoryTrail(categoryPath))}>
         <CatalogTitle title={title} focusKey={href} />
         {subcategories.length > 0 && (
-          <Box
-            component="ul"
-            aria-label="Sous-catégories"
-            sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, listStyle: 'none', m: 0, mb: 3, p: 0 }}
-          >
+          <ul aria-label="Sous-catégories" className={`bui-chip-list ${styles.subcategories}`}>
             {subcategories.map((child) => (
               <li key={child.slug}>
-                <Chip
-                  component={Link}
-                  href={child.href}
-                  clickable
-                  label={child.name}
-                  variant="outlined"
-                  sx={{ minHeight: 44, borderRadius: 22 }}
-                />
+                <Link href={child.href} className="bui-chip">
+                  {child.name}
+                </Link>
               </li>
             ))}
-          </Box>
+          </ul>
         )}
 
         <CatalogTransitionProvider>
-          <Box
-            sx={{
-              display: 'grid',
-              gap: { xs: 2, lg: 6 },
-              gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '280px minmax(0, 1fr)' },
-              alignItems: 'start',
-            }}
-          >
+          <div className={styles.layout}>
             <div>
               {page && (
                 <CatalogFilters
@@ -89,28 +73,15 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
             </div>
             <div>
               <ActiveFilters path={path} query={query} />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 2,
-                  mb: 2,
-                }}
-              >
-                <Typography
-                  role="status"
-                  sx={{ fontWeight: 600 }}
-                  data-testid="catalog-results-count"
-                >
+              <Cluster justify="between" gap="4" className={styles.toolbar}>
+                <p role="status" className={styles.count} data-testid="catalog-results-count">
                   {page ? productCount(page.total) : ''}
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+                </p>
+                <Cluster gap="4">
                   <SortSelect path={path} query={query} />
                   <ViewToggle path={path} query={query} />
-                </Box>
-              </Box>
+                </Cluster>
+              </Cluster>
               {result.status === 'success' ? (
                 <>
                   <PendingResults view={query.view}>
@@ -144,7 +115,7 @@ export const CatalogView = async ({ slugs, searchParams }: CatalogViewProps) => 
                 />
               )}
             </div>
-          </Box>
+          </div>
         </CatalogTransitionProvider>
       </PageContainer>
     </>

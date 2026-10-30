@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+import { Cluster } from '@kewinmarchand/boilerplates-ui/react'
 
 import { Icon, Link } from '@/shared/ui/kit'
 
@@ -18,26 +17,25 @@ const OPTIONS = [
 ] as const
 
 export const ViewToggle = ({ path, query }: ViewToggleProps) => (
-  <Box component="nav" aria-label="Affichage">
-    <Box component="ul" sx={{ display: 'flex', gap: 1, listStyle: 'none', m: 0, p: 0 }}>
+  <nav aria-label="Affichage">
+    <Cluster as="ul" gap="2">
       {OPTIONS.map((option) => {
         const isActive = query.view === option.view
         return (
           <li key={option.view}>
-            <Button
-              component={Link}
+            <Link
               href={catalogHref(path, { ...query, view: option.view })}
               scroll={false}
-              variant={isActive ? 'contained' : 'outlined'}
               aria-current={isActive ? 'page' : undefined}
-              startIcon={<Icon name={option.icon} />}
               data-testid={option.testId}
+              className={isActive ? 'bui-button' : 'bui-button bui-button--outline'}
             >
+              <Icon name={option.icon} />
               {option.label}
-            </Button>
+            </Link>
           </li>
         )
       })}
-    </Box>
-  </Box>
+    </Cluster>
+  </nav>
 )

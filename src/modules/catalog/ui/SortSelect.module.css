@@ -1,0 +1,6 @@
+.form {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--bui-space-2);
+  min-width: 200px;
+}

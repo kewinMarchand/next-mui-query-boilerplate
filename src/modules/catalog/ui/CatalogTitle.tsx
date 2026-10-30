@@ -1,8 +1,8 @@
 'use client'
 
-import Typography from '@mui/material/Typography'
 import { useEffect, useRef } from 'react'
 
+import styles from './CatalogTitle.module.css'
 import { consumeTitleFocus } from './titleFocus'
 
 interface CatalogTitleProps {
@@ -22,15 +22,13 @@ export const CatalogTitle = ({ title, focusKey }: CatalogTitleProps) => {
   }, [focusKey])
 
   return (
-    <Typography
+    <h1
       ref={ref}
-      variant="h1"
       id={CATALOG_TITLE_ID}
       tabIndex={-1}
-      gutterBottom
-      sx={{ scrollMarginTop: 16 }}
+      className={`bui-text bui-text--h1 ${styles.title}`}
     >
       {title}
-    </Typography>
+    </h1>
   )
 }

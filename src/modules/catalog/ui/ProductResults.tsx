@@ -1,11 +1,9 @@
-import Alert from '@mui/material/Alert'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Skeleton from '@mui/material/Skeleton'
+import { Alert, Skeleton } from '@kewinmarchand/boilerplates-ui/react'
 
 import { Link } from '@/shared/ui/kit'
 
 import { ProductCard } from './ProductCard'
+import styles from './ProductResults.module.css'
 import { TitleFocusLink } from './TitleFocusLink'
 
 import type { Catalog } from '../domain/catalog'
@@ -21,16 +19,7 @@ interface ProductResultsProps {
 
 const PRIORITY_COUNT = 4
 
-const listSx = (view: Catalog.View) =>
-  ({
-    display: 'grid',
-    gap: 2,
-    listStyle: 'none',
-    m: 0,
-    p: 0,
-    gridTemplateColumns:
-      view === 'liste' ? 'minmax(0, 1fr)' : 'repeat(auto-fill, minmax(min(240px, 100%), 1fr))',
-  }) as const
+const listClass = (view: Catalog.View) => (view === 'liste' ? styles.list : styles.grid)
 
 export const ProductResults = ({
   status,
@@ -42,48 +31,60 @@ export const ProductResults = ({
 }: ProductResultsProps) => {
   if (status === 'pending') {
     return (
-      <Box role="status" aria-label="Chargement des produits" aria-busy="true" sx={listSx(view)}>
+      <div
+        role="status"
+        aria-label="Chargement des produits"
+        aria-busy="true"
+        className={listClass(view)}
+      >
         {[1, 2, 3, 4, 5, 6].map((key) => (
-          <Skeleton key={key} variant="rounded" height={320} />
+          <Skeleton key={key} height="320px" />
         ))}
-      </Box>
+      </div>
     )
   }
 
   if (status === 'error') {
     return (
-      <Alert
-        severity="error"
-        data-testid="catalog-error"
-        action={
-          <Button component={Link} href={retryHref} color="inherit" data-testid="catalog-retry">
-            Réessayer
-          </Button>
-        }
-      >
-        {errorMessage}
-      </Alert>
+      <div data-testid="catalog-error">
+        <Alert
+          variant="error"
+          action={
+            <Link
+              href={retryHref}
+              className="bui-button bui-button--ghost"
+              data-testid="catalog-retry"
+            >
+              Réessayer
+            </Link>
+          }
+        >
+          {errorMessage}
+        </Alert>
+      </div>
     )
   }
 
   if (!products?.length) {
     return (
-      <Alert severity="info" data-testid="catalog-empty">
-        Aucun produit ne correspond à ces filtres.{' '}
-        <TitleFocusLink href={clearHref} data-testid="catalog-clear-filters">
-          Tout effacer
-        </TitleFocusLink>
-      </Alert>
+      <div data-testid="catalog-empty">
+        <Alert>
+          Aucun produit ne correspond à ces filtres.{' '}
+          <TitleFocusLink href={clearHref} data-testid="catalog-clear-filters" className="bui-link">
+            Tout effacer
+          </TitleFocusLink>
+        </Alert>
+      </div>
     )
   }
 
   return (
-    <Box component="ul" sx={listSx(view)}>
+    <ul className={listClass(view)}>
       {products.map((product, index) => (
         <li key={product.id}>
           <ProductCard product={product} position={index + 1} isPriority={index < PRIORITY_COUNT} />
         </li>
       ))}
-    </Box>
+    </ul>
   )
 }

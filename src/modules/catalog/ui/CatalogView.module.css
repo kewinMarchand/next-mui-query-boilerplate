@@ -1,0 +1,26 @@
+.subcategories {
+  margin-block-end: var(--bui-space-6);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bui-space-4);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: var(--bui-space-12);
+  }
+}
+
+.toolbar {
+  margin-block-end: var(--bui-space-4);
+}
+
+.count {
+  margin: 0;
+  font-weight: var(--bui-font-weight-semibold);
+}

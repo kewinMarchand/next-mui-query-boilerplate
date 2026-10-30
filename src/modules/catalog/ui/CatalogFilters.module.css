@@ -1,0 +1,26 @@
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-2);
+  min-height: var(--bui-size-touch);
+  font-weight: var(--bui-font-weight-semibold);
+  cursor: pointer;
+}
+
+.desktopOnly {
+  display: none;
+}
+
+.title {
+  margin-block-end: var(--bui-space-2);
+}
+
+@media (min-width: 1024px) {
+  .mobileOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: block;
+  }
+}

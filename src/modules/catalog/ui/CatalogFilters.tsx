@@ -1,23 +1,18 @@
 'use client'
 
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import dynamic from 'next/dynamic'
 import { useId, useState } from 'react'
+
+import { Button, Drawer } from '@kewinmarchand/boilerplates-ui/react'
 
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 import { Icon } from '@/shared/ui/kit'
 
 import { countActiveFilters } from '../domain/catalogQuery'
+import styles from './CatalogFilters.module.css'
 import { FiltersForm } from './FiltersForm'
 import { useCatalogNavigation } from './hooks/useCatalogNavigation'
 
 import type { Catalog } from '../domain/catalog'
-
-// Le panneau n'est utile qu'au clic : son code (Modal, piège de focus) quitte le chargement initial.
-const Drawer = dynamic(() => import('@mui/material/Drawer'), { ssr: false })
 
 interface CatalogFiltersProps {
   path: string
@@ -57,87 +52,53 @@ export const CatalogFilters = ({
   return (
     <>
       {!isHydrated && (
-        <Box component="details" sx={{ display: { lg: 'none' } }}>
-          <Box
-            component="summary"
-            data-testid="catalog-filters-summary"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              minHeight: 44,
-              cursor: 'pointer',
-              fontWeight: 600,
-            }}
-          >
+        <details className={styles.mobileOnly}>
+          <summary className={styles.summary} data-testid="catalog-filters-summary">
             <Icon name="sliders-horizontal" />
             {filterLabel}
-          </Box>
+          </summary>
           {form}
-        </Box>
+        </details>
       )}
       {isHydrated && (
-        <Button
-          variant="outlined"
-          startIcon={<Icon name="sliders-horizontal" />}
-          aria-haspopup="dialog"
-          aria-expanded={isOpen}
-          aria-controls={drawerId}
-          onClick={() => setIsOpen(true)}
-          data-testid="catalog-filters-open"
-          sx={{ display: { lg: 'none' } }}
-        >
-          {filterLabel}
-        </Button>
+        <div className={styles.mobileOnly}>
+          <Button
+            variant="outline"
+            icon="sliders-horizontal"
+            aria-haspopup="dialog"
+            aria-expanded={isOpen}
+            aria-controls={drawerId}
+            onClick={() => setIsOpen(true)}
+            data-testid="catalog-filters-open"
+          >
+            {filterLabel}
+          </Button>
+        </div>
       )}
 
       {!isOpen && (
-        <Box
-          component="aside"
-          aria-labelledby={titleId}
-          sx={{ display: { xs: 'none', lg: 'block' } }}
-        >
-          <Typography variant="h2" id={titleId} sx={{ fontSize: 'var(--bui-font-size-title)' }}>
+        <aside aria-labelledby={titleId} className={styles.desktopOnly}>
+          <h2 id={titleId} className={`bui-text bui-text--title ${styles.title}`}>
             Filtres
-          </Typography>
+          </h2>
           {form}
-        </Box>
+        </aside>
       )}
 
       <Drawer
-        anchor="left"
+        id={drawerId}
+        title="Filtres"
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        slotProps={{
-          paper: {
-            id: drawerId,
-            role: 'dialog',
-            'aria-modal': true,
-            'aria-labelledby': `${drawerId}-title`,
-            sx: { width: 'min(360px, 90vw)', p: 2 },
-          },
-        }}
+        side="start"
+        closeLabel="Fermer les filtres"
+        footer={
+          <Button fullWidth onClick={() => setIsOpen(false)}>
+            Voir les {total} produits
+          </Button>
+        }
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <Typography
-            variant="h2"
-            id={`${drawerId}-title`}
-            sx={{ flexGrow: 1, fontSize: 'var(--bui-font-size-title)' }}
-          >
-            Filtres
-          </Typography>
-          <IconButton
-            aria-label="Fermer les filtres"
-            onClick={() => setIsOpen(false)}
-            sx={{ width: 48, height: 48 }}
-          >
-            <Icon name="x" />
-          </IconButton>
-        </Box>
-        {form}
-        <Button variant="contained" fullWidth onClick={() => setIsOpen(false)} sx={{ mt: 2 }}>
-          Voir les {total} produits
-        </Button>
+        {isOpen && form}
       </Drawer>
     </>
   )

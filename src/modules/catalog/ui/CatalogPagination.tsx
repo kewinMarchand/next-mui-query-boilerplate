@@ -1,8 +1,5 @@
-import Box from '@mui/material/Box'
-
-import { VISUALLY_HIDDEN } from '@/shared/ui/kit'
-
 import { catalogHref } from '../domain/catalogQuery'
+import styles from './CatalogPagination.module.css'
 import { paginationWindow } from './pagination'
 import { TitleFocusLink } from './TitleFocusLink'
 
@@ -15,15 +12,7 @@ interface CatalogPaginationProps {
   pageCount: number
 }
 
-const ITEM_SX = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minWidth: 44,
-  minHeight: 44,
-  px: 1,
-  borderRadius: 1,
-} as const
+const LINK = 'bui-pagination__link'
 
 export const CatalogPagination = ({ path, query, page, pageCount }: CatalogPaginationProps) => {
   if (pageCount <= 1) return null
@@ -33,56 +22,32 @@ export const CatalogPagination = ({ path, query, page, pageCount }: CatalogPagin
   const next = page < pageCount ? hrefOf(page + 1) : null
 
   return (
-    <Box component="nav" aria-label="Pagination" data-testid="catalog-pagination" sx={{ mt: 4 }}>
+    <nav aria-label="Pagination" data-testid="catalog-pagination" className={styles.pagination}>
       {previous && <link rel="prev" href={previous} />}
       {next && <link rel="next" href={next} />}
-      <Box
-        component="ul"
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: 0.5,
-          listStyle: 'none',
-          m: 0,
-          p: 0,
-        }}
-      >
+      <ul className={`bui-pagination__list ${styles.list}`}>
         <li>
           {previous ? (
-            <TitleFocusLink href={previous} rel="prev" sx={ITEM_SX}>
+            <TitleFocusLink href={previous} rel="prev" className={LINK}>
               Précédent
             </TitleFocusLink>
           ) : (
-            <Box component="span" sx={{ ...ITEM_SX, color: 'text.secondary' }}>
-              Précédent
-            </Box>
+            <span className={`${LINK} ${styles.disabled}`}>Précédent</span>
           )}
         </li>
         {paginationWindow(page, pageCount).map((entry, index) => (
           <li key={entry === 'ellipsis' ? `ellipsis-${index}` : entry}>
             {entry === 'ellipsis' ? (
-              <Box component="span" aria-hidden="true" sx={ITEM_SX}>
+              <span aria-hidden="true" className="bui-pagination__ellipsis">
                 …
-              </Box>
+              </span>
             ) : entry === page ? (
-              <Box
-                component="span"
-                aria-current="page"
-                sx={{
-                  ...ITEM_SX,
-                  bgcolor: 'primary.main',
-                  color: 'primary.contrastText',
-                  fontWeight: 700,
-                }}
-              >
-                <Box component="span" sx={VISUALLY_HIDDEN}>
-                  Page{' '}
-                </Box>
+              <span aria-current="page" className={LINK}>
+                <span className="bui-visually-hidden">Page </span>
                 {entry}
-              </Box>
+              </span>
             ) : (
-              <TitleFocusLink href={hrefOf(entry)} aria-label={`Page ${entry}`} sx={ITEM_SX}>
+              <TitleFocusLink href={hrefOf(entry)} aria-label={`Page ${entry}`} className={LINK}>
                 {entry}
               </TitleFocusLink>
             )}
@@ -90,16 +55,14 @@ export const CatalogPagination = ({ path, query, page, pageCount }: CatalogPagin
         ))}
         <li>
           {next ? (
-            <TitleFocusLink href={next} rel="next" sx={ITEM_SX}>
+            <TitleFocusLink href={next} rel="next" className={LINK}>
               Suivant
             </TitleFocusLink>
           ) : (
-            <Box component="span" sx={{ ...ITEM_SX, color: 'text.secondary' }}>
-              Suivant
-            </Box>
+            <span className={`${LINK} ${styles.disabled}`}>Suivant</span>
           )}
         </li>
-      </Box>
-    </Box>
+      </ul>
+    </nav>
   )
 }

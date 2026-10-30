@@ -1,20 +1,13 @@
 'use client'
 
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import InputLabel from '@mui/material/InputLabel'
-import MuiLink from '@mui/material/Link'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import Switch from '@mui/material/Switch'
-import Typography from '@mui/material/Typography'
 import { useId } from 'react'
 
-import { Link, VISUALLY_HIDDEN } from '@/shared/ui/kit'
+import { Button, Checkbox, Switch } from '@kewinmarchand/boilerplates-ui/react'
+
+import { Link } from '@/shared/ui/kit'
 
 import { withFilter } from '../domain/catalogQuery'
+import styles from './FiltersForm.module.css'
 import { EXPOSURE_LABELS, sizeLabel } from './labels'
 import { QueryHiddenFields } from './QueryHiddenFields'
 
@@ -30,7 +23,6 @@ interface FiltersFormProps {
   onApply: (next: Catalog.Query) => void
 }
 
-// `as object` : le type de `slotProps.input` des Checkbox et Switch MUI n'accepte pas les attributs data-*.
 const FILTER_KEYS = ['exposition', 'taille', 'prix_min', 'prix_max', 'en_stock', 'page']
 
 const toggle = <T,>(values: T[], value: T) =>
@@ -42,26 +34,13 @@ const parsePrice = (raw: string) => {
 }
 
 const FacetGroup = ({ legend, children }: { legend: string; children: ReactNode }) => (
-  <Box component="details" open sx={{ borderBottom: 1, borderColor: 'divider', py: 1 }}>
-    <Box
-      component="summary"
-      sx={{
-        cursor: 'pointer',
-        minHeight: 44,
-        display: 'flex',
-        alignItems: 'center',
-        fontWeight: 600,
-      }}
-    >
-      {legend}
-    </Box>
-    <Box component="fieldset" sx={{ border: 0, m: 0, p: 0 }}>
-      <Box component="legend" sx={VISUALLY_HIDDEN}>
-        {legend}
-      </Box>
+  <details open className="bui-accordion__item">
+    <summary className="bui-accordion__summary">{legend}</summary>
+    <fieldset className={styles.fieldset}>
+      <legend className="bui-visually-hidden">{legend}</legend>
       {children}
-    </Box>
-  </Box>
+    </fieldset>
+  </details>
 )
 
 interface PriceFieldProps {
@@ -72,22 +51,25 @@ interface PriceFieldProps {
   testId: string
 }
 
-// FormControl + OutlinedInput plutôt que TextField : TextField embarque Select, Menu et Popover.
 const PriceField = ({ label, name, defaultValue, onBlur, testId }: PriceFieldProps) => {
   const id = useId()
   return (
-    <FormControl size="small">
-      <InputLabel htmlFor={id}>{label}</InputLabel>
-      <OutlinedInput
+    <div className="bui-field">
+      <label className="bui-field__label" htmlFor={id}>
+        {label}
+      </label>
+      <input
+        className="bui-field__input"
         id={id}
-        label={label}
         name={name}
         type="number"
+        min={0}
+        inputMode="numeric"
         defaultValue={defaultValue ?? ''}
         onBlur={onBlur}
-        inputProps={{ min: 0, inputMode: 'numeric', 'data-testid': testId }}
+        data-testid={testId}
       />
-    </FormControl>
+    </div>
   )
 }
 
@@ -99,6 +81,7 @@ export const FiltersForm = ({
   isHydrated,
   onApply,
 }: FiltersFormProps) => {
+  const idPrefix = useId()
   const applyPrice = (key: 'priceMin' | 'priceMax') => (event: FocusEvent<HTMLInputElement>) => {
     const value = parsePrice(event.target.value)
     if (value !== query[key]) onApply(withFilter(query, { [key]: value }))
@@ -120,135 +103,105 @@ export const FiltersForm = ({
     <form method="get" action={path} onSubmit={onSubmit} data-testid="catalog-filters">
       <QueryHiddenFields query={query} omit={FILTER_KEYS} />
 
-      {subcategories.length > 0 && (
-        <FacetGroup legend="Catégorie">
-          <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
-            {subcategories.map((category) => (
-              <li key={category.href}>
-                <MuiLink
-                  component={Link}
-                  href={category.href}
-                  sx={{ display: 'flex', alignItems: 'center', minHeight: 44 }}
-                >
-                  {category.name} ({category.count})
-                </MuiLink>
-              </li>
-            ))}
-          </Box>
+      <div className="bui-accordion">
+        {subcategories.length > 0 && (
+          <FacetGroup legend="Catégorie">
+            <ul className={styles.categories}>
+              {subcategories.map((category) => (
+                <li key={category.href}>
+                  <Link href={category.href} className={`bui-link ${styles.category}`}>
+                    {category.name} ({category.count})
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </FacetGroup>
+        )}
+
+        <FacetGroup legend="Exposition">
+          {facets.exposure.map((facet) => {
+            const checked = query.exposures.includes(facet.value)
+            return (
+              <Checkbox
+                key={facet.value}
+                id={`${idPrefix}-exposition-${facet.value}`}
+                label={`${EXPOSURE_LABELS[facet.value]} (${facet.count})`}
+                name="exposition"
+                value={facet.value}
+                checked={checked}
+                disabled={facet.count === 0 && !checked}
+                onChange={() =>
+                  onApply(withFilter(query, { exposures: toggle(query.exposures, facet.value) }))
+                }
+                data-testid={`catalog-filter-exposure-${facet.value}`}
+              />
+            )
+          })}
         </FacetGroup>
-      )}
 
-      <FacetGroup legend="Exposition">
-        {facets.exposure.map((facet) => {
-          const checked = query.exposures.includes(facet.value)
-          return (
-            <FormControlLabel
-              key={facet.value}
-              sx={{ display: 'flex', minHeight: 44 }}
-              label={`${EXPOSURE_LABELS[facet.value]} (${facet.count})`}
-              disabled={facet.count === 0 && !checked}
-              control={
-                <Checkbox
-                  name="exposition"
-                  value={facet.value}
-                  checked={checked}
-                  onChange={() =>
-                    onApply(withFilter(query, { exposures: toggle(query.exposures, facet.value) }))
-                  }
-                  slotProps={{
-                    input: { 'data-testid': `catalog-filter-exposure-${facet.value}` } as object,
-                  }}
-                />
-              }
+        <FacetGroup legend="Taille">
+          {facets.size.map((facet) => {
+            const checked = query.sizes.includes(facet.value)
+            return (
+              <Checkbox
+                key={facet.value}
+                id={`${idPrefix}-taille-${facet.value}`}
+                label={`${sizeLabel(facet.value)} (${facet.count})`}
+                name="taille"
+                value={facet.value}
+                checked={checked}
+                disabled={facet.count === 0 && !checked}
+                onChange={() =>
+                  onApply(withFilter(query, { sizes: toggle(query.sizes, facet.value) }))
+                }
+                data-testid={`catalog-filter-size-${facet.value}`}
+              />
+            )
+          })}
+        </FacetGroup>
+
+        <FacetGroup legend="Prix (en euros)">
+          <div key={`${query.priceMin}-${query.priceMax}`} className={styles.prices}>
+            <PriceField
+              label="Minimum"
+              name="prix_min"
+              defaultValue={query.priceMin}
+              onBlur={applyPrice('priceMin')}
+              testId="catalog-filter-price-min"
             />
-          )
-        })}
-      </FacetGroup>
-
-      <FacetGroup legend="Taille">
-        {facets.size.map((facet) => {
-          const checked = query.sizes.includes(facet.value)
-          return (
-            <FormControlLabel
-              key={facet.value}
-              sx={{ display: 'flex', minHeight: 44 }}
-              label={`${sizeLabel(facet.value)} (${facet.count})`}
-              disabled={facet.count === 0 && !checked}
-              control={
-                <Checkbox
-                  name="taille"
-                  value={facet.value}
-                  checked={checked}
-                  onChange={() =>
-                    onApply(withFilter(query, { sizes: toggle(query.sizes, facet.value) }))
-                  }
-                  slotProps={{
-                    input: { 'data-testid': `catalog-filter-size-${facet.value}` } as object,
-                  }}
-                />
-              }
+            <PriceField
+              label="Maximum"
+              name="prix_max"
+              defaultValue={query.priceMax}
+              onBlur={applyPrice('priceMax')}
+              testId="catalog-filter-price-max"
             />
-          )
-        })}
-      </FacetGroup>
+          </div>
+        </FacetGroup>
 
-      <FacetGroup legend="Prix (en euros)">
-        <Box
-          key={`${query.priceMin}-${query.priceMax}`}
-          sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5, py: 1 }}
-        >
-          <PriceField
-            label="Minimum"
-            name="prix_min"
-            defaultValue={query.priceMin}
-            onBlur={applyPrice('priceMin')}
-            testId="catalog-filter-price-min"
+        <FacetGroup legend="Disponibilité">
+          <Switch
+            id={`${idPrefix}-en-stock`}
+            label="En stock uniquement"
+            name="en_stock"
+            value="1"
+            checked={query.inStock}
+            onChange={() => onApply(withFilter(query, { inStock: !query.inStock }))}
+            data-testid="catalog-filter-in-stock"
           />
-          <PriceField
-            label="Maximum"
-            name="prix_max"
-            defaultValue={query.priceMax}
-            onBlur={applyPrice('priceMax')}
-            testId="catalog-filter-price-max"
-          />
-        </Box>
-      </FacetGroup>
+        </FacetGroup>
+      </div>
 
-      <FacetGroup legend="Disponibilité">
-        <FormControlLabel
-          sx={{ display: 'flex', minHeight: 44 }}
-          label="En stock uniquement"
-          control={
-            <Switch
-              name="en_stock"
-              value="1"
-              checked={query.inStock}
-              onChange={() => onApply(withFilter(query, { inStock: !query.inStock }))}
-              slotProps={{
-                input: {
-                  role: 'switch',
-                  'aria-checked': query.inStock,
-                  'data-testid': 'catalog-filter-in-stock',
-                } as object,
-              }}
-            />
-          }
-        />
-      </FacetGroup>
-
-      <Button
-        type="submit"
-        data-testid="catalog-filters-submit"
-        variant="contained"
-        fullWidth
-        sx={{ mt: 2, display: isHydrated ? 'none' : undefined }}
-      >
-        Appliquer les filtres
-      </Button>
+      {/* Gardé caché une fois hydraté : il reste le bouton par défaut de la touche Entrée dans les champs de prix. */}
+      <div className={isHydrated ? styles.hidden : styles.submit}>
+        <Button type="submit" fullWidth data-testid="catalog-filters-submit">
+          Appliquer les filtres
+        </Button>
+      </div>
       {isHydrated && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        <p className={`bui-text bui-text--body-sm ${styles.hint}`}>
           Les filtres s'appliquent dès qu'ils changent.
-        </Typography>
+        </p>
       )}
     </form>
   )

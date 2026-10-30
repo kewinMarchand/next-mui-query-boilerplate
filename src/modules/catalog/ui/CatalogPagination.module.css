@@ -1,0 +1,11 @@
+.pagination {
+  margin-block-start: var(--bui-space-8);
+}
+
+.list {
+  justify-content: center;
+}
+
+.disabled {
+  color: var(--bui-color-text-muted);
+}

@@ -1,12 +1,8 @@
 'use client'
 
-import Button from '@mui/material/Button'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import NativeSelect from '@mui/material/NativeSelect'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import Stack from '@mui/material/Stack'
 import { useId } from 'react'
+
+import { Button, Select } from '@kewinmarchand/boilerplates-ui/react'
 
 import { useHydrated } from '@/shared/ui/hooks/useHydrated'
 
@@ -15,6 +11,7 @@ import { withFilter } from '../domain/catalogQuery'
 import { useCatalogNavigation } from './hooks/useCatalogNavigation'
 import { SORT_LABELS } from './labels'
 import { QueryHiddenFields } from './QueryHiddenFields'
+import styles from './SortSelect.module.css'
 
 import type { Catalog } from '../domain/catalog'
 
@@ -22,6 +19,8 @@ interface SortSelectProps {
   path: string
   query: Catalog.Query
 }
+
+const OPTIONS = SORTS.map((sort) => ({ value: sort, label: SORT_LABELS[sort] }))
 
 const isSort = (value: string): value is Catalog.Sort => SORTS.some((sort) => sort === value)
 
@@ -31,47 +30,26 @@ export const SortSelect = ({ path, query }: SortSelectProps) => {
   const navigation = useCatalogNavigation(path, query)
 
   return (
-    <Stack
-      component="form"
-      method="get"
-      action={path}
-      direction="row"
-      sx={{ gap: 1, alignItems: 'center' }}
-    >
+    <form method="get" action={path} className={styles.form}>
       <QueryHiddenFields query={query} omit={['tri', 'page']} />
-      <FormControl size="small" sx={{ minWidth: 200 }}>
-        <InputLabel htmlFor={selectId} shrink>
-          Trier par
-        </InputLabel>
-        <NativeSelect
-          id={selectId}
-          name="tri"
-          value={navigation.query.sort}
-          onChange={(event) => {
-            if (isSort(event.target.value)) {
-              navigation.apply(withFilter(query, { sort: event.target.value }))
-            }
-          }}
-          input={
-            <OutlinedInput
-              label="Trier par"
-              notched
-              inputProps={{ 'data-testid': 'catalog-sort' }}
-            />
+      <Select
+        id={selectId}
+        name="tri"
+        label="Trier par"
+        options={OPTIONS}
+        value={navigation.query.sort}
+        onChange={(event) => {
+          if (isSort(event.target.value)) {
+            navigation.apply(withFilter(query, { sort: event.target.value }))
           }
-        >
-          {SORTS.map((sort) => (
-            <option key={sort} value={sort}>
-              {SORT_LABELS[sort]}
-            </option>
-          ))}
-        </NativeSelect>
-      </FormControl>
+        }}
+        data-testid="catalog-sort"
+      />
       {!isHydrated && (
-        <Button type="submit" variant="outlined">
+        <Button type="submit" variant="outline">
           Trier
         </Button>
       )}
-    </Stack>
+    </form>
   )
 }
