@@ -8,6 +8,4 @@ export const cspReportHandler = cspReportRoute()
 
 /** Ligne de démarrage, pour retrouver le bon fichier de log chez l'hébergeur. */
 export const announceStartup = () =>
-  process.stdout.write(
-    `${startupLine('next-mui-query-boilerplate', process.env.NODE_ENV ?? 'production')}\n`,
-  )
+  process.stdout.write(`${startupLine('boilerplate-next', process.env.NODE_ENV ?? 'production')}\n`)

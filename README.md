@@ -1,4 +1,4 @@
-# next-mui-query-boilerplate
+# boilerplate-next
 
 Point de départ pour une application **Next.js App Router** avec les composants de **boilerplates-ui**, **TanStack Query**, **react-hook-form + zod**, et toute la chaîne qualité : lint, format, types, tests unitaires, end-to-end, accessibilité et Lighthouse.
 
@@ -42,8 +42,8 @@ Rien d'autre : ni Node, ni Yarn, ni navigateur sur la machine. Chaque commande `
 ## Démarrage
 
 ```sh
-git clone https://github.com/kewinMarchand/next-mui-query-boilerplate.git
-cd next-mui-query-boilerplate
+git clone https://github.com/kewinMarchand/boilerplate-next.git
+cd boilerplate-next
 cp .env.example .env.local
 make install   # image de dev (Node, Chromium) et dépendances
 make up        # http://localhost:3000, rechargement à chaud
@@ -175,7 +175,7 @@ Chaque réponse porte un en-tête `Content-Security-Policy-Report-Only` construi
 [csp-report] https://cdn.exemple.com a besoin d'une autorisation de type script (script-src) — bloqué sur /contact
 ```
 
-- **Lire les logs** : `docker compose logs -f web` pour l'image de production, la sortie de `make up` en développement, la console de l'hébergeur en production. Au démarrage, `[next-mui-query-boilerplate] serveur démarré (production)` permet de retrouver le bon fichier.
+- **Lire les logs** : `docker compose logs -f web` pour l'image de production, la sortie de `make up` en développement, la console de l'hébergeur en production. Au démarrage, `[boilerplate-next] serveur démarré (production)` permet de retrouver le bon fichier.
 - **Autoriser une origine** : l'ajouter à sa directive (le nom est entre parenthèses dans la ligne) dans `siteCsp()` de `src/shared/security/csp.ts`. L'API (`API_URL`), Matomo et GlitchTip y sont déjà, quand leur variable est renseignée. L'en-tête est figé au build, comme les `NEXT_PUBLIC_*`.
 - **Pourquoi Report-Only et `'unsafe-inline'`** : on collecte d'abord ce que le site charge vraiment avant de bloquer quoi que ce soit ; l'hydratation de Next et les attributs `style` écrivent du code en ligne, et un nonce par réponse rendrait toutes les pages dynamiques.
 
