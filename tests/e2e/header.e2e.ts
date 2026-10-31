@@ -17,7 +17,7 @@ test.describe('Header mobile compact', () => {
   test.skip(({ isMobile }) => !isMobile, 'Header compact réservé aux écrans étroits')
 
   for (const mode of MODES) {
-    test(`tient sur une ligne avec deux boutons icône de 44 px (mode ${mode})`, async ({
+    test(`tient sur une ligne avec trois boutons icône de 44 px (mode ${mode})`, async ({
       page,
     }) => {
       await useMode(page, mode)
@@ -25,6 +25,7 @@ test.describe('Header mobile compact', () => {
 
       const logo = page.getByTestId('layout-logo')
       const menu = page.getByTestId('layout-mobile-menu-toggle')
+      const theme = page.getByTestId('color-scheme-toggle')
       const a11y = page.getByTestId('a11y-mode-toggle')
 
       await expect(menu).toHaveAccessibleName('Menu')
@@ -32,14 +33,20 @@ test.describe('Header mobile compact', () => {
       await expect(menu).toHaveAttribute('aria-expanded', 'false')
       await expect(a11y).toHaveAttribute('aria-pressed', mode === 'enhanced' ? 'true' : 'false')
 
-      const [logoBox, menuBox, a11yBox] = await Promise.all([box(logo), box(menu), box(a11y)])
-      for (const button of [menuBox, a11yBox]) {
+      const [logoBox, menuBox, themeBox, a11yBox] = await Promise.all([
+        box(logo),
+        box(menu),
+        box(theme),
+        box(a11y),
+      ])
+      for (const button of [menuBox, themeBox, a11yBox]) {
         expect(button.width).toBeGreaterThanOrEqual(44)
         expect(button.height).toBeGreaterThanOrEqual(44)
         expect(Math.abs(centerY(button) - centerY(logoBox))).toBeLessThan(logoBox.height / 2)
       }
       expect(menuBox.x).toBeGreaterThan(logoBox.x + logoBox.width - 1)
-      expect(a11yBox.x).toBeGreaterThan(menuBox.x + menuBox.width - 1)
+      expect(themeBox.x).toBeGreaterThan(menuBox.x + menuBox.width - 1)
+      expect(a11yBox.x).toBeGreaterThan(themeBox.x + themeBox.width - 1)
     })
   }
 

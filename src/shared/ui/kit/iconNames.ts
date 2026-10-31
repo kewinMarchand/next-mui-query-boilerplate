@@ -14,9 +14,12 @@ export const ICON_NAMES = [
   'loader-circle',
   'mail',
   'menu',
+  'monitor',
+  'moon',
   'person-standing',
   'rotate-cw',
   'sliders-horizontal',
+  'sun',
   'triangle-alert',
   'x',
 ] as const

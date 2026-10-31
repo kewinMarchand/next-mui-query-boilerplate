@@ -30,6 +30,9 @@ for (const mode of MODES) {
       if (mode === 'enhanced') {
         await expect(page.locator('html')).toHaveAttribute('data-a11y-mode', 'enhanced')
       }
+      if (mode === 'dark') {
+        await expect(page.locator('html')).toHaveAttribute('data-color-scheme', 'dark')
+      }
 
       await expectNoViolations(page)
     })

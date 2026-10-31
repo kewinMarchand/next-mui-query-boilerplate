@@ -7,6 +7,9 @@ export const useMode = async (page: Page, mode: Mode) => {
   if (mode === 'enhanced') {
     await page.addInitScript(() => localStorage.setItem('a11y-mode', 'enhanced'))
   }
+  if (mode === 'dark') {
+    await page.addInitScript(() => localStorage.setItem('color-scheme', 'dark'))
+  }
 }
 
 /** Le bouton « Filtrer » n'existe qu'une fois le catalogue hydraté (masqué en CSS sur ordinateur). */

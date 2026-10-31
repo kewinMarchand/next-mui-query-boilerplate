@@ -3,6 +3,7 @@ import { Cluster, Container } from '@kewinmarchand/boilerplates-ui/react'
 import { CATALOG_NAVIGATION, MAIN_NAVIGATION } from '@/shared/config'
 
 import { A11yModeToggle } from '../a11y-mode/A11yModeToggle'
+import { ColorSchemeToggle } from '../color-scheme/ColorSchemeToggle'
 import { CategoryMenu } from './CategoryMenu'
 import styles from './Header.module.css'
 import { LogoLink } from './LogoLink'
@@ -36,6 +37,7 @@ export const Header = ({ categoryMenu }: HeaderProps) => (
             ))}
           </Cluster>
         </nav>
+        <ColorSchemeToggle />
         <A11yModeToggle />
       </div>
     </Container>

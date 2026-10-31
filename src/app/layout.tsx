@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { SITE } from '@/shared/config'
 import { Providers } from '@/shared/providers'
 import { A11Y_MODE_SCRIPT } from '@/shared/ui/a11y-mode/a11yMode'
+import { COLOR_SCHEME_SCRIPT } from '@/shared/ui/color-scheme/colorScheme'
 import { AppShell } from '@/shared/ui/layout'
 
 import { getCategoryMenu } from '@/modules/catalog'
@@ -30,15 +31,16 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#1d4ed8',
+  colorScheme: 'light dark',
   width: 'device-width',
   initialScale: 1,
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={inter.variable} suppressHydrationWarning>
+    <html lang="fr" className={inter.variable} data-color-scheme="auto" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: A11Y_MODE_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: A11Y_MODE_SCRIPT + COLOR_SCHEME_SCRIPT }} />
       </head>
       <body>
         <Providers>
