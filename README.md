@@ -49,7 +49,7 @@ make install   # image de dev (Node, Chromium) et dépendances
 make up        # http://localhost:3000, rechargement à chaud
 ```
 
-Le site lit ses données dans une API de test lancée à côté : [api-platform-test-api](https://github.com/kewinMarchand/api-platform-test-api) sur le port 8090 (défaut) ou [hono-mongo-test-api](https://github.com/kewinMarchand/hono-mongo-test-api) sur le port 8091, au même contrat. `API_URL` choisit l'une ou l'autre. Les tests e2e ont besoin de l'API lancée.
+Le site lit ses données dans une API de test lancée à côté : [boilerplate-api-platform](https://github.com/kewinMarchand/boilerplate-api-platform) sur le port 8090 (défaut) ou [boilerplate-hono](https://github.com/kewinMarchand/boilerplate-hono) sur le port 8091, au même contrat. `API_URL` choisit l'une ou l'autre. Les tests e2e ont besoin de l'API lancée.
 
 Le port vient de `DEV_PORT` (3000 par défaut), pour `make up` comme pour `make start`. Le conteneur partage le réseau de la machine. Le navigateur appelle l'API directement : un autre port doit être autorisé par la configuration CORS de l'API, par exemple `DEV_PORT=3150 make up` si le 3000 est déjà pris.
 
