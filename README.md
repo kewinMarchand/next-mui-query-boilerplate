@@ -82,7 +82,7 @@ Variables d'environnement :
 | `make test-e2e`                        | Playwright, desktop et mobile, sur le build de production (port 3150)                                        |
 | `make test-a11y`                       | axe-core, WCAG 2.1 AA, sur chaque page, dans les deux modes d'affichage                                      |
 | `make test-dev`                        | Charte graphique, servie par `next dev` (port 3151)                                                          |
-| `make metrics`                         | Lighthouse CI : échoue sous 90 en performance ou sous 100 en accessibilité et SEO                            |
+| `make metrics`                         | Lighthouse CI en clair puis en sombre : échoue sous 90 en performance ou sous 100 en accessibilité et SEO    |
 | `make icons` / `make icons-check`      | Génère le sprite `public/icons.svg` et le type `IconName` depuis `icons.json`, ou vérifie qu'ils sont à jour |
 | `make api-types`                       | Génère `src/shared/api/schema.d.ts` depuis `API_SCHEMA_URL`                                                  |
 | `make docker-build` / `make docker-up` | Image de production, sur le port `PORT` (3000 par défaut)                                                    |
